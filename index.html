@@ -607,22 +607,42 @@
       });
     }
 
-    const LEAGUE_TRANSLATIONS = {
-      'Brazilian Serie A': 'Brasileirão Série A',
-      'Copa do Brasil': 'Copa do Brasil',
-      'CONMEBOL Libertadores': 'Copa Libertadores',
-      'CONMEBOL Sudamericana': 'Copa Sul-Americana',
-      'UEFA Champions League': 'Champions League',
-      'UEFA Europa League': 'Europa League',
-      'English Premier League': 'Premier League',
-      'Spanish LALIGA': 'La Liga',
-      'Italian Serie A': 'Serie A Itália',
-      'German Bundesliga': 'Bundesliga',
-      'French Ligue 1': 'Ligue 1',
-      'Argentine Liga Profesional de Fútbol': 'Liga Argentina',
-      'Portuguese Primeira Liga': 'Liga Portugal',
-      'FIFA World Cup': 'Copa do Mundo'
-    };
+    const LEAGUE_CATALOG = [
+      { slug: 'bra.1', name: 'Brasileirão Série A', aliases: ['brazilian serie a', 'campeonato brasileiro', 'brasileirao', 'bra.1'] },
+      { slug: 'bra.copa_do_brazil', name: 'Copa do Brasil', aliases: ['copa do brasil', 'bra.copa_do_brazil'] },
+      { slug: 'conmebol.libertadores', name: 'Copa Libertadores', aliases: ['conmebol libertadores', 'copa libertadores', 'libertadores'] },
+      { slug: 'conmebol.sudamericana', name: 'Copa Sul-Americana', aliases: ['conmebol sudamericana', 'copa sudamericana', 'sul-americana'] },
+      { slug: 'uefa.champions', name: 'Champions League', aliases: ['uefa champions league', 'champions league', 'uefa.champions'] },
+      { slug: 'uefa.europa', name: 'Europa League', aliases: ['uefa europa league', 'europa league', 'uefa.europa'] },
+      { slug: 'eng.1', name: 'Premier League', aliases: ['english premier league', 'premier league', 'eng.1'] },
+      { slug: 'esp.1', name: 'La Liga', aliases: ['spanish laliga', 'laliga', 'la liga', 'esp.1'] },
+      { slug: 'ita.1', name: 'Serie A', aliases: ['italian serie a', 'serie a', 'ita.1'] },
+      { slug: 'ger.1', name: 'Bundesliga', aliases: ['german bundesliga', 'bundesliga', 'ger.1'] },
+      { slug: 'fra.1', name: 'Ligue 1', aliases: ['french ligue 1', 'ligue 1', 'fra.1'] },
+      { slug: 'arg.1', name: 'Liga Argentina', aliases: ['argentine liga profesional', 'liga profesional', 'arg.1'] },
+      { slug: 'por.1', name: 'Liga Portugal', aliases: ['portuguese primeira liga', 'primeira liga', 'por.1'] },
+      { slug: 'fifa.world', name: 'Copa do Mundo', aliases: ['fifa world cup', 'world cup', 'fifa.world'] }
+    ];
+
+    function normalizeLeagueName(rawName, slugHint = '') {
+      const cleanSlug = String(slugHint || '').toLowerCase().trim();
+      const cleanName = String(rawName || '').toLowerCase().trim();
+
+      for (const item of LEAGUE_CATALOG) {
+        if (cleanSlug && item.slug.toLowerCase() === cleanSlug) {
+          return { code: item.slug, name: item.name };
+        }
+        if (cleanName && item.aliases.some(a => cleanName === a || cleanName.includes(a))) {
+          return { code: item.slug, name: item.name };
+        }
+      }
+
+      if (rawName && cleanName !== 'soccer' && cleanName !== 'football' && cleanName !== 'futebol mundial') {
+        return { code: cleanSlug || cleanName.replace(/\s+/g, '_'), name: String(rawName).trim() };
+      }
+
+      return { code: cleanSlug || 'outros', name: 'Futebol Internacional' };
+    }
 
     const initialUser = JSON.parse(localStorage.getItem('rb_user')) || null;
     const initialAccount = initialUser ? loadSavedAccountForUser(initialUser) : null;
@@ -981,6 +1001,54 @@
       };
     }
 
+    function parseEventsFromScoreboardJson(data, fallbackSlug = '', fallbackName = '') {
+      const leagueIndex = new Map();
+      (data.leagues || []).forEach(lg => {
+        if (lg?.slug) {
+          leagueIndex.set(String(lg.slug).toLowerCase(), lg.name || lg.shortName || '');
+        }
+      });
+
+      const items = [];
+      (data.events || []).forEach(ev => {
+        if (!ev || !ev.id) return;
+        const comp = ev.competitions?.[0];
+        if (!comp || !comp.competitors || comp.competitors.length < 2) return;
+
+        const homeComp = comp.competitors.find(c => c.homeAway === 'home') || comp.competitors[0];
+        const awayComp = comp.competitors.find(c => c.homeAway === 'away') || comp.competitors[1];
+
+        const rawSlug = ev.league?.slug || comp.league?.slug || fallbackSlug || '';
+        const indexedLeagueTitle = rawSlug ? (leagueIndex.get(String(rawSlug).toLowerCase()) || '') : '';
+        const rawLeague = ev.league?.name || comp.league?.name || indexedLeagueTitle || fallbackName || '';
+        const leagueInfo = normalizeLeagueName(rawLeague, rawSlug);
+
+        const stateType = ev.status?.type?.state || 'pre';
+        const detailText = ev.status?.type?.shortDetail || ev.status?.displayClock || '';
+
+        const homeName = homeComp.team?.shortDisplayName || homeComp.team?.displayName || 'Mandante';
+        const awayName = awayComp.team?.shortDisplayName || awayComp.team?.displayName || 'Visitante';
+
+        items.push({
+          id: String(ev.id),
+          leagueCode: leagueInfo.code,
+          leagueName: leagueInfo.name,
+          date: ev.date,
+          timestamp: new Date(ev.date).getTime() || 0,
+          status: stateType,
+          statusDetail: detailText,
+          homeName,
+          homeLogo: homeComp.team?.logo || '',
+          homeScore: parseInt(homeComp.score || '0', 10),
+          awayName,
+          awayLogo: awayComp.team?.logo || '',
+          awayScore: parseInt(awayComp.score || '0', 10),
+          markets: computeDeterministicMarkets(ev.id, homeName, awayName)
+        });
+      });
+      return items;
+    }
+
     async function loadRealMatches(manual = false) {
       const container = document.getElementById('matches-container');
       const statusEl = document.getElementById('api-sync-status');
@@ -998,56 +1066,47 @@
       }
 
       const days = getSingleDayStrings(5);
-      const loaded = [];
-      const seenIds = new Set();
+      const matchesById = new Map();
 
+      // 1. Consulta por competições principais para garantir o campeonato exato de cada jogo
+      const trackedLeagues = [
+        'bra.1', 'bra.copa_do_brazil', 'conmebol.libertadores', 'conmebol.sudamericana',
+        'uefa.champions', 'uefa.europa', 'eng.1', 'esp.1', 'ita.1', 'ger.1', 'fra.1', 'arg.1', 'por.1'
+      ];
+
+      await Promise.all(trackedLeagues.map(async (slug) => {
+        const lgInfo = normalizeLeagueName('', slug);
+        await Promise.all(days.map(async (ymd) => {
+          try {
+            const url = `https://site.api.espn.com/apis/site/v2/sports/soccer/${slug}/scoreboard?dates=${ymd}&limit=100`;
+            const res = await fetch(url);
+            if (!res.ok) return;
+            const data = await res.json();
+            parseEventsFromScoreboardJson(data, slug, lgInfo.name).forEach(ev => {
+              matchesById.set(ev.id, ev);
+            });
+          } catch (err) {}
+        }));
+      }));
+
+      // 2. Complementa com /all/scoreboard para partidas de outras competições do dia
       await Promise.all(days.map(async (ymd) => {
         try {
           const url = `https://site.api.espn.com/apis/site/v2/sports/soccer/all/scoreboard?dates=${ymd}&limit=100`;
           const res = await fetch(url);
           if (!res.ok) return;
           const data = await res.json();
-
-          (data.events || []).forEach(ev => {
-            if (!ev || !ev.id || seenIds.has(ev.id)) return;
-            const comp = ev.competitions?.[0];
-            if (!comp || !comp.competitors || comp.competitors.length < 2) return;
-
-            const homeComp = comp.competitors.find(c => c.homeAway === 'home') || comp.competitors[0];
-            const awayComp = comp.competitors.find(c => c.homeAway === 'away') || comp.competitors[1];
-
-            const rawLeague = ev.league?.name || comp.league?.name || 'Futebol Mundial';
-            const leagueCode = ev.league?.slug || rawLeague;
-            const leagueName = LEAGUE_TRANSLATIONS[rawLeague] || rawLeague;
-
-            const stateType = ev.status?.type?.state || 'pre';
-            const detailText = ev.status?.type?.shortDetail || ev.status?.displayClock || '';
-
-            const homeName = homeComp.team?.shortDisplayName || homeComp.team?.displayName || 'Mandante';
-            const awayName = awayComp.team?.shortDisplayName || awayComp.team?.displayName || 'Visitante';
-
-            seenIds.add(ev.id);
-            loaded.push({
-              id: String(ev.id),
-              leagueCode: String(leagueCode),
-              leagueName: leagueName,
-              date: ev.date,
-              timestamp: new Date(ev.date).getTime() || 0,
-              status: stateType,
-              statusDetail: detailText,
-              homeName,
-              homeLogo: homeComp.team?.logo || '',
-              homeScore: parseInt(homeComp.score || '0', 10),
-              awayName,
-              awayLogo: awayComp.team?.logo || '',
-              awayScore: parseInt(awayComp.score || '0', 10),
-              markets: computeDeterministicMarkets(ev.id, homeName, awayName)
-            });
+          parseEventsFromScoreboardJson(data).forEach(ev => {
+            if (!matchesById.has(ev.id)) {
+              matchesById.set(ev.id, ev);
+            }
           });
         } catch (err) {
           console.warn('Falha ao buscar data:', ymd, err);
         }
       }));
+
+      const loaded = Array.from(matchesById.values());
 
       const prioritySlugs = new Set([
         'bra.1', 'bra.copa_do_brazil', 'conmebol.libertadores', 'conmebol.sudamericana',
