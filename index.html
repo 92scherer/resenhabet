@@ -3,6 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#090d16" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Resenha Bet" />
   <title>Resenha Bet — Portal de Palpites Esportivos Gratuitos</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -252,9 +256,14 @@
         <span class="px-2 py-0.5 rounded bg-amber-400/15 text-amber-300 border border-amber-400/30 font-bold uppercase text-[10px] tracking-wider shrink-0">Patrocinador Master</span>
         <span class="text-gray-300 leading-snug">Copa <strong class="text-white">Resenha Bet</strong> — Prêmio de <strong class="text-emerald-400">R$ 1.000 em Produtos</strong> para o Top 1 do mês!</span>
       </div>
-      <button type="button" onclick="openMediaKitModal()" class="text-amber-300 hover:text-amber-200 font-semibold underline underline-offset-2 transition shrink-0">
-        Anuncie sua marca aqui →
-      </button>
+      <div class="flex items-center gap-3 shrink-0">
+        <button type="button" id="btn-install-app" onclick="triggerInstallPrompt()" class="hidden text-emerald-400 hover:text-emerald-300 font-bold underline underline-offset-2 transition">
+          Instalar App
+        </button>
+        <button type="button" onclick="openMediaKitModal()" class="text-amber-300 hover:text-amber-200 font-semibold underline underline-offset-2 transition">
+          Anuncie sua marca aqui →
+        </button>
+      </div>
     </div>
   </div>
 
@@ -333,6 +342,7 @@
             <div class="flex flex-wrap items-center gap-2">
               <span class="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded bg-white/10 text-gray-300 shrink-0">Múltiplas Opções</span>
               <span id="api-sync-status" class="text-[11px] text-emerald-400 font-semibold">● Conectando grade ao vivo...</span>
+              <span id="cloud-sync-badge" class="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">Nuvem: OK</span>
             </div>
             <h2 class="text-base sm:text-lg font-extrabold text-white leading-snug">Resultado, + de 1 Gol, Escanteios e Lateral com várias linhas por jogo!</h2>
             <p class="text-xs text-gray-300 leading-relaxed">Cada opção clicada aparece na hora na janela menor ao lado para você acompanhar suas escolhas.</p>
@@ -348,6 +358,24 @@
         <!-- ABA: JOGOS REAIS -->
         <section id="tab-jogos" class="space-y-4">
           <div class="space-y-2.5">
+            <!-- BUSCA RÁPIDA POR TIME OU CAMPEONATO -->
+            <div class="relative">
+              <input
+                id="match-search-input"
+                type="search"
+                oninput="setSearchQuery(this.value)"
+                placeholder="Buscar time ou campeonato (ex: Grêmio, Flamengo, Champions, Premier)..."
+                class="w-full h-10 bg-gray-900 border border-gray-800 focus:border-emerald-500 rounded-xl pl-3.5 pr-9 text-xs font-semibold text-white placeholder-gray-500 outline-none transition"
+              />
+              <button
+                type="button"
+                id="btn-clear-search"
+                onclick="clearSearchQuery()"
+                aria-label="Limpar busca"
+                class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 w-6 h-6 rounded-md text-gray-400 hover:text-white hover:bg-gray-800 text-xs font-bold inline-flex items-center justify-center"
+              >✕</button>
+            </div>
+
             <div id="league-filters" class="flex items-center gap-2 overflow-x-auto pb-1.5">
               <button type="button" onclick="setLeagueFilter('ALL')" data-league="ALL" class="league-pill h-9 px-3.5 rounded-full text-xs font-bold bg-emerald-500 text-black whitespace-nowrap inline-flex items-center justify-center">Todos os Jogos</button>
             </div>
@@ -372,6 +400,27 @@
             <h2 class="text-lg font-extrabold text-white">Histórico de Bilhetes</h2>
             <span class="text-xs text-gray-400">Liquidação automática pelo placar oficial</span>
           </div>
+
+          <!-- RESUMO DE ESTATÍSTICAS PESSOAIS -->
+          <div id="stats-summary-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+            <div class="bg-gray-900 border border-gray-800 rounded-2xl p-3">
+              <div class="text-[10px] uppercase font-bold text-gray-400">Palpites</div>
+              <div id="stat-total-tickets" class="text-base font-black text-white tabular-nums mt-0.5">0</div>
+            </div>
+            <div class="bg-gray-900 border border-gray-800 rounded-2xl p-3">
+              <div class="text-[10px] uppercase font-bold text-gray-400">Taxa de Acerto</div>
+              <div id="stat-winrate" class="text-base font-black text-emerald-400 tabular-nums mt-0.5">0%</div>
+            </div>
+            <div class="bg-gray-900 border border-gray-800 rounded-2xl p-3">
+              <div class="text-[10px] uppercase font-bold text-gray-400">Greens</div>
+              <div id="stat-wins" class="text-base font-black text-emerald-400 tabular-nums mt-0.5">0</div>
+            </div>
+            <div class="bg-gray-900 border border-gray-800 rounded-2xl p-3">
+              <div class="text-[10px] uppercase font-bold text-gray-400">Maior Odd</div>
+              <div id="stat-best-odd" class="text-base font-black text-amber-400 tabular-nums mt-0.5">0.00</div>
+            </div>
+          </div>
+
           <div id="tickets-container" class="space-y-3"></div>
         </section>
 
@@ -573,23 +622,153 @@
 
   <script>
     const GOOGLE_SHEETS_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbwz-822hliCk6oNCS3BC0e_rpZ2mzqxZgCUZHXJP_Vf3HREs2jlUjiR5dPKUf2TcT8NIA/exec';
+    const CLOUD_QUEUE_KEY = 'rb_cloud_sync_queue';
 
-    function sendToCloud(payload) {
-      if (!GOOGLE_SHEETS_WEBHOOK_URL) return;
+    // PWA: registra manifest dinâmico para instalação rápida na tela inicial
+    (function setupDynamicManifest() {
       try {
-        fetch(GOOGLE_SHEETS_WEBHOOK_URL, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-      } catch (err) {
-        console.warn('Falha ao enviar para a nuvem:', err);
+        const manifestObj = {
+          name: 'Resenha Bet — Palpites Esportivos',
+          short_name: 'Resenha Bet',
+          start_url: './',
+          display: 'standalone',
+          background_color: '#090d16',
+          theme_color: '#090d16',
+          icons: [
+            { src: './logo.PNG', sizes: '192x192', type: 'image/png' },
+            { src: './logo.PNG', sizes: '512x512', type: 'image/png' }
+          ]
+        };
+        const blob = new Blob([JSON.stringify(manifestObj)], { type: 'application/manifest+json' });
+        const manifestUrl = URL.createObjectURL(blob);
+        const link = document.createElement('link');
+        link.rel = 'manifest';
+        link.href = manifestUrl;
+        document.head.appendChild(link);
+      } catch (e) {}
+    })();
+
+    let deferredInstallPrompt = null;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredInstallPrompt = e;
+      const btn = document.getElementById('btn-install-app');
+      if (btn) btn.classList.remove('hidden');
+    });
+
+    async function triggerInstallPrompt() {
+      if (!deferredInstallPrompt) {
+        showToast('No iPhone/Safari: toque em Compartilhar e "Adicionar à Tela de Início".');
+        return;
+      }
+      deferredInstallPrompt.prompt();
+      const { outcome } = await deferredInstallPrompt.userChoice;
+      deferredInstallPrompt = null;
+      const btn = document.getElementById('btn-install-app');
+      if (btn) btn.classList.add('hidden');
+      if (outcome === 'accepted') {
+        showToast('Resenha Bet adicionado à sua tela inicial!');
       }
     }
 
+    function getCloudQueue() {
+      try {
+        const raw = localStorage.getItem(CLOUD_QUEUE_KEY);
+        return raw ? JSON.parse(raw) : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function saveCloudQueue(queue) {
+      try {
+        localStorage.setItem(CLOUD_QUEUE_KEY, JSON.stringify(queue.slice(-50)));
+      } catch (e) {}
+    }
+
+    function updateCloudSyncBadge() {
+      const badge = document.getElementById('cloud-sync-badge');
+      if (!badge) return;
+      const queueLen = getCloudQueue().length;
+      if (!navigator.onLine) {
+        badge.textContent = `Offline (${queueLen} pendente${queueLen === 1 ? '' : 's'})`;
+        badge.className = 'text-[10px] font-bold px-2 py-0.5 rounded bg-amber-400/15 text-amber-300 border border-amber-400/30';
+      } else if (queueLen > 0) {
+        badge.textContent = `Sincronizando (${queueLen})`;
+        badge.className = 'text-[10px] font-bold px-2 py-0.5 rounded bg-amber-400/15 text-amber-300 border border-amber-400/30';
+      } else {
+        badge.textContent = 'Nuvem: OK';
+        badge.className = 'text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30';
+      }
+    }
+
+    async function postPayloadNow(payload) {
+      if (!GOOGLE_SHEETS_WEBHOOK_URL) return true;
+      await fetch(GOOGLE_SHEETS_WEBHOOK_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      return true;
+    }
+
+    async function flushCloudQueue() {
+      if (!navigator.onLine || !GOOGLE_SHEETS_WEBHOOK_URL) {
+        updateCloudSyncBadge();
+        return;
+      }
+      const queue = getCloudQueue();
+      if (!queue.length) {
+        updateCloudSyncBadge();
+        return;
+      }
+      const remaining = [];
+      for (const item of queue) {
+        try {
+          await postPayloadNow(item);
+        } catch (err) {
+          remaining.push(item);
+        }
+      }
+      saveCloudQueue(remaining);
+      updateCloudSyncBadge();
+    }
+
+    function sendToCloud(payload) {
+      if (!GOOGLE_SHEETS_WEBHOOK_URL) return;
+      const enriched = { ...payload, queuedAt: new Date().toISOString() };
+      if (!navigator.onLine) {
+        const q = getCloudQueue();
+        q.push(enriched);
+        saveCloudQueue(q);
+        updateCloudSyncBadge();
+        return;
+      }
+      postPayloadNow(enriched).then(() => {
+        updateCloudSyncBadge();
+      }).catch(() => {
+        const q = getCloudQueue();
+        q.push(enriched);
+        saveCloudQueue(q);
+        updateCloudSyncBadge();
+      });
+    }
+
+    window.addEventListener('online', () => {
+      flushCloudQueue();
+      showToast('Conexão restabelecida — sincronizando dados...');
+    });
+    window.addEventListener('offline', () => updateCloudSyncBadge());
+
+    function normalizeDigits(val) {
+      let d = String(val || '').replace(/\D/g, '');
+      if (d.length > 11 && d.startsWith('55')) d = d.slice(2);
+      return d;
+    }
+
     function getUserStorageKey(user) {
-      const digits = (user?.whatsappDigits || user?.whatsapp || '').replace(/\D/g, '');
+      const digits = normalizeDigits(user?.whatsappDigits || user?.whatsapp || '');
       return digits ? `rb_account_${digits}` : null;
     }
 
@@ -606,12 +785,13 @@
 
     function persistAccountSnapshot() {
       if (!state.user) return;
-      const key = getUserStorageKey(state.user);
+      const digits = normalizeDigits(state.user.whatsappDigits || state.user.whatsapp || '');
+      const key = digits ? `rb_account_${digits}` : null;
       const snapshot = {
         user: {
           name: state.user.name,
           whatsapp: state.user.whatsapp,
-          whatsappDigits: state.user.whatsappDigits,
+          whatsappDigits: digits,
           city: state.user.city,
           state: state.user.state,
           password: state.user.password,
@@ -775,7 +955,8 @@
       matches: [],
       matchMarketTabs: {},
       activeLeague: 'ALL',
-      activeStatus: 'ALL'
+      activeStatus: 'ALL',
+      searchQuery: ''
     };
 
     window.addEventListener('DOMContentLoaded', () => {
@@ -784,6 +965,8 @@
         checkUserRegistration();
       }, 1500);
 
+      updateCloudSyncBadge();
+      flushCloudQueue();
       applyUserProfileUI();
       updateBalanceUI();
       renderSlip();
@@ -791,7 +974,10 @@
       renderRanking();
       loadRealMatches(false);
 
-      setInterval(() => loadRealMatches(false), 60000);
+      setInterval(() => {
+        loadRealMatches(false);
+        flushCloudQueue();
+      }, 60000);
     });
 
     function forceUppercaseInput(input) {
@@ -802,6 +988,19 @@
         input.value = upper;
         input.setSelectionRange(start, end);
       }
+    }
+
+    function setSearchQuery(val) {
+      state.searchQuery = String(val || '').trim().toLowerCase();
+      const clearBtn = document.getElementById('btn-clear-search');
+      if (clearBtn) clearBtn.classList.toggle('hidden', !state.searchQuery);
+      renderMatches();
+    }
+
+    function clearSearchQuery() {
+      const input = document.getElementById('match-search-input');
+      if (input) input.value = '';
+      setSearchQuery('');
     }
 
     function setAuthMode(mode) {
@@ -883,7 +1082,7 @@
       const stateInput = document.getElementById('reg-state').value.trim().toUpperCase();
       const passInput = document.getElementById('reg-password').value;
       const passConfirmInput = document.getElementById('reg-password-confirm').value;
-      const waDigits = waInput.replace(/\D/g, '');
+      const waDigits = normalizeDigits(waInput);
       const errEl = document.getElementById('reg-error');
 
       if (nameInput.length < 2) {
@@ -970,7 +1169,7 @@
       event.preventDefault();
       const waInput = document.getElementById('login-whatsapp').value.trim();
       const passInput = document.getElementById('login-password').value;
-      const waDigits = waInput.replace(/\D/g, '');
+      const waDigits = normalizeDigits(waInput);
       const errEl = document.getElementById('login-error');
 
       if (waDigits.length < 10 || waDigits.length > 11) {
@@ -1367,6 +1566,32 @@
       }
     }
 
+    function cashOutTicket(ticketId) {
+      const idx = state.tickets.findIndex(t => t.id === ticketId);
+      if (idx === -1) return;
+      const ticket = state.tickets[idx];
+      if (ticket.status !== 'pending') return;
+
+      const returnAmount = Number((ticket.stake * 0.85).toFixed(2));
+      ticket.status = 'cashed_out';
+      ticket.cashOutAmount = returnAmount;
+      ticket.cashedOutAt = new Date().toLocaleTimeString('pt-BR', { timeZone: 'America/Sao_Paulo', hour: '2-digit', minute: '2-digit' });
+
+      state.balance = Number((state.balance + returnAmount).toFixed(2));
+      saveState();
+      updateBalanceUI();
+      renderTickets();
+      renderRanking();
+      showToast(`Cash-out concluído: +${formatCurrency(returnAmount)} devolvidos!`);
+
+      sendToCloud({
+        type: 'cash_out',
+        ticketId: ticket.id,
+        returnedAmount: returnAmount,
+        newBalance: state.balance
+      });
+    }
+
     function setLeagueFilter(code) {
       state.activeLeague = code;
       buildDynamicLeaguePills();
@@ -1468,12 +1693,18 @@
       } else if (state.activeStatus === 'FINISHED') {
         filtered = filtered.filter(m => m.status === 'post');
       }
+      if (state.searchQuery) {
+        filtered = filtered.filter(m => {
+          const haystack = `${m.homeName} ${m.awayName} ${m.leagueName}`.toLowerCase();
+          return haystack.includes(state.searchQuery);
+        });
+      }
 
       if (filtered.length === 0) {
         container.innerHTML = `
           <div class="bg-gray-900 border border-gray-800 rounded-2xl p-8 text-center space-y-2">
             <p class="text-sm font-bold text-gray-300">Nenhuma partida encontrada neste filtro.</p>
-            <button type="button" onclick="setLeagueFilter('ALL'); setStatusFilter('ALL');" class="text-xs font-bold text-emerald-400 underline py-1">Ver todos os jogos disponíveis</button>
+            <button type="button" onclick="clearSearchQuery(); setLeagueFilter('ALL'); setStatusFilter('ALL');" class="text-xs font-bold text-emerald-400 underline py-1">Ver todos os jogos disponíveis</button>
           </div>`;
         return;
       }
@@ -1778,7 +2009,28 @@
       });
     }
 
+    function updateUserStatsUI() {
+      const total = state.tickets.length;
+      const won = state.tickets.filter(t => t.status === 'won').length;
+      const lost = state.tickets.filter(t => t.status === 'lost').length;
+      const settled = won + lost;
+      const winrate = settled > 0 ? Math.round((won / settled) * 100) : 0;
+      const wonOdds = state.tickets.filter(t => t.status === 'won').map(t => t.totalOdd || 0);
+      const bestOdd = wonOdds.length ? Math.max(...wonOdds).toFixed(2) : '0.00';
+
+      const elTotal = document.getElementById('stat-total-tickets');
+      const elRate = document.getElementById('stat-winrate');
+      const elWins = document.getElementById('stat-wins');
+      const elBest = document.getElementById('stat-best-odd');
+
+      if (elTotal) elTotal.textContent = String(total);
+      if (elRate) elRate.textContent = `${winrate}%`;
+      if (elWins) elWins.textContent = String(won);
+      if (elBest) elBest.textContent = bestOdd;
+    }
+
     function renderTickets() {
+      updateUserStatsUI();
       const container = document.getElementById('tickets-container');
       if (state.tickets.length === 0) {
         container.innerHTML = `
@@ -1790,10 +2042,12 @@
       }
 
       container.innerHTML = state.tickets.map(t => {
+        const cashOutValue = (t.stake * 0.85).toFixed(2);
         const badgeMap = {
           pending: '<span class="h-6 inline-flex items-center px-2.5 rounded-full text-[11px] font-bold bg-amber-400/15 text-amber-300 border border-amber-400/30">Aguardando Resultado</span>',
           won: '<span class="h-6 inline-flex items-center px-2.5 rounded-full text-[11px] font-black bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">GREEN • PAGO</span>',
-          lost: '<span class="h-6 inline-flex items-center px-2.5 rounded-full text-[11px] font-bold bg-red-500/15 text-red-400 border border-red-500/30">RED</span>'
+          lost: '<span class="h-6 inline-flex items-center px-2.5 rounded-full text-[11px] font-bold bg-red-500/15 text-red-400 border border-red-500/30">RED</span>',
+          cashed_out: `<span class="h-6 inline-flex items-center px-2.5 rounded-full text-[11px] font-bold bg-sky-500/15 text-sky-300 border border-sky-500/30">CASH-OUT (${formatCurrency(t.cashOutAmount || 0)})</span>`
         };
 
         return `
@@ -1803,7 +2057,13 @@
                 <span class="font-black text-xs text-white">${t.id}</span>
                 <span class="text-[11px] text-gray-500">• ${t.createdAt}</span>
               </div>
-              ${badgeMap[t.status]}
+              <div class="flex items-center gap-2">
+                ${badgeMap[t.status] || badgeMap.pending}
+                ${t.status === 'pending' ? `
+                  <button type="button" onclick="cashOutTicket('${t.id}')" class="h-6 px-2.5 rounded-full text-[10px] font-black bg-sky-500/20 hover:bg-sky-500/30 text-sky-300 border border-sky-500/40 transition">
+                    Encerrar (${formatCurrency(cashOutValue)})
+                  </button>` : ''}
+              </div>
             </div>
             <div class="space-y-2">
               ${t.selections.map(s => `
@@ -1824,7 +2084,7 @@
             </div>
             <div class="flex flex-wrap items-center justify-between gap-2 text-xs pt-1">
               <span class="text-gray-400">Palpite: <strong class="text-white tabular-nums">${formatCurrency(t.stake)}</strong> (Odd ${t.totalOdd.toFixed(2)})</span>
-              <span class="text-gray-400">Retorno: <strong class="${t.status === 'won' ? 'text-emerald-400' : 'text-white'} tabular-nums">${formatCurrency(t.potentialReturn)}</strong></span>
+              <span class="text-gray-400">Retorno: <strong class="${t.status === 'won' ? 'text-emerald-400' : 'text-white'} tabular-nums">${formatCurrency(t.status === 'cashed_out' ? (t.cashOutAmount || 0) : t.potentialReturn)}</strong></span>
             </div>
           </div>`;
       }).join('');
@@ -1876,6 +2136,7 @@
         }
       });
       if (tab === 'ranking') renderRanking();
+      if (tab === 'bilhetes') renderTickets();
     }
 
     let rechargeTimer = null;
