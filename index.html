@@ -33,11 +33,11 @@
       50% { opacity: 0.4; transform: scale(1.25); }
     }
     @keyframes pop-in {
-      0% { opacity: 0; transform: translateY(6px) scale(0.98); }
-      100% { opacity: 1; transform: translateY(0) scale(1); }
+      0% { opacity: 0; transform: translateX(8px) scale(0.98); }
+      100% { opacity: 1; transform: translateX(0) scale(1); }
     }
     .live-dot { animation: pulse-live 1.5s infinite; }
-    .pick-pop { animation: pop-in 0.18s ease-out; }
+    .pick-pop { animation: pop-in 0.16s ease-out; }
     #splash-screen { transition: opacity 0.45s ease, visibility 0.45s ease; }
     .splash-hidden { opacity: 0; visibility: hidden; pointer-events: none; }
   </style>
@@ -313,11 +313,11 @@
   </header>
 
   <!-- CONTEÚDO PRINCIPAL -->
-  <main class="max-w-7xl w-full mx-auto px-3 sm:px-4 py-5 sm:py-6 flex-1">
+  <main class="max-w-7xl w-full mx-auto px-3 sm:px-4 py-5 sm:py-6 flex-1 pb-24 lg:pb-8">
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 items-start">
 
       <!-- COLUNA ESQUERDA: GRADE DE JOGOS / BILHETES / RANKING -->
-      <div class="lg:col-span-7 xl:col-span-8 space-y-5 min-w-0">
+      <div class="lg:col-span-8 space-y-5 min-w-0">
 
         <!-- BANNER PUBLICITÁRIO TOPO -->
         <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-gray-900 via-emerald-950/60 to-gray-900 border border-emerald-500/30 p-4 sm:p-5 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
@@ -327,7 +327,7 @@
               <span id="api-sync-status" class="text-[11px] text-emerald-400 font-semibold">● Conectando grade ao vivo...</span>
             </div>
             <h2 class="text-base sm:text-lg font-extrabold text-white leading-snug">Resultado, + de 1 Gol, Escanteios e Lateral com várias linhas por jogo!</h2>
-            <p class="text-xs text-gray-300 leading-relaxed">Cada jogo mostra sua competição ao lado e cada clique atualiza a janela lateral ao vivo.</p>
+            <p class="text-xs text-gray-300 leading-relaxed">Cada opção clicada aparece na hora na janela menor ao lado para você acompanhar suas escolhas.</p>
           </div>
           <div class="flex items-center gap-2 shrink-0">
             <button type="button" onclick="loadRealMatches(true)" id="btn-sync-api" class="w-full sm:w-auto min-h-[42px] bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold text-xs px-4 py-2.5 rounded-xl transition inline-flex items-center justify-center gap-1.5 shadow-lg shadow-emerald-500/20 whitespace-nowrap">
@@ -386,69 +386,86 @@
 
       </div>
 
-      <!-- COLUNA DIREITA: JANELA LATERAL AO VIVO DAS APOSTAS MARCADAS + ESPAÇO PATROCINADOR -->
-      <aside id="live-betslip-panel" class="lg:col-span-5 xl:col-span-4 space-y-5 lg:sticky lg:top-48 min-w-0">
+      <!-- COLUNA DIREITA: JANELA MENOR AO VIVO AO LADO COM AS APOSTAS SELECIONADAS -->
+      <aside id="live-betslip-panel" class="lg:col-span-4 space-y-4 lg:sticky lg:top-44 min-w-0">
 
-        <div class="bg-gray-900 border-2 border-emerald-500/40 rounded-2xl overflow-hidden shadow-2xl shadow-emerald-500/10">
-          <div class="bg-gradient-to-r from-gray-950 via-emerald-950/50 to-gray-950 px-4 py-3.5 border-b border-gray-800 flex items-center justify-between gap-2">
+        <div id="side-picks-window" class="bg-gray-900/95 border border-emerald-500/40 rounded-2xl overflow-hidden shadow-2xl shadow-emerald-500/10 transition-all">
+          <div class="bg-gradient-to-r from-gray-950 via-emerald-950/60 to-gray-950 px-3.5 py-2.5 border-b border-gray-800 flex items-center justify-between gap-2">
             <div class="flex items-center gap-2 min-w-0">
-              <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 live-dot shrink-0"></span>
-              <h3 class="font-extrabold text-sm text-white uppercase tracking-wide truncate">Suas Apostas Marcadas</h3>
+              <span class="w-2 h-2 rounded-full bg-emerald-400 live-dot shrink-0"></span>
+              <h3 class="font-extrabold text-xs text-white uppercase tracking-wide truncate">Apostas Selecionadas</h3>
             </div>
-            <span id="slip-count" class="text-xs font-black px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 shrink-0">0 seleções</span>
+            <span id="slip-count" class="text-[11px] font-black px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 shrink-0">0 marcadas</span>
           </div>
 
-          <div id="betslip-items" class="p-4 space-y-2.5 max-h-96 overflow-y-auto">
-            <div class="text-center py-8 text-gray-500 text-xs leading-relaxed">
-              Conforme você for clicando em <strong class="text-gray-300">1X2</strong>, <strong class="text-emerald-400">+ de 1 Gol</strong>, <strong class="text-amber-300">Escanteios</strong> ou <strong class="text-sky-300">Lateral</strong>, cada palpite aparece aqui na hora com a competição e a odd.
+          <!-- Resumo compacto no topo da janela -->
+          <div id="slip-mini-summary" class="hidden grid grid-cols-3 divide-x divide-gray-800 bg-gray-950/80 border-b border-gray-800 text-center">
+            <div class="py-2 px-1.5">
+              <div class="text-[9px] uppercase font-bold text-gray-400">Jogos/Linhas</div>
+              <div id="mini-picks-val" class="text-xs font-black text-white tabular-nums mt-0.5">0</div>
+            </div>
+            <div class="py-2 px-1.5">
+              <div class="text-[9px] uppercase font-bold text-gray-400">Odd Total</div>
+              <div id="mini-odd-val" class="text-xs font-black text-amber-400 tabular-nums mt-0.5">1.00</div>
+            </div>
+            <div class="py-2 px-1.5">
+              <div class="text-[9px] uppercase font-bold text-gray-400">Retorno</div>
+              <div id="mini-return-val" class="text-xs font-black text-emerald-400 tabular-nums mt-0.5">RC$ 0,00</div>
             </div>
           </div>
 
-          <div id="betslip-footer" class="hidden p-4 bg-gray-950/95 border-t border-gray-800 space-y-3">
-            <div class="flex items-center justify-between text-xs">
-              <span class="text-gray-400 font-medium">Formato do Bilhete:</span>
+          <!-- Lista compacta das apostas marcadas na hora -->
+          <div id="betslip-items" class="p-3 space-y-2 max-h-64 overflow-y-auto">
+            <div class="text-center py-5 px-2 text-gray-500 text-[11px] leading-relaxed">
+              Clique em qualquer odd ao lado (<strong class="text-gray-300">1X2</strong>, <strong class="text-emerald-400">+1 Gol</strong>, <strong class="text-amber-300">Escanteios</strong> ou <strong class="text-sky-300">Lateral</strong>) para ver sua aposta aparecer aqui na hora.
+            </div>
+          </div>
+
+          <div id="betslip-footer" class="hidden p-3.5 bg-gray-950 border-t border-gray-800 space-y-2.5">
+            <div class="flex items-center justify-between text-[11px]">
+              <span class="text-gray-400 font-medium">Tipo:</span>
               <span id="slip-type-label" class="font-bold text-amber-400">Simples</span>
             </div>
-            <div class="flex items-center justify-between text-xs">
-              <span class="text-gray-400 font-medium">Odd Total Combinada:</span>
-              <span id="slip-total-odd" class="font-black text-white text-sm tabular-nums">1.00</span>
+            <div class="flex items-center justify-between text-[11px]">
+              <span class="text-gray-400 font-medium">Odd Total:</span>
+              <span id="slip-total-odd" class="font-black text-white text-xs tabular-nums">1.00</span>
             </div>
 
             <div>
-              <div class="flex items-center justify-between gap-2 text-xs mb-1.5">
-                <label for="stake-input" class="text-gray-400 font-semibold">Valor do Palpite (RC$)</label>
+              <div class="flex items-center justify-between gap-2 text-[11px] mb-1">
+                <label for="stake-input" class="text-gray-400 font-semibold">Valor (RC$)</label>
                 <div class="flex gap-1 shrink-0">
-                  <button type="button" onclick="setQuickStake(50)" class="min-h-[28px] px-2.5 py-0.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-[11px] font-bold text-gray-300 inline-flex items-center justify-center">50</button>
-                  <button type="button" onclick="setQuickStake(100)" class="min-h-[28px] px-2.5 py-0.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-[11px] font-bold text-gray-300 inline-flex items-center justify-center">100</button>
-                  <button type="button" onclick="setQuickStake(250)" class="min-h-[28px] px-2.5 py-0.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-[11px] font-bold text-gray-300 inline-flex items-center justify-center">250</button>
+                  <button type="button" onclick="setQuickStake(50)" class="min-h-[26px] px-2 py-0.5 rounded-md bg-gray-800 hover:bg-gray-700 text-[10px] font-bold text-gray-300 inline-flex items-center justify-center">50</button>
+                  <button type="button" onclick="setQuickStake(100)" class="min-h-[26px] px-2 py-0.5 rounded-md bg-gray-800 hover:bg-gray-700 text-[10px] font-bold text-gray-300 inline-flex items-center justify-center">100</button>
+                  <button type="button" onclick="setQuickStake(250)" class="min-h-[26px] px-2 py-0.5 rounded-md bg-gray-800 hover:bg-gray-700 text-[10px] font-bold text-gray-300 inline-flex items-center justify-center">250</button>
                 </div>
               </div>
-              <input id="stake-input" type="number" min="10" step="10" value="100" oninput="updateSlipTotals()" class="w-full min-w-0 bg-gray-900 border border-gray-700 focus:border-emerald-500 rounded-xl px-3 py-2.5 text-sm font-black text-white outline-none tabular-nums" />
+              <input id="stake-input" type="number" min="10" step="10" value="100" oninput="updateSlipTotals()" class="w-full min-w-0 bg-gray-900 border border-gray-700 focus:border-emerald-500 rounded-xl px-3 py-2 text-xs font-black text-white outline-none tabular-nums" />
             </div>
 
             <div class="flex items-center justify-between pt-1 border-t border-gray-800">
-              <span class="text-xs text-gray-400 font-semibold">Retorno Potencial:</span>
-              <span id="slip-potential-return" class="text-base font-black text-emerald-400 tabular-nums">RC$ 0,00</span>
+              <span class="text-[11px] text-gray-400 font-semibold">Retorno Potencial:</span>
+              <span id="slip-potential-return" class="text-sm font-black text-emerald-400 tabular-nums">RC$ 0,00</span>
             </div>
 
             <div class="flex items-center gap-2">
-              <button type="button" onclick="clearSlip()" class="min-h-[42px] px-3.5 py-2.5 rounded-xl bg-gray-800 hover:bg-gray-700 text-xs font-bold text-gray-300 transition inline-flex items-center justify-center shrink-0">Limpar</button>
-              <button type="button" onclick="placeBet()" class="flex-1 min-h-[42px] bg-emerald-500 hover:bg-emerald-400 text-black font-black text-xs sm:text-sm py-2.5 px-3 rounded-xl shadow-lg shadow-emerald-500/20 transition inline-flex items-center justify-center text-center leading-tight">
+              <button type="button" onclick="clearSlip()" class="min-h-[40px] px-3 py-2 rounded-xl bg-gray-800 hover:bg-gray-700 text-xs font-bold text-gray-300 transition inline-flex items-center justify-center shrink-0">Limpar</button>
+              <button type="button" onclick="placeBet()" class="flex-1 min-h-[40px] bg-emerald-500 hover:bg-emerald-400 text-black font-black text-xs py-2 px-3 rounded-xl shadow-lg shadow-emerald-500/20 transition inline-flex items-center justify-center text-center leading-tight">
                 Confirmar Palpite Grátis
               </button>
             </div>
           </div>
         </div>
 
-        <div class="rounded-2xl bg-gradient-to-b from-gray-900 to-gray-950 border border-amber-400/30 p-5 text-center space-y-3">
+        <div class="rounded-2xl bg-gradient-to-b from-gray-900 to-gray-950 border border-amber-400/30 p-4 text-center space-y-2.5">
           <span class="inline-block text-[10px] font-bold uppercase tracking-widest px-2.5 py-0.5 rounded-full bg-amber-400/15 text-amber-300 border border-amber-400/30">
             Espaço Patrocinado
           </span>
-          <h4 class="font-black text-base text-white">Sua Marca no Centro da Resenha</h4>
-          <p class="text-xs text-gray-400 leading-relaxed">
+          <h4 class="font-black text-sm text-white">Sua Marca no Centro da Resenha</h4>
+          <p class="text-[11px] text-gray-400 leading-relaxed">
             Impacte milhares de fãs de futebol todos os dias com banners exclusivos, naming rights de ligas e recargas patrocinadas.
           </p>
-          <button type="button" onclick="openMediaKitModal()" class="w-full min-h-[42px] py-2.5 px-4 rounded-xl bg-amber-400/15 hover:bg-amber-400/25 border border-amber-400/40 text-amber-300 font-bold text-xs transition inline-flex items-center justify-center">
+          <button type="button" onclick="openMediaKitModal()" class="w-full min-h-[38px] py-2 px-3 rounded-xl bg-amber-400/15 hover:bg-amber-400/25 border border-amber-400/40 text-amber-300 font-bold text-xs transition inline-flex items-center justify-center">
             Ver Mídia Kit & Cotas
           </button>
         </div>
@@ -456,6 +473,20 @@
       </aside>
     </div>
   </main>
+
+  <!-- JANELA COMPACTA FLUTUANTE NO MOBILE QUANDO HÁ APOSTAS MARCADAS -->
+  <div id="mobile-floating-slip" class="lg:hidden fixed bottom-3 left-3 right-3 z-30 hidden bg-gray-900/95 backdrop-blur-md border border-emerald-500/50 rounded-2xl px-3.5 py-2.5 shadow-2xl flex items-center justify-between gap-2">
+    <div class="min-w-0">
+      <div class="flex items-center gap-1.5">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 live-dot shrink-0"></span>
+        <span id="mobile-slip-count-label" class="text-xs font-black text-white truncate">0 marcadas</span>
+      </div>
+      <div id="mobile-slip-odd-label" class="text-[11px] text-emerald-400 font-bold tabular-nums">Odd 1.00</div>
+    </div>
+    <button type="button" onclick="scrollToLiveSlip()" class="min-h-[36px] px-3 py-1.5 rounded-xl bg-emerald-500 text-black font-black text-xs shrink-0 inline-flex items-center justify-center">
+      Ver Seleções ↑
+    </button>
+  </div>
 
   <!-- MODAL: RECARGA PATROCINADA -->
   <div id="recharge-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
@@ -934,13 +965,18 @@
       document.getElementById('toast-msg').textContent = msg;
       toast.classList.remove('hidden');
       clearTimeout(window._toastTimer);
-      window._toastTimer = setTimeout(() => toast.classList.add('hidden'), 3000);
+      window._toastTimer = setTimeout(() => toast.classList.add('hidden'), 2600);
     }
 
     function updateBalanceUI() {
       document.getElementById('user-balance').textContent = formatCurrency(state.balance);
       document.getElementById('badge-bilhetes').textContent = state.tickets.length;
       document.getElementById('mbadge-bilhetes').textContent = state.tickets.length;
+    }
+
+    function scrollToLiveSlip() {
+      const el = document.getElementById('live-betslip-panel');
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     function getSingleDayStrings(daysAhead = 5) {
@@ -1068,7 +1104,6 @@
       const days = getSingleDayStrings(5);
       const matchesById = new Map();
 
-      // 1. Consulta por competições principais para garantir o campeonato exato de cada jogo
       const trackedLeagues = [
         'bra.1', 'bra.copa_do_brazil', 'conmebol.libertadores', 'conmebol.sudamericana',
         'uefa.champions', 'uefa.europa', 'eng.1', 'esp.1', 'ita.1', 'ger.1', 'fra.1', 'arg.1', 'por.1'
@@ -1089,7 +1124,6 @@
         }));
       }));
 
-      // 2. Complementa com /all/scoreboard para partidas de outras competições do dia
       await Promise.all(days.map(async (ymd) => {
         try {
           const url = `https://site.api.espn.com/apis/site/v2/sports/soccer/all/scoreboard?dates=${ymd}&limit=100`;
@@ -1455,11 +1489,11 @@
 
     function getSelectionDetails(match, market, pick) {
       if (market === 'goals') {
-        if (pick === 'OVER_15') return { marketName: '+ de 1 Gol', label: '+ de 1.5 Gols', odd: match.markets.goals.over15 };
-        if (pick === 'OVER_25') return { marketName: '+ de 1 Gol', label: '+ de 2.5 Gols', odd: match.markets.goals.over25 };
-        if (pick === 'OVER_35') return { marketName: '+ de 1 Gol', label: '+ de 3.5 Gols', odd: match.markets.goals.over35 };
-        if (pick === 'BTTS_YES') return { marketName: '+ de 1 Gol', label: 'Ambos Marcam (Sim)', odd: match.markets.goals.bttsYes };
-        return { marketName: '+ de 1 Gol', label: '- de 1.5 Gols', odd: match.markets.goals.under15 };
+        if (pick === 'OVER_15') return { marketName: '+1 Gol', label: '+ de 1.5 Gols', odd: match.markets.goals.over15 };
+        if (pick === 'OVER_25') return { marketName: '+1 Gol', label: '+ de 2.5 Gols', odd: match.markets.goals.over25 };
+        if (pick === 'OVER_35') return { marketName: '+1 Gol', label: '+ de 3.5 Gols', odd: match.markets.goals.over35 };
+        if (pick === 'BTTS_YES') return { marketName: '+1 Gol', label: 'Ambos Marcam', odd: match.markets.goals.bttsYes };
+        return { marketName: '+1 Gol', label: '- de 1.5 Gols', odd: match.markets.goals.under15 };
       }
       if (market === 'corners') {
         if (pick === 'CORNERS_OVER_75') return { marketName: 'Escanteios', label: '+7.5 Escanteios', odd: match.markets.corners.over75 };
@@ -1475,11 +1509,11 @@
         if (pick === 'THROW_TOTAL_405') return { marketName: 'Lateral', label: '+40.5 Lat. Total', odd: match.markets.throwIns.totalOver405 };
         return { marketName: 'Lateral', label: '-37.5 Lat. Total', odd: match.markets.throwIns.totalUnder375 };
       }
-      if (pick === '1') return { marketName: 'Resultado (1X2)', label: `Vitória ${match.homeName}`, odd: match.markets.result.home };
-      if (pick === '2') return { marketName: 'Resultado (1X2)', label: `Vitória ${match.awayName}`, odd: match.markets.result.away };
-      if (pick === 'DC_1X') return { marketName: 'Resultado (1X2)', label: 'Casa ou Empate (1X)', odd: match.markets.result.dc1x };
-      if (pick === 'DC_X2') return { marketName: 'Resultado (1X2)', label: 'Empate ou Fora (X2)', odd: match.markets.result.dcx2 };
-      return { marketName: 'Resultado (1X2)', label: 'Empate (X)', odd: match.markets.result.draw };
+      if (pick === '1') return { marketName: '1X2', label: `Vitória ${match.homeName}`, odd: match.markets.result.home };
+      if (pick === '2') return { marketName: '1X2', label: `Vitória ${match.awayName}`, odd: match.markets.result.away };
+      if (pick === 'DC_1X') return { marketName: '1X2', label: 'Casa ou Empate (1X)', odd: match.markets.result.dc1x };
+      if (pick === 'DC_X2') return { marketName: '1X2', label: 'Empate ou Fora (X2)', odd: match.markets.result.dcx2 };
+      return { marketName: '1X2', label: 'Empate (X)', odd: match.markets.result.draw };
     }
 
     function toggleSelection(matchId, market, pick) {
@@ -1519,33 +1553,44 @@
     function renderSlip() {
       const container = document.getElementById('betslip-items');
       const footer = document.getElementById('betslip-footer');
+      const miniSummary = document.getElementById('slip-mini-summary');
+      const sideWindow = document.getElementById('side-picks-window');
+      const mobileBar = document.getElementById('mobile-floating-slip');
       const countEl = document.getElementById('slip-count');
 
-      countEl.textContent = `${state.slip.length} ${state.slip.length === 1 ? 'seleção' : 'seleções'}`;
+      const totalCount = state.slip.length;
+      countEl.textContent = `${totalCount} ${totalCount === 1 ? 'marcada' : 'marcadas'}`;
 
-      if (state.slip.length === 0) {
+      if (totalCount === 0) {
         footer.classList.add('hidden');
+        miniSummary.classList.add('hidden');
+        mobileBar.classList.add('hidden');
+        sideWindow.className = 'bg-gray-900/95 border border-gray-800 rounded-2xl overflow-hidden shadow-xl transition-all';
         container.innerHTML = `
-          <div class="text-center py-8 text-gray-500 text-xs leading-relaxed">
-            Conforme você for clicando em <strong class="text-gray-300">1X2</strong>, <strong class="text-emerald-400">+ de 1 Gol</strong>, <strong class="text-amber-300">Escanteios</strong> ou <strong class="text-sky-300">Lateral</strong>, cada palpite aparece aqui na hora com a competição e a odd.
+          <div class="text-center py-5 px-2 text-gray-500 text-[11px] leading-relaxed">
+            Clique em qualquer odd ao lado (<strong class="text-gray-300">1X2</strong>, <strong class="text-emerald-400">+1 Gol</strong>, <strong class="text-amber-300">Escanteios</strong> ou <strong class="text-sky-300">Lateral</strong>) para ver sua aposta aparecer aqui na hora.
           </div>`;
         return;
       }
 
       footer.classList.remove('hidden');
-      container.innerHTML = state.slip.map((item, index) => `
-        <div class="pick-pop bg-gray-950 border border-emerald-500/30 rounded-xl p-3 flex items-start justify-between gap-2">
+      miniSummary.classList.remove('hidden');
+      mobileBar.classList.remove('hidden');
+      sideWindow.className = 'bg-gray-900 border-2 border-emerald-400 rounded-2xl overflow-hidden shadow-2xl shadow-emerald-500/20 transition-all';
+
+      container.innerHTML = state.slip.map((item) => `
+        <div class="pick-pop bg-gray-950 border border-emerald-500/35 rounded-xl px-2.5 py-2 flex items-center justify-between gap-2">
           <div class="min-w-0">
-            <div class="flex flex-wrap items-center gap-1.5">
-              <span class="text-[10px] font-black uppercase px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-400">${item.marketName}</span>
-              <span class="text-[10px] font-bold text-gray-400 truncate">${item.leagueName}</span>
+            <div class="flex items-center gap-1.5 min-w-0">
+              <span class="text-[9px] font-black uppercase px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-400 shrink-0">${item.marketName}</span>
+              <span class="text-[10px] font-semibold text-gray-400 truncate">${item.leagueName}</span>
             </div>
-            <div class="text-xs font-bold text-white truncate mt-1">${item.matchTitle}</div>
-            <div class="text-xs text-amber-300 font-extrabold mt-0.5">${item.pickLabel}</div>
+            <div class="text-[11px] font-bold text-white truncate mt-0.5">${item.matchTitle}</div>
+            <div class="text-[11px] text-amber-300 font-extrabold truncate">${item.pickLabel}</div>
           </div>
-          <div class="flex items-center gap-1.5 shrink-0">
-            <span class="px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-400 font-black text-xs tabular-nums">@${item.odd.toFixed(2)}</span>
-            <button type="button" onclick="toggleSelection('${item.matchId}', '${item.market}', '${item.pick}')" aria-label="Remover seleção" class="w-7 h-7 rounded-lg text-gray-400 hover:text-red-400 hover:bg-gray-900 text-xs font-bold inline-flex items-center justify-center">✕</button>
+          <div class="flex items-center gap-1 shrink-0">
+            <span class="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-black text-[11px] tabular-nums">@${item.odd.toFixed(2)}</span>
+            <button type="button" onclick="toggleSelection('${item.matchId}', '${item.market}', '${item.pick}')" aria-label="Remover seleção" class="w-6 h-6 rounded-md text-gray-400 hover:text-red-400 hover:bg-gray-900 text-[11px] font-bold inline-flex items-center justify-center">✕</button>
           </div>
         </div>
       `).join('');
@@ -1562,10 +1607,23 @@
       const totalOdd = state.slip.reduce((acc, item) => acc * item.odd, 1);
       const stake = Math.max(0, parseFloat(document.getElementById('stake-input').value) || 0);
       const potential = stake * totalOdd;
+      const formattedReturn = formatCurrency(potential);
 
-      document.getElementById('slip-type-label').textContent = state.slip.length > 1 ? `Múltipla (${state.slip.length} seleções)` : 'Simples';
+      document.getElementById('slip-type-label').textContent = state.slip.length > 1 ? `Múltipla (${state.slip.length})` : 'Simples';
       document.getElementById('slip-total-odd').textContent = totalOdd.toFixed(2);
-      document.getElementById('slip-potential-return').textContent = formatCurrency(potential);
+      document.getElementById('slip-potential-return').textContent = formattedReturn;
+
+      const miniCount = document.getElementById('mini-picks-val');
+      const miniOdd = document.getElementById('mini-odd-val');
+      const miniReturn = document.getElementById('mini-return-val');
+      const mobileCount = document.getElementById('mobile-slip-count-label');
+      const mobileOdd = document.getElementById('mobile-slip-odd-label');
+
+      if (miniCount) miniCount.textContent = String(state.slip.length);
+      if (miniOdd) miniOdd.textContent = totalOdd.toFixed(2);
+      if (miniReturn) miniReturn.textContent = formattedReturn;
+      if (mobileCount) mobileCount.textContent = `${state.slip.length} ${state.slip.length === 1 ? 'aposta marcada' : 'apostas marcadas'}`;
+      if (mobileOdd) mobileOdd.textContent = `Odd ${totalOdd.toFixed(2)} • Retorno ${formattedReturn}`;
     }
 
     function clearSlip() {
