@@ -292,6 +292,7 @@
         <button type="button" onclick="switchTab('bilhetes')" id="nav-bilhetes" class="tab-btn h-9 px-4 rounded-lg text-xs font-semibold text-gray-300 hover:text-white transition inline-flex items-center justify-center gap-1.5 whitespace-nowrap">
           <span>Meus Bilhetes</span>
           <span id="badge-bilhetes" class="px-1.5 py-0.5 text-[10px] leading-none rounded-full bg-gray-800 text-emerald-400 font-bold shrink-0">0</span>
+          <span id="badge-bilhetes-alert" class="hidden px-1.5 py-0.5 text-[9px] leading-none rounded-full bg-amber-400 text-black font-black shrink-0">!</span>
         </button>
         <button type="button" onclick="switchTab('ranking')" id="nav-ranking" class="tab-btn h-9 px-4 rounded-lg text-xs font-semibold text-gray-300 hover:text-white transition inline-flex items-center justify-center gap-1.5 whitespace-nowrap">
           <span>Ranking &amp; Prêmios</span>
@@ -322,6 +323,7 @@
       <button type="button" onclick="switchTab('bilhetes')" id="mnav-bilhetes" class="h-10 px-2 text-gray-400 border-b-2 border-transparent inline-flex items-center justify-center gap-1 text-center leading-tight">
         <span>Bilhetes</span>
         <span class="px-1.5 py-0.5 text-[10px] leading-none rounded-full bg-gray-800 text-emerald-400 font-bold" id="mbadge-bilhetes">0</span>
+        <span id="mbadge-bilhetes-alert" class="hidden px-1 py-0.5 text-[9px] leading-none rounded-full bg-amber-400 text-black font-black">!</span>
       </button>
       <button type="button" onclick="switchTab('ranking')" id="mnav-ranking" class="h-10 px-2 text-gray-400 border-b-2 border-transparent inline-flex items-center justify-center text-center leading-tight">
         Ranking
@@ -380,6 +382,17 @@
               <button type="button" onclick="setLeagueFilter('ALL')" data-league="ALL" class="league-pill h-9 px-3.5 rounded-full text-xs font-bold bg-emerald-500 text-black whitespace-nowrap inline-flex items-center justify-center">Todos os Jogos</button>
             </div>
 
+            <!-- FILTROS RÁPIDOS DE DATA + STATUS -->
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <div id="date-filters" class="flex flex-wrap items-center gap-1.5">
+                <button type="button" onclick="setDateFilter('ALL')" data-date="ALL" class="date-pill h-8 px-3 rounded-lg text-[11px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 inline-flex items-center justify-center">Todas Datas</button>
+                <button type="button" onclick="setDateFilter('TODAY')" data-date="TODAY" class="date-pill h-8 px-3 rounded-lg text-[11px] font-semibold bg-gray-950 text-gray-400 border border-gray-800 hover:text-white inline-flex items-center justify-center">Hoje</button>
+                <button type="button" onclick="setDateFilter('TOMORROW')" data-date="TOMORROW" class="date-pill h-8 px-3 rounded-lg text-[11px] font-semibold bg-gray-950 text-gray-400 border border-gray-800 hover:text-white inline-flex items-center justify-center">Amanhã</button>
+                <button type="button" onclick="setDateFilter('UPCOMING')" data-date="UPCOMING" class="date-pill h-8 px-3 rounded-lg text-[11px] font-semibold bg-gray-950 text-gray-400 border border-gray-800 hover:text-white inline-flex items-center justify-center">Próximos Dias</button>
+              </div>
+              <span class="text-[11px] text-gray-400">Fuso: <strong class="text-gray-300">Horário de Brasília (UTC-3)</strong></span>
+            </div>
+
             <div class="flex flex-wrap items-center justify-between gap-2">
               <div id="status-filters" class="flex flex-wrap items-center gap-1.5">
                 <button type="button" onclick="setStatusFilter('ALL')" data-status="ALL" class="status-pill h-8 px-3 rounded-lg text-[11px] font-bold bg-gray-800 text-white border border-gray-700 inline-flex items-center justify-center">Todos</button>
@@ -387,7 +400,6 @@
                 <button type="button" onclick="setStatusFilter('LIVE')" data-status="LIVE" class="status-pill h-8 px-3 rounded-lg text-[11px] font-semibold bg-gray-950 text-gray-400 border border-gray-800 hover:text-white inline-flex items-center justify-center">Ao Vivo</button>
                 <button type="button" onclick="setStatusFilter('FINISHED')" data-status="FINISHED" class="status-pill h-8 px-3 rounded-lg text-[11px] font-semibold bg-gray-950 text-gray-400 border border-gray-800 hover:text-white inline-flex items-center justify-center">Encerrados</button>
               </div>
-              <span class="text-[11px] text-gray-400">Fuso: <strong class="text-gray-300">Horário de Brasília (UTC-3)</strong></span>
             </div>
           </div>
 
@@ -395,7 +407,7 @@
         </section>
 
         <!-- ABA: MEUS BILHETES -->
-        <section id="tab-bilhetes" class="hidden space-y-4">
+        <section id="tab-bilhetes" class="hidden space-y-5">
           <div class="flex flex-wrap items-center justify-between gap-2">
             <h2 class="text-lg font-extrabold text-white">Histórico de Bilhetes</h2>
             <span class="text-xs text-gray-400">Liquidação automática pelo placar oficial</span>
@@ -422,6 +434,18 @@
           </div>
 
           <div id="tickets-container" class="space-y-3"></div>
+
+          <!-- HISTÓRICO DE MOVIMENTAÇÕES DA BANCA -->
+          <div class="bg-gray-900 border border-gray-800 rounded-2xl p-4 sm:p-5 space-y-3">
+            <div class="flex items-center justify-between gap-2 border-b border-gray-800 pb-2.5">
+              <div>
+                <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-400">Extrato da Conta</span>
+                <h3 class="text-sm sm:text-base font-extrabold text-white">Movimentações da Banca</h3>
+              </div>
+              <span id="ledger-count" class="text-[11px] text-gray-400 font-semibold">0 registros</span>
+            </div>
+            <div id="ledger-container" class="divide-y divide-gray-800/80 max-h-72 overflow-y-auto"></div>
+          </div>
         </section>
 
         <!-- ABA: RANKING & PRÊMIOS -->
@@ -624,7 +648,6 @@
     const GOOGLE_SHEETS_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbwz-822hliCk6oNCS3BC0e_rpZ2mzqxZgCUZHXJP_Vf3HREs2jlUjiR5dPKUf2TcT8NIA/exec';
     const CLOUD_QUEUE_KEY = 'rb_cloud_sync_queue';
 
-    // PWA: registra manifest dinâmico para instalação rápida na tela inicial
     (function setupDynamicManifest() {
       try {
         const manifestObj = {
@@ -783,6 +806,25 @@
       }
     }
 
+    function addLedgerEntry(kind, title, amount, isCredit) {
+      const nowStr = new Date().toLocaleString('pt-BR', {
+        timeZone: 'America/Sao_Paulo',
+        day: '2-digit',
+        month: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+      state.ledger.unshift({
+        id: 'MOV-' + Date.now().toString(36).toUpperCase() + '-' + Math.floor(Math.random() * 90 + 10),
+        kind,
+        title,
+        amount: Number(amount.toFixed(2)),
+        isCredit: Boolean(isCredit),
+        createdAt: nowStr
+      });
+      state.ledger = state.ledger.slice(0, 60);
+    }
+
     function persistAccountSnapshot() {
       if (!state.user) return;
       const digits = normalizeDigits(state.user.whatsappDigits || state.user.whatsapp || '');
@@ -799,12 +841,14 @@
         },
         balance: Number(state.balance.toFixed(2)),
         tickets: state.tickets,
+        ledger: state.ledger,
         updatedAt: new Date().toISOString()
       };
 
       localStorage.setItem('rb_user', JSON.stringify(snapshot.user));
       localStorage.setItem('rb_balance', snapshot.balance.toFixed(2));
       localStorage.setItem('rb_tickets', JSON.stringify(snapshot.tickets));
+      localStorage.setItem('rb_ledger', JSON.stringify(snapshot.ledger));
       if (key) {
         localStorage.setItem(key, JSON.stringify(snapshot));
       }
@@ -820,6 +864,7 @@
         },
         balance: snapshot.balance,
         tickets: snapshot.tickets,
+        ledger: snapshot.ledger,
         updatedAt: snapshot.updatedAt
       });
     }
@@ -944,17 +989,29 @@
 
     const initialUser = JSON.parse(localStorage.getItem('rb_user')) || null;
     const initialAccount = initialUser ? loadSavedAccountForUser(initialUser) : null;
+    const initialBalance = initialAccount && typeof initialAccount.balance === 'number'
+      ? initialAccount.balance
+      : (parseFloat(localStorage.getItem('rb_balance')) || 1000.00);
 
     let state = {
       user: initialAccount?.user || initialUser,
-      balance: initialAccount && typeof initialAccount.balance === 'number'
-        ? initialAccount.balance
-        : (parseFloat(localStorage.getItem('rb_balance')) || 1000.00),
+      balance: initialBalance,
       tickets: initialAccount?.tickets || JSON.parse(localStorage.getItem('rb_tickets')) || [],
+      ledger: initialAccount?.ledger || JSON.parse(localStorage.getItem('rb_ledger')) || [
+        {
+          id: 'MOV-INIT',
+          kind: 'Banca Inicial',
+          title: 'Saldo inicial gratuito da Resenha',
+          amount: initialBalance,
+          isCredit: true,
+          createdAt: 'Início'
+        }
+      ],
       slip: [],
       matches: [],
       matchMarketTabs: {},
       activeLeague: 'ALL',
+      activeDate: 'ALL',
       activeStatus: 'ALL',
       searchQuery: ''
     };
@@ -969,8 +1026,10 @@
       flushCloudQueue();
       applyUserProfileUI();
       updateBalanceUI();
+      updateStatusAlertBadges();
       renderSlip();
       renderTickets();
+      renderLedger();
       renderRanking();
       loadRealMatches(false);
 
@@ -1138,15 +1197,28 @@
       if (existingAccount && typeof existingAccount.balance === 'number') {
         state.balance = existingAccount.balance;
         state.tickets = existingAccount.tickets || [];
+        state.ledger = existingAccount.ledger || state.ledger;
       } else {
         state.balance = 1000.00;
         state.tickets = [];
+        state.ledger = [
+          {
+            id: 'MOV-INIT',
+            kind: 'Banca Inicial',
+            title: 'Saldo inicial gratuito da Resenha',
+            amount: 1000.00,
+            isCredit: true,
+            createdAt: 'Hoje'
+          }
+        ];
       }
 
       saveState();
       applyUserProfileUI();
       updateBalanceUI();
+      updateStatusAlertBadges();
       renderTickets();
+      renderLedger();
       renderRanking();
 
       document.getElementById('register-gate').classList.add('hidden');
@@ -1201,11 +1273,14 @@
       state.user = saved.user;
       state.balance = typeof saved.balance === 'number' ? saved.balance : 1000.00;
       state.tickets = Array.isArray(saved.tickets) ? saved.tickets : [];
+      state.ledger = Array.isArray(saved.ledger) ? saved.ledger : state.ledger;
 
       saveState();
       applyUserProfileUI();
       updateBalanceUI();
+      updateStatusAlertBadges();
       renderTickets();
+      renderLedger();
       renderRanking();
       settleTicketsWithRealScores();
 
@@ -1258,6 +1333,34 @@
       document.getElementById('user-balance').textContent = formatCurrency(state.balance);
       document.getElementById('badge-bilhetes').textContent = state.tickets.length;
       document.getElementById('mbadge-bilhetes').textContent = state.tickets.length;
+    }
+
+    function updateStatusAlertBadges() {
+      const unreadCount = state.tickets.filter(t => t.unreadChange).length;
+      const dAlert = document.getElementById('badge-bilhetes-alert');
+      const mAlert = document.getElementById('mbadge-bilhetes-alert');
+      if (dAlert) {
+        dAlert.textContent = unreadCount > 0 ? `+${unreadCount}` : '!';
+        dAlert.classList.toggle('hidden', unreadCount === 0);
+      }
+      if (mAlert) {
+        mAlert.textContent = unreadCount > 0 ? `+${unreadCount}` : '!';
+        mAlert.classList.toggle('hidden', unreadCount === 0);
+      }
+    }
+
+    function markSettledTicketsSeen() {
+      let changed = false;
+      state.tickets.forEach(t => {
+        if (t.unreadChange) {
+          t.unreadChange = false;
+          changed = true;
+        }
+      });
+      if (changed) {
+        saveState();
+        updateStatusAlertBadges();
+      }
     }
 
     function scrollToLiveSlip() {
@@ -1546,10 +1649,15 @@
 
         if (anyLost) {
           ticket.status = 'lost';
+          ticket.unreadChange = true;
+          ticket.settledAt = new Date().toLocaleTimeString('pt-BR', { timeZone: 'America/Sao_Paulo', hour: '2-digit', minute: '2-digit' });
           changed = true;
         } else if (allFinished) {
           ticket.status = 'won';
+          ticket.unreadChange = true;
+          ticket.settledAt = new Date().toLocaleTimeString('pt-BR', { timeZone: 'America/Sao_Paulo', hour: '2-digit', minute: '2-digit' });
           newlyWonAmount += ticket.potentialReturn;
+          addLedgerEntry('Green', `Bilhete ${ticket.id} liquidado`, ticket.potentialReturn, true);
           changed = true;
         }
       });
@@ -1561,7 +1669,9 @@
         }
         saveState();
         updateBalanceUI();
+        updateStatusAlertBadges();
         renderTickets();
+        renderLedger();
         renderRanking();
       }
     }
@@ -1575,12 +1685,16 @@
       const returnAmount = Number((ticket.stake * 0.85).toFixed(2));
       ticket.status = 'cashed_out';
       ticket.cashOutAmount = returnAmount;
+      ticket.unreadChange = false;
       ticket.cashedOutAt = new Date().toLocaleTimeString('pt-BR', { timeZone: 'America/Sao_Paulo', hour: '2-digit', minute: '2-digit' });
 
       state.balance = Number((state.balance + returnAmount).toFixed(2));
+      addLedgerEntry('Cash-Out', `Encerramento antecipado ${ticket.id}`, returnAmount, true);
       saveState();
       updateBalanceUI();
+      updateStatusAlertBadges();
       renderTickets();
+      renderLedger();
       renderRanking();
       showToast(`Cash-out concluído: +${formatCurrency(returnAmount)} devolvidos!`);
 
@@ -1592,10 +1706,63 @@
       });
     }
 
+    function shareTicketWhatsApp(ticketId) {
+      const ticket = state.tickets.find(t => t.id === ticketId);
+      if (!ticket) return;
+
+      const lines = [
+        `⚽ *RESENHA BET — BILHETE ${ticket.id}*`,
+        `👤 Jogador: *${ticket.userName}* (${ticket.userLocation})`,
+        `━━━━━━━━━━━━━━━━━━`,
+        ...ticket.selections.map(s => `• *${s.matchTitle}* (${s.marketName}) → ${s.pickLabel} [@${Number(s.odd).toFixed(2)}]${s.finalScore ? ` [${s.finalScore}]` : ''}`),
+        `━━━━━━━━━━━━━━━━━━`,
+        `🎲 Odd Total: *${Number(ticket.totalOdd).toFixed(2)}*`,
+        `💰 Palpite: *${formatCurrency(ticket.stake)}*`,
+        `🏆 Retorno Potencial: *${formatCurrency(ticket.potentialReturn)}*`,
+        `📌 Status: *${ticket.status === 'won' ? 'GREEN' : ticket.status === 'lost' ? 'RED' : ticket.status === 'cashed_out' ? 'CASH-OUT' : 'AGUARDANDO'}*`
+      ];
+
+      const text = lines.join('\n');
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).catch(() => {});
+      }
+      const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
+      window.open(url, '_blank', 'noopener,noreferrer');
+      showToast('Bilhete pronto para enviar no WhatsApp!');
+    }
+
     function setLeagueFilter(code) {
       state.activeLeague = code;
       buildDynamicLeaguePills();
       renderMatches();
+    }
+
+    function setDateFilter(dt) {
+      state.activeDate = dt;
+      document.querySelectorAll('.date-pill').forEach(btn => {
+        const isSelected = btn.getAttribute('data-date') === dt;
+        btn.className = isSelected
+          ? 'date-pill h-8 px-3 rounded-lg text-[11px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 inline-flex items-center justify-center'
+          : 'date-pill h-8 px-3 rounded-lg text-[11px] font-semibold bg-gray-950 text-gray-400 border border-gray-800 hover:text-white inline-flex items-center justify-center';
+      });
+      renderMatches();
+    }
+
+    function getMatchRelativeDay(isoDate) {
+      const d = new Date(isoDate);
+      if (isNaN(d.getTime())) return 'UPCOMING';
+      const tz = 'America/Sao_Paulo';
+      const now = new Date();
+      const tomorrow = new Date(now);
+      tomorrow.setDate(now.getDate() + 1);
+
+      const dKey = d.toLocaleDateString('pt-BR', { timeZone: tz });
+      const todayKey = now.toLocaleDateString('pt-BR', { timeZone: tz });
+      const tomorrowKey = tomorrow.toLocaleDateString('pt-BR', { timeZone: tz });
+
+      if (dKey === todayKey) return 'TODAY';
+      if (dKey === tomorrowKey) return 'TOMORROW';
+      return 'UPCOMING';
     }
 
     function setStatusFilter(st) {
@@ -1686,6 +1853,9 @@
       if (state.activeLeague !== 'ALL') {
         filtered = filtered.filter(m => m.leagueCode === state.activeLeague);
       }
+      if (state.activeDate !== 'ALL') {
+        filtered = filtered.filter(m => getMatchRelativeDay(m.date) === state.activeDate);
+      }
       if (state.activeStatus === 'OPEN') {
         filtered = filtered.filter(m => m.status === 'pre');
       } else if (state.activeStatus === 'LIVE') {
@@ -1704,7 +1874,7 @@
         container.innerHTML = `
           <div class="bg-gray-900 border border-gray-800 rounded-2xl p-8 text-center space-y-2">
             <p class="text-sm font-bold text-gray-300">Nenhuma partida encontrada neste filtro.</p>
-            <button type="button" onclick="clearSearchQuery(); setLeagueFilter('ALL'); setStatusFilter('ALL');" class="text-xs font-bold text-emerald-400 underline py-1">Ver todos os jogos disponíveis</button>
+            <button type="button" onclick="clearSearchQuery(); setLeagueFilter('ALL'); setDateFilter('ALL'); setStatusFilter('ALL');" class="text-xs font-bold text-emerald-400 underline py-1">Ver todos os jogos disponíveis</button>
           </div>`;
         return;
       }
@@ -1980,8 +2150,9 @@
       const potentialReturn = Number((stake * totalOdd).toFixed(2));
 
       state.balance = Number((state.balance - stake).toFixed(2));
+      const ticketId = 'RB-' + Math.floor(100000 + Math.random() * 900000);
       const createdTicket = {
-        id: 'RB-' + Math.floor(100000 + Math.random() * 900000),
+        id: ticketId,
         userName: state.user.name.toUpperCase(),
         userLocation: `${state.user.city.toUpperCase()}/${state.user.state.toUpperCase()}`,
         createdAt: new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo', day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }),
@@ -1989,16 +2160,20 @@
         totalOdd,
         potentialReturn,
         status: 'pending',
+        unreadChange: false,
         selections: JSON.parse(JSON.stringify(state.slip))
       };
 
       state.tickets.unshift(createdTicket);
+      addLedgerEntry('Palpite', `Bilhete ${ticketId} (${createdTicket.selections.length} ${createdTicket.selections.length === 1 ? 'jogo' : 'jogos'})`, stake, false);
       state.slip = [];
       saveState();
       updateBalanceUI();
+      updateStatusAlertBadges();
       renderMatches();
       renderSlip();
       renderTickets();
+      renderLedger();
       renderRanking();
       showToast(`Bilhete registrado! Saldo restante: ${formatCurrency(state.balance)}.`);
 
@@ -2050,15 +2225,27 @@
           cashed_out: `<span class="h-6 inline-flex items-center px-2.5 rounded-full text-[11px] font-bold bg-sky-500/15 text-sky-300 border border-sky-500/30">CASH-OUT (${formatCurrency(t.cashOutAmount || 0)})</span>`
         };
 
+        const alertTag = t.unreadChange
+          ? `<span class="h-6 inline-flex items-center px-2 rounded-full text-[10px] font-black bg-amber-400 text-black animate-pulse">NOVO RESULTADO!</span>`
+          : '';
+
+        const borderClass = t.unreadChange
+          ? (t.status === 'won' ? 'border-emerald-400 shadow-lg shadow-emerald-500/15' : 'border-amber-400')
+          : 'border-gray-800';
+
         return `
-          <div class="bg-gray-900 border border-gray-800 rounded-2xl p-4 space-y-3">
+          <div class="bg-gray-900 border ${borderClass} rounded-2xl p-4 space-y-3 transition">
             <div class="flex flex-wrap items-center justify-between gap-2 border-b border-gray-800 pb-2.5">
-              <div class="flex items-center gap-2">
+              <div class="flex flex-wrap items-center gap-2">
                 <span class="font-black text-xs text-white">${t.id}</span>
                 <span class="text-[11px] text-gray-500">• ${t.createdAt}</span>
+                ${alertTag}
               </div>
-              <div class="flex items-center gap-2">
+              <div class="flex flex-wrap items-center gap-1.5">
                 ${badgeMap[t.status] || badgeMap.pending}
+                <button type="button" onclick="shareTicketWhatsApp('${t.id}')" class="h-6 px-2.5 rounded-full text-[10px] font-black bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 border border-emerald-500/30 transition">
+                  WhatsApp
+                </button>
                 ${t.status === 'pending' ? `
                   <button type="button" onclick="cashOutTicket('${t.id}')" class="h-6 px-2.5 rounded-full text-[10px] font-black bg-sky-500/20 hover:bg-sky-500/30 text-sky-300 border border-sky-500/40 transition">
                     Encerrar (${formatCurrency(cashOutValue)})
@@ -2088,6 +2275,37 @@
             </div>
           </div>`;
       }).join('');
+    }
+
+    function renderLedger() {
+      const container = document.getElementById('ledger-container');
+      const countEl = document.getElementById('ledger-count');
+      if (!container) return;
+
+      const items = Array.isArray(state.ledger) ? state.ledger : [];
+      if (countEl) countEl.textContent = `${items.length} ${items.length === 1 ? 'registro' : 'registros'}`;
+
+      if (!items.length) {
+        container.innerHTML = `<div class="py-4 text-center text-xs text-gray-500">Nenhuma movimentação registrada ainda.</div>`;
+        return;
+      }
+
+      container.innerHTML = items.map(mov => `
+        <div class="py-2.5 flex items-center justify-between gap-3 text-xs">
+          <div class="min-w-0">
+            <div class="flex items-center gap-2">
+              <span class="px-1.5 py-0.5 rounded text-[10px] font-black uppercase ${
+                mov.isCredit ? 'bg-emerald-500/15 text-emerald-400' : 'bg-amber-400/15 text-amber-300'
+              }">${mov.kind}</span>
+              <span class="text-[11px] text-gray-500">${mov.createdAt}</span>
+            </div>
+            <div class="font-semibold text-gray-200 truncate mt-1">${mov.title}</div>
+          </div>
+          <div class="font-black tabular-nums shrink-0 ${mov.isCredit ? 'text-emerald-400' : 'text-red-400'}">
+            ${mov.isCredit ? '+' : '-'}${formatCurrency(mov.amount)}
+          </div>
+        </div>
+      `).join('');
     }
 
     function renderRanking() {
@@ -2136,7 +2354,11 @@
         }
       });
       if (tab === 'ranking') renderRanking();
-      if (tab === 'bilhetes') renderTickets();
+      if (tab === 'bilhetes') {
+        renderTickets();
+        renderLedger();
+        setTimeout(markSettledTicketsSeen, 1200);
+      }
     }
 
     let rechargeTimer = null;
@@ -2175,8 +2397,10 @@
 
     function claimRecharge() {
       state.balance = Number((state.balance + 500).toFixed(2));
+      addLedgerEntry('Recarga Grátis', 'Bônus patrocinado +RC$ 500,00', 500, true);
       saveState();
       updateBalanceUI();
+      renderLedger();
       renderRanking();
       closeRechargeModal();
       showToast('+RC$ 500,00 adicionados à sua banca virtual!');
