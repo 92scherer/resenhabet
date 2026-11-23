@@ -32,7 +32,12 @@
       0%, 100% { opacity: 1; transform: scale(1); }
       50% { opacity: 0.4; transform: scale(1.25); }
     }
+    @keyframes pop-in {
+      0% { opacity: 0; transform: translateY(6px) scale(0.98); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
     .live-dot { animation: pulse-live 1.5s infinite; }
+    .pick-pop { animation: pop-in 0.18s ease-out; }
     #splash-screen { transition: opacity 0.45s ease, visibility 0.45s ease; }
     .splash-hidden { opacity: 0; visibility: hidden; pointer-events: none; }
   </style>
@@ -76,7 +81,6 @@
         </p>
       </div>
 
-      <!-- Alternar Cadastro / Entrar -->
       <div class="grid grid-cols-2 gap-1.5 bg-gray-950 p-1 rounded-xl border border-gray-800">
         <button type="button" id="auth-tab-register" onclick="setAuthMode('register')" class="min-h-[38px] rounded-lg text-xs font-black bg-emerald-500 text-black transition inline-flex items-center justify-center">
           Criar Cadastro
@@ -86,7 +90,6 @@
         </button>
       </div>
 
-      <!-- FORMULÁRIO DE CADASTRO -->
       <form id="register-form" onsubmit="submitRegistration(event)" class="space-y-3">
         <div>
           <label for="reg-name" class="block text-xs font-bold text-gray-300 mb-1">Seu Nome ou Apelido *</label>
@@ -204,7 +207,6 @@
         </button>
       </form>
 
-      <!-- FORMULÁRIO DE LOGIN -->
       <form id="login-form" onsubmit="submitLogin(event)" class="hidden space-y-3.5">
         <div>
           <label for="login-whatsapp" class="block text-xs font-bold text-gray-300 mb-1">WhatsApp Cadastrado *</label>
@@ -314,17 +316,18 @@
   <main class="max-w-7xl w-full mx-auto px-3 sm:px-4 py-5 sm:py-6 flex-1">
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 items-start">
 
-      <div class="lg:col-span-8 space-y-5 min-w-0">
+      <!-- COLUNA ESQUERDA: GRADE DE JOGOS / BILHETES / RANKING -->
+      <div class="lg:col-span-7 xl:col-span-8 space-y-5 min-w-0">
 
         <!-- BANNER PUBLICITÁRIO TOPO -->
         <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-gray-900 via-emerald-950/60 to-gray-900 border border-emerald-500/30 p-4 sm:p-5 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
           <div class="space-y-1 min-w-0">
             <div class="flex flex-wrap items-center gap-2">
-              <span class="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded bg-white/10 text-gray-300 shrink-0">Publicidade • Cota Ouro</span>
+              <span class="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded bg-white/10 text-gray-300 shrink-0">Múltiplas Opções</span>
               <span id="api-sync-status" class="text-[11px] text-emerald-400 font-semibold">● Conectando grade ao vivo...</span>
             </div>
-            <h2 class="text-base sm:text-lg font-extrabold text-white leading-snug">Palpite sem arriscar seu bolso e concorra a prêmios reais toda semana!</h2>
-            <p class="text-xs text-gray-300 leading-relaxed">Horários oficiais (Brasília) e placares ao vivo sincronizados. Sua banca fica salva para os próximos jogos.</p>
+            <h2 class="text-base sm:text-lg font-extrabold text-white leading-snug">Resultado, + de 1 Gol, Escanteios e Lateral com várias linhas por jogo!</h2>
+            <p class="text-xs text-gray-300 leading-relaxed">Cada jogo mostra sua competição ao lado e cada clique atualiza a janela lateral ao vivo.</p>
           </div>
           <div class="flex items-center gap-2 shrink-0">
             <button type="button" onclick="loadRealMatches(true)" id="btn-sync-api" class="w-full sm:w-auto min-h-[42px] bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold text-xs px-4 py-2.5 rounded-xl transition inline-flex items-center justify-center gap-1.5 shadow-lg shadow-emerald-500/20 whitespace-nowrap">
@@ -383,31 +386,31 @@
 
       </div>
 
-      <!-- COLUNA DIREITA: BOLETIM DE PALPITES + ESPAÇO PATROCINADOR -->
-      <aside class="lg:col-span-4 space-y-5 lg:sticky lg:top-48 min-w-0">
+      <!-- COLUNA DIREITA: JANELA LATERAL AO VIVO DAS APOSTAS MARCADAS + ESPAÇO PATROCINADOR -->
+      <aside id="live-betslip-panel" class="lg:col-span-5 xl:col-span-4 space-y-5 lg:sticky lg:top-48 min-w-0">
 
-        <div class="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-xl">
-          <div class="bg-gray-950 px-4 py-3.5 border-b border-gray-800 flex items-center justify-between gap-2">
+        <div class="bg-gray-900 border-2 border-emerald-500/40 rounded-2xl overflow-hidden shadow-2xl shadow-emerald-500/10">
+          <div class="bg-gradient-to-r from-gray-950 via-emerald-950/50 to-gray-950 px-4 py-3.5 border-b border-gray-800 flex items-center justify-between gap-2">
             <div class="flex items-center gap-2 min-w-0">
-              <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 shrink-0"></span>
-              <h3 class="font-extrabold text-sm text-white uppercase tracking-wide truncate">Boletim de Palpites</h3>
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 live-dot shrink-0"></span>
+              <h3 class="font-extrabold text-sm text-white uppercase tracking-wide truncate">Suas Apostas Marcadas</h3>
             </div>
             <span id="slip-count" class="text-xs font-black px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 shrink-0">0 seleções</span>
           </div>
 
-          <div id="betslip-items" class="p-4 space-y-2.5 max-h-80 overflow-y-auto">
+          <div id="betslip-items" class="p-4 space-y-2.5 max-h-96 overflow-y-auto">
             <div class="text-center py-8 text-gray-500 text-xs leading-relaxed">
-              Clique em uma odd (<strong class="text-gray-300">1</strong>, <strong class="text-gray-300">X</strong> ou <strong class="text-gray-300">2</strong>) nos jogos abertos para montar seu bilhete gratuito.
+              Conforme você for clicando em <strong class="text-gray-300">1X2</strong>, <strong class="text-emerald-400">+ de 1 Gol</strong>, <strong class="text-amber-300">Escanteios</strong> ou <strong class="text-sky-300">Lateral</strong>, cada palpite aparece aqui na hora com a competição e a odd.
             </div>
           </div>
 
-          <div id="betslip-footer" class="hidden p-4 bg-gray-950/90 border-t border-gray-800 space-y-3">
+          <div id="betslip-footer" class="hidden p-4 bg-gray-950/95 border-t border-gray-800 space-y-3">
             <div class="flex items-center justify-between text-xs">
-              <span class="text-gray-400 font-medium">Tipo de Bilhete:</span>
+              <span class="text-gray-400 font-medium">Formato do Bilhete:</span>
               <span id="slip-type-label" class="font-bold text-amber-400">Simples</span>
             </div>
             <div class="flex items-center justify-between text-xs">
-              <span class="text-gray-400 font-medium">Odd Total:</span>
+              <span class="text-gray-400 font-medium">Odd Total Combinada:</span>
               <span id="slip-total-odd" class="font-black text-white text-sm tabular-nums">1.00</span>
             </div>
 
@@ -632,6 +635,7 @@
       tickets: initialAccount?.tickets || JSON.parse(localStorage.getItem('rb_tickets')) || [],
       slip: [],
       matches: [],
+      matchMarketTabs: {},
       activeLeague: 'ALL',
       activeStatus: 'ALL'
     };
@@ -644,6 +648,7 @@
 
       applyUserProfileUI();
       updateBalanceUI();
+      renderSlip();
       renderTickets();
       renderRanking();
       loadRealMatches(false);
@@ -909,7 +914,7 @@
       document.getElementById('toast-msg').textContent = msg;
       toast.classList.remove('hidden');
       clearTimeout(window._toastTimer);
-      window._toastTimer = setTimeout(() => toast.classList.add('hidden'), 3200);
+      window._toastTimer = setTimeout(() => toast.classList.add('hidden'), 3000);
     }
 
     function updateBalanceUI() {
@@ -931,7 +936,7 @@
       return list;
     }
 
-    function computeDeterministicOdds(eventId, homeName, awayName) {
+    function computeDeterministicMarkets(eventId, homeName, awayName) {
       const str = `${eventId}-${homeName}-${awayName}`;
       let hash = 0;
       for (let i = 0; i < str.length; i++) {
@@ -939,10 +944,40 @@
         hash |= 0;
       }
       const abs = Math.abs(hash);
+
+      const h = Number((1.55 + (abs % 210) / 100).toFixed(2));
+      const d = Number((2.95 + ((abs >> 3) % 95) / 100).toFixed(2));
+      const a = Number((1.75 + ((abs >> 5) % 260) / 100).toFixed(2));
+
       return {
-        home: Number((1.55 + (abs % 210) / 100).toFixed(2)),
-        draw: Number((2.95 + ((abs >> 3) % 95) / 100).toFixed(2)),
-        away: Number((1.75 + ((abs >> 5) % 260) / 100).toFixed(2))
+        result: {
+          home: h,
+          draw: d,
+          away: a,
+          dc1x: Number(Math.max(1.08, (1 / (1 / h + 1 / d)) * 0.96).toFixed(2)),
+          dcx2: Number(Math.max(1.10, (1 / (1 / d + 1 / a)) * 0.96).toFixed(2))
+        },
+        goals: {
+          over15: Number((1.22 + ((abs >> 2) % 45) / 100).toFixed(2)),
+          over25: Number((1.65 + ((abs >> 6) % 85) / 100).toFixed(2)),
+          over35: Number((2.55 + ((abs >> 7) % 120) / 100).toFixed(2)),
+          under15: Number((2.65 + ((abs >> 4) % 115) / 100).toFixed(2)),
+          bttsYes: Number((1.62 + ((abs >> 5) % 75) / 100).toFixed(2))
+        },
+        corners: {
+          over75: Number((1.35 + ((abs >> 6) % 50) / 100).toFixed(2)),
+          over85: Number((1.55 + ((abs >> 7) % 65) / 100).toFixed(2)),
+          over95: Number((1.88 + ((abs >> 8) % 75) / 100).toFixed(2)),
+          over105: Number((2.35 + ((abs >> 9) % 90) / 100).toFixed(2)),
+          over115: Number((3.05 + ((abs >> 10) % 110) / 100).toFixed(2))
+        },
+        throwIns: {
+          homeOver185: Number((1.75 + ((abs >> 10) % 55) / 100).toFixed(2)),
+          awayOver185: Number((1.82 + ((abs >> 11) % 60) / 100).toFixed(2)),
+          totalOver375: Number((1.70 + ((abs >> 12) % 50) / 100).toFixed(2)),
+          totalOver405: Number((2.15 + ((abs >> 13) % 70) / 100).toFixed(2)),
+          totalUnder375: Number((1.95 + ((abs >> 14) % 60) / 100).toFixed(2))
+        }
       };
     }
 
@@ -988,6 +1023,9 @@
             const stateType = ev.status?.type?.state || 'pre';
             const detailText = ev.status?.type?.shortDetail || ev.status?.displayClock || '';
 
+            const homeName = homeComp.team?.shortDisplayName || homeComp.team?.displayName || 'Mandante';
+            const awayName = awayComp.team?.shortDisplayName || awayComp.team?.displayName || 'Visitante';
+
             seenIds.add(ev.id);
             loaded.push({
               id: String(ev.id),
@@ -997,13 +1035,13 @@
               timestamp: new Date(ev.date).getTime() || 0,
               status: stateType,
               statusDetail: detailText,
-              homeName: homeComp.team?.shortDisplayName || homeComp.team?.displayName || 'Mandante',
+              homeName,
               homeLogo: homeComp.team?.logo || '',
               homeScore: parseInt(homeComp.score || '0', 10),
-              awayName: awayComp.team?.shortDisplayName || awayComp.team?.displayName || 'Visitante',
+              awayName,
               awayLogo: awayComp.team?.logo || '',
               awayScore: parseInt(awayComp.score || '0', 10),
-              odds: computeDeterministicOdds(ev.id, homeComp.team?.displayName, awayComp.team?.displayName)
+              markets: computeDeterministicMarkets(ev.id, homeName, awayName)
             });
           });
         } catch (err) {
@@ -1099,13 +1137,32 @@
             allFinished = false;
             return;
           }
+
+          const totalGoals = realMatch.homeScore + realMatch.awayScore;
+          const bothScored = realMatch.homeScore > 0 && realMatch.awayScore > 0;
           let realOutcome = 'X';
           if (realMatch.homeScore > realMatch.awayScore) realOutcome = '1';
           else if (realMatch.awayScore > realMatch.homeScore) realOutcome = '2';
 
           sel.finalScore = `${realMatch.homeScore} x ${realMatch.awayScore}`;
-          sel.won = (sel.pick === realOutcome);
-          if (!sel.won) anyLost = true;
+
+          if (sel.market === 'result') {
+            if (sel.pick === '1' || sel.pick === 'X' || sel.pick === '2') sel.won = (sel.pick === realOutcome);
+            else if (sel.pick === 'DC_1X') sel.won = (realOutcome === '1' || realOutcome === 'X');
+            else if (sel.pick === 'DC_X2') sel.won = (realOutcome === 'X' || realOutcome === '2');
+          } else if (sel.market === 'goals') {
+            if (sel.pick === 'OVER_15') sel.won = totalGoals > 1.5;
+            else if (sel.pick === 'OVER_25') sel.won = totalGoals > 2.5;
+            else if (sel.pick === 'OVER_35') sel.won = totalGoals > 3.5;
+            else if (sel.pick === 'UNDER_15') sel.won = totalGoals < 1.5;
+            else if (sel.pick === 'BTTS_YES') sel.won = bothScored;
+          } else {
+            sel.won = null;
+            allFinished = false;
+            return;
+          }
+
+          if (sel.won === false) anyLost = true;
         });
 
         if (anyLost) {
@@ -1120,7 +1177,7 @@
 
       if (changed) {
         if (newlyWonAmount > 0) {
-          state.balance += newlyWonAmount;
+          state.balance = Number((state.balance + newlyWonAmount).toFixed(2));
           showToast(`GREEN! Você ganhou ${formatCurrency(newlyWonAmount)}!`);
         }
         saveState();
@@ -1144,6 +1201,11 @@
           ? 'status-pill min-h-[34px] px-3 py-1.5 rounded-lg text-[11px] font-bold bg-gray-800 text-white border border-gray-700 inline-flex items-center justify-center'
           : 'status-pill min-h-[34px] px-3 py-1.5 rounded-lg text-[11px] font-semibold bg-gray-950 text-gray-400 border border-gray-800 hover:text-white inline-flex items-center justify-center';
       });
+      renderMatches();
+    }
+
+    function setMatchMarketTab(matchId, marketTab) {
+      state.matchMarketTabs[matchId] = marketTab;
       renderMatches();
     }
 
@@ -1175,6 +1237,43 @@
       return `${capWeekday} ${dayMonth} • ${timeStr}`;
     }
 
+    function getMatchMarketOptions(match, tab) {
+      if (tab === 'goals') {
+        return [
+          { market: 'goals', pick: 'OVER_15', label: '+ de 1.5 Gols', odd: match.markets.goals.over15 },
+          { market: 'goals', pick: 'OVER_25', label: '+ de 2.5 Gols', odd: match.markets.goals.over25 },
+          { market: 'goals', pick: 'OVER_35', label: '+ de 3.5 Gols', odd: match.markets.goals.over35 },
+          { market: 'goals', pick: 'UNDER_15', label: '- de 1.5 Gols', odd: match.markets.goals.under15 },
+          { market: 'goals', pick: 'BTTS_YES', label: 'Ambos Marcam', odd: match.markets.goals.bttsYes }
+        ];
+      }
+      if (tab === 'corners') {
+        return [
+          { market: 'corners', pick: 'CORNERS_OVER_75', label: '+7.5 Esc.', odd: match.markets.corners.over75 },
+          { market: 'corners', pick: 'CORNERS_OVER_85', label: '+8.5 Esc.', odd: match.markets.corners.over85 },
+          { market: 'corners', pick: 'CORNERS_OVER_95', label: '+9.5 Esc.', odd: match.markets.corners.over95 },
+          { market: 'corners', pick: 'CORNERS_OVER_105', label: '+10.5 Esc.', odd: match.markets.corners.over105 },
+          { market: 'corners', pick: 'CORNERS_OVER_115', label: '+11.5 Esc.', odd: match.markets.corners.over115 }
+        ];
+      }
+      if (tab === 'throwIns') {
+        return [
+          { market: 'throwIns', pick: 'THROW_HOME_185', label: `${match.homeName} +18.5`, odd: match.markets.throwIns.homeOver185 },
+          { market: 'throwIns', pick: 'THROW_AWAY_185', label: `${match.awayName} +18.5`, odd: match.markets.throwIns.awayOver185 },
+          { market: 'throwIns', pick: 'THROW_TOTAL_375', label: '+37.5 Lat.', odd: match.markets.throwIns.totalOver375 },
+          { market: 'throwIns', pick: 'THROW_TOTAL_405', label: '+40.5 Lat.', odd: match.markets.throwIns.totalOver405 },
+          { market: 'throwIns', pick: 'THROW_UNDER_375', label: '-37.5 Lat.', odd: match.markets.throwIns.totalUnder375 }
+        ];
+      }
+      return [
+        { market: 'result', pick: '1', label: 'Casa (1)', odd: match.markets.result.home },
+        { market: 'result', pick: 'X', label: 'Empate (X)', odd: match.markets.result.draw },
+        { market: 'result', pick: '2', label: 'Fora (2)', odd: match.markets.result.away },
+        { market: 'result', pick: 'DC_1X', label: 'Casa ou Emp.', odd: match.markets.result.dc1x },
+        { market: 'result', pick: 'DC_X2', label: 'Emp. ou Fora', odd: match.markets.result.dcx2 }
+      ];
+    }
+
     function renderMatches() {
       const container = document.getElementById('matches-container');
 
@@ -1203,27 +1302,36 @@
         const isLive = m.status === 'in';
         const isPost = m.status === 'post';
         const canBet = m.status === 'pre';
+        const activeTab = state.matchMarketTabs[m.id] || 'result';
+        const options = getMatchMarketOptions(m, activeTab);
+        const matchPicksCount = state.slip.filter(s => s.matchId === m.id).length;
 
-        const isSel1 = state.slip.some(s => s.matchId === m.id && s.pick === '1');
-        const isSelX = state.slip.some(s => s.matchId === m.id && s.pick === 'X');
-        const isSel2 = state.slip.some(s => s.matchId === m.id && s.pick === '2');
-
-        let statusBadge = `<span class="text-[11px] font-bold text-gray-300 bg-gray-950 border border-gray-800 px-2.5 py-0.5 rounded-full">${formatMatchDateBrasilia(m.date)}</span>`;
+        let statusBadge = `<span class="text-[11px] font-bold text-gray-300 bg-gray-950 border border-gray-800 px-2.5 py-0.5 rounded-full shrink-0">${formatMatchDateBrasilia(m.date)}</span>`;
         if (isLive) {
-          statusBadge = `<span class="inline-flex items-center gap-1.5 text-[11px] font-black text-red-400 bg-red-500/10 border border-red-500/30 px-2.5 py-0.5 rounded-full"><span class="w-1.5 h-1.5 rounded-full bg-red-500 live-dot shrink-0"></span><span>AO VIVO ${m.statusDetail ? `(${m.statusDetail})` : ''}</span></span>`;
+          statusBadge = `<span class="inline-flex items-center gap-1.5 text-[11px] font-black text-red-400 bg-red-500/10 border border-red-500/30 px-2.5 py-0.5 rounded-full shrink-0"><span class="w-1.5 h-1.5 rounded-full bg-red-500 live-dot shrink-0"></span><span>AO VIVO ${m.statusDetail ? `(${m.statusDetail})` : ''}</span></span>`;
         } else if (isPost) {
-          statusBadge = `<span class="text-[11px] font-bold text-gray-400 bg-gray-800 px-2.5 py-0.5 rounded-full">ENCERRADO • ${formatMatchDateBrasilia(m.date)}</span>`;
+          statusBadge = `<span class="text-[11px] font-bold text-gray-400 bg-gray-800 px-2.5 py-0.5 rounded-full shrink-0">ENCERRADO • ${formatMatchDateBrasilia(m.date)}</span>`;
         }
 
+        const marketTabsConfig = [
+          { id: 'result', label: '1X2' },
+          { id: 'goals', label: '+ de 1 Gol' },
+          { id: 'corners', label: 'Escanteios' },
+          { id: 'throwIns', label: 'Lateral' }
+        ];
+
         return `
-          <div class="bg-gray-900/95 hover:bg-gray-900 border ${isLive ? 'border-red-500/40' : 'border-gray-800'} rounded-2xl p-3.5 sm:p-4 transition">
-            <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
-              <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-400">${m.leagueName}</span>
+          <div class="bg-gray-900/95 hover:bg-gray-900 border ${matchPicksCount > 0 ? 'border-emerald-500/50' : isLive ? 'border-red-500/40' : 'border-gray-800'} rounded-2xl p-3.5 sm:p-4 transition space-y-3">
+            <div class="flex flex-wrap items-center justify-between gap-2 border-b border-gray-800/70 pb-2">
+              <div class="flex flex-wrap items-center gap-2 min-w-0">
+                <span class="px-2.5 py-0.5 rounded-md text-[11px] font-black uppercase tracking-wider bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 truncate">${m.leagueName}</span>
+                ${matchPicksCount > 0 ? `<span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-amber-400/15 text-amber-300 shrink-0">${matchPicksCount} marcada</span>` : ''}
+              </div>
               ${statusBadge}
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-12 gap-3.5 md:gap-4 items-center">
-              <div class="md:col-span-6 space-y-2 min-w-0">
+            <div class="grid grid-cols-1 xl:grid-cols-12 gap-3.5 items-center">
+              <div class="xl:col-span-5 space-y-2 min-w-0">
                 <div class="flex items-center justify-between gap-2">
                   <div class="flex items-center gap-2.5 min-w-0">
                     ${m.homeLogo ? `<img src="${m.homeLogo}" alt="" class="w-6 h-6 object-contain shrink-0" onerror="this.style.display='none'" />` : ''}
@@ -1238,62 +1346,111 @@
                   </div>
                   ${(isLive || isPost) ? `<span class="font-black text-base ${isLive ? 'text-amber-400' : 'text-white'} tabular-nums shrink-0">${m.awayScore}</span>` : ''}
                 </div>
+                <div class="pt-0.5 flex items-center gap-1.5 text-[11px] text-gray-400 truncate">
+                  <span class="text-emerald-400 font-bold">Competição:</span>
+                  <span class="text-gray-200 font-semibold truncate">${m.leagueName}</span>
+                </div>
               </div>
 
-              <div class="md:col-span-6 grid grid-cols-3 gap-2">
-                ${renderOddButton(m, '1', 'Casa', m.odds.home, isSel1, canBet)}
-                ${renderOddButton(m, 'X', 'Empate', m.odds.draw, isSelX, canBet)}
-                ${renderOddButton(m, '2', 'Fora', m.odds.away, isSel2, canBet)}
+              <div class="xl:col-span-7 space-y-2 min-w-0">
+                <div class="grid grid-cols-4 gap-1 bg-gray-950 p-1 rounded-xl border border-gray-800/90">
+                  ${marketTabsConfig.map(mt => {
+                    const isTabActive = activeTab === mt.id;
+                    return `
+                      <button type="button" onclick="setMatchMarketTab('${m.id}', '${mt.id}')" class="min-h-[30px] px-1.5 py-1 rounded-lg text-[10px] sm:text-[11px] font-extrabold transition truncate ${
+                        isTabActive ? 'bg-emerald-500 text-black' : 'text-gray-400 hover:text-white'
+                      }">${mt.label}</button>`;
+                  }).join('')}
+                </div>
+
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-1.5">
+                  ${options.map(opt => {
+                    const isSelected = state.slip.some(s => s.matchId === m.id && s.pick === opt.pick);
+                    return renderOddButton(m, opt.market, opt.pick, opt.label, opt.odd, isSelected, canBet);
+                  }).join('')}
+                </div>
               </div>
             </div>
           </div>`;
       }).join('');
     }
 
-    function renderOddButton(match, pick, label, oddVal, isSelected, canBet) {
+    function renderOddButton(match, market, pick, label, oddVal, isSelected, canBet) {
       if (!canBet) {
         return `
-          <div class="min-h-[48px] rounded-xl bg-gray-950/70 border border-gray-800/80 py-2 px-2 text-center opacity-50 cursor-not-allowed flex flex-col items-center justify-center">
-            <div class="text-[10px] text-gray-500 font-semibold leading-tight">${label}</div>
+          <div class="min-h-[46px] rounded-xl bg-gray-950/70 border border-gray-800/80 py-1.5 px-1.5 text-center opacity-50 cursor-not-allowed flex flex-col items-center justify-center">
+            <div class="text-[10px] text-gray-500 font-semibold leading-tight truncate max-w-full">${label}</div>
             <div class="text-xs font-bold text-gray-400 tabular-nums leading-tight mt-0.5">${oddVal.toFixed(2)}</div>
           </div>`;
       }
       return `
-        <button type="button" onclick="toggleSelection('${match.id}', '${pick}')" class="min-h-[48px] rounded-xl py-2 px-2 text-center border transition flex flex-col items-center justify-center ${
+        <button type="button" onclick="toggleSelection('${match.id}', '${market}', '${pick}')" class="min-h-[46px] rounded-xl py-1.5 px-1.5 text-center border transition flex flex-col items-center justify-center ${
           isSelected
             ? 'bg-emerald-500 border-emerald-400 text-black shadow-lg shadow-emerald-500/20'
             : 'bg-gray-950 hover:bg-gray-800 border-gray-800 text-white'
         }">
-          <div class="text-[10px] font-bold leading-tight ${isSelected ? 'text-black/80' : 'text-gray-400'}">${label}</div>
-          <div class="text-sm font-black tabular-nums leading-tight mt-0.5">${oddVal.toFixed(2)}</div>
+          <div class="text-[10px] font-bold leading-tight truncate max-w-full ${isSelected ? 'text-black/80' : 'text-gray-400'}">${label}</div>
+          <div class="text-xs sm:text-sm font-black tabular-nums leading-tight mt-0.5">${oddVal.toFixed(2)}</div>
         </button>`;
     }
 
-    function toggleSelection(matchId, pick) {
+    function getSelectionDetails(match, market, pick) {
+      if (market === 'goals') {
+        if (pick === 'OVER_15') return { marketName: '+ de 1 Gol', label: '+ de 1.5 Gols', odd: match.markets.goals.over15 };
+        if (pick === 'OVER_25') return { marketName: '+ de 1 Gol', label: '+ de 2.5 Gols', odd: match.markets.goals.over25 };
+        if (pick === 'OVER_35') return { marketName: '+ de 1 Gol', label: '+ de 3.5 Gols', odd: match.markets.goals.over35 };
+        if (pick === 'BTTS_YES') return { marketName: '+ de 1 Gol', label: 'Ambos Marcam (Sim)', odd: match.markets.goals.bttsYes };
+        return { marketName: '+ de 1 Gol', label: '- de 1.5 Gols', odd: match.markets.goals.under15 };
+      }
+      if (market === 'corners') {
+        if (pick === 'CORNERS_OVER_75') return { marketName: 'Escanteios', label: '+7.5 Escanteios', odd: match.markets.corners.over75 };
+        if (pick === 'CORNERS_OVER_85') return { marketName: 'Escanteios', label: '+8.5 Escanteios', odd: match.markets.corners.over85 };
+        if (pick === 'CORNERS_OVER_95') return { marketName: 'Escanteios', label: '+9.5 Escanteios', odd: match.markets.corners.over95 };
+        if (pick === 'CORNERS_OVER_105') return { marketName: 'Escanteios', label: '+10.5 Escanteios', odd: match.markets.corners.over105 };
+        return { marketName: 'Escanteios', label: '+11.5 Escanteios', odd: match.markets.corners.over115 };
+      }
+      if (market === 'throwIns') {
+        if (pick === 'THROW_HOME_185') return { marketName: 'Lateral', label: `${match.homeName} +18.5 Lat.`, odd: match.markets.throwIns.homeOver185 };
+        if (pick === 'THROW_AWAY_185') return { marketName: 'Lateral', label: `${match.awayName} +18.5 Lat.`, odd: match.markets.throwIns.awayOver185 };
+        if (pick === 'THROW_TOTAL_375') return { marketName: 'Lateral', label: '+37.5 Lat. Total', odd: match.markets.throwIns.totalOver375 };
+        if (pick === 'THROW_TOTAL_405') return { marketName: 'Lateral', label: '+40.5 Lat. Total', odd: match.markets.throwIns.totalOver405 };
+        return { marketName: 'Lateral', label: '-37.5 Lat. Total', odd: match.markets.throwIns.totalUnder375 };
+      }
+      if (pick === '1') return { marketName: 'Resultado (1X2)', label: `Vitória ${match.homeName}`, odd: match.markets.result.home };
+      if (pick === '2') return { marketName: 'Resultado (1X2)', label: `Vitória ${match.awayName}`, odd: match.markets.result.away };
+      if (pick === 'DC_1X') return { marketName: 'Resultado (1X2)', label: 'Casa ou Empate (1X)', odd: match.markets.result.dc1x };
+      if (pick === 'DC_X2') return { marketName: 'Resultado (1X2)', label: 'Empate ou Fora (X2)', odd: match.markets.result.dcx2 };
+      return { marketName: 'Resultado (1X2)', label: 'Empate (X)', odd: match.markets.result.draw };
+    }
+
+    function toggleSelection(matchId, market, pick) {
       const match = state.matches.find(m => m.id === matchId);
       if (!match || match.status !== 'pre') return;
 
-      const existingIdx = state.slip.findIndex(s => s.matchId === matchId);
+      const existingIdx = state.slip.findIndex(s => s.matchId === matchId && s.pick === pick);
       if (existingIdx !== -1) {
-        const samePick = state.slip[existingIdx].pick === pick;
         state.slip.splice(existingIdx, 1);
-        if (samePick) {
-          renderMatches();
-          renderSlip();
-          return;
-        }
+        renderMatches();
+        renderSlip();
+        return;
       }
 
-      const oddMap = { '1': match.odds.home, 'X': match.odds.draw, '2': match.odds.away };
-      const labelMap = { '1': `Vitória ${match.homeName}`, 'X': 'Empate', '2': `Vitória ${match.awayName}` };
+      const sameMarketIdx = state.slip.findIndex(s => s.matchId === matchId && s.market === market);
+      if (sameMarketIdx !== -1) {
+        state.slip.splice(sameMarketIdx, 1);
+      }
+
+      const details = getSelectionDetails(match, market, pick);
 
       state.slip.push({
         matchId: match.id,
         matchTitle: `${match.homeName} x ${match.awayName}`,
         leagueName: match.leagueName,
+        market,
+        marketName: details.marketName,
         pick,
-        pickLabel: labelMap[pick],
-        odd: oddMap[pick]
+        pickLabel: details.label,
+        odd: details.odd
       });
 
       renderMatches();
@@ -1311,22 +1468,25 @@
         footer.classList.add('hidden');
         container.innerHTML = `
           <div class="text-center py-8 text-gray-500 text-xs leading-relaxed">
-            Clique em uma odd (<strong class="text-gray-300">1</strong>, <strong class="text-gray-300">X</strong> ou <strong class="text-gray-300">2</strong>) nos jogos abertos para montar seu bilhete gratuito.
+            Conforme você for clicando em <strong class="text-gray-300">1X2</strong>, <strong class="text-emerald-400">+ de 1 Gol</strong>, <strong class="text-amber-300">Escanteios</strong> ou <strong class="text-sky-300">Lateral</strong>, cada palpite aparece aqui na hora com a competição e a odd.
           </div>`;
         return;
       }
 
       footer.classList.remove('hidden');
-      container.innerHTML = state.slip.map(item => `
-        <div class="bg-gray-950 border border-gray-800 rounded-xl p-3 flex items-start justify-between gap-2">
+      container.innerHTML = state.slip.map((item, index) => `
+        <div class="pick-pop bg-gray-950 border border-emerald-500/30 rounded-xl p-3 flex items-start justify-between gap-2">
           <div class="min-w-0">
-            <div class="text-[10px] text-emerald-400 font-bold uppercase truncate">${item.leagueName}</div>
-            <div class="text-xs font-bold text-white truncate">${item.matchTitle}</div>
-            <div class="text-xs text-amber-300 font-semibold mt-0.5">${item.pickLabel}</div>
+            <div class="flex flex-wrap items-center gap-1.5">
+              <span class="text-[10px] font-black uppercase px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-400">${item.marketName}</span>
+              <span class="text-[10px] font-bold text-gray-400 truncate">${item.leagueName}</span>
+            </div>
+            <div class="text-xs font-bold text-white truncate mt-1">${item.matchTitle}</div>
+            <div class="text-xs text-amber-300 font-extrabold mt-0.5">${item.pickLabel}</div>
           </div>
           <div class="flex items-center gap-1.5 shrink-0">
             <span class="px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-400 font-black text-xs tabular-nums">@${item.odd.toFixed(2)}</span>
-            <button type="button" onclick="toggleSelection('${item.matchId}', '${item.pick}')" aria-label="Remover seleção" class="w-7 h-7 rounded-lg text-gray-500 hover:text-red-400 hover:bg-gray-900 text-xs font-bold inline-flex items-center justify-center">✕</button>
+            <button type="button" onclick="toggleSelection('${item.matchId}', '${item.market}', '${item.pick}')" aria-label="Remover seleção" class="w-7 h-7 rounded-lg text-gray-400 hover:text-red-400 hover:bg-gray-900 text-xs font-bold inline-flex items-center justify-center">✕</button>
           </div>
         </div>
       `).join('');
@@ -1344,7 +1504,7 @@
       const stake = Math.max(0, parseFloat(document.getElementById('stake-input').value) || 0);
       const potential = stake * totalOdd;
 
-      document.getElementById('slip-type-label').textContent = state.slip.length > 1 ? `Múltipla (${state.slip.length} jogos)` : 'Simples';
+      document.getElementById('slip-type-label').textContent = state.slip.length > 1 ? `Múltipla (${state.slip.length} seleções)` : 'Simples';
       document.getElementById('slip-total-odd').textContent = totalOdd.toFixed(2);
       document.getElementById('slip-potential-return').textContent = formatCurrency(potential);
     }
@@ -1419,7 +1579,7 @@
 
       container.innerHTML = state.tickets.map(t => {
         const badgeMap = {
-          pending: '<span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-400/15 text-amber-300 border border-amber-400/30">Aguardando Placar Real</span>',
+          pending: '<span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-400/15 text-amber-300 border border-amber-400/30">Aguardando Resultado</span>',
           won: '<span class="px-2.5 py-0.5 rounded-full text-[11px] font-black bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">GREEN • PAGO</span>',
           lost: '<span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-red-500/15 text-red-400 border border-red-500/30">RED</span>'
         };
@@ -1438,7 +1598,8 @@
                 <div class="flex items-center justify-between gap-2 text-xs bg-gray-950/80 px-3 py-2 rounded-xl">
                   <div class="min-w-0">
                     <div class="font-bold text-gray-200 truncate">${s.matchTitle} ${s.finalScore ? `<span class="text-emerald-400 font-black ml-1">(${s.finalScore})</span>` : ''}</div>
-                    <div class="text-amber-300 font-semibold">${s.pickLabel}</div>
+                    <div class="text-[11px] text-gray-400 truncate">${s.leagueName || ''}</div>
+                    <div class="text-amber-300 font-semibold">${s.marketName ? `${s.marketName}: ` : ''}${s.pickLabel}</div>
                   </div>
                   <span class="font-black text-gray-300 tabular-nums shrink-0">@${s.odd.toFixed(2)}</span>
                 </div>
