@@ -651,7 +651,7 @@
     // Opcional: cole sua chave gratuita da The Odds API para buscar cotações reais com cache automático.
     const ODDS_API_KEY = '';
     const REAL_ODDS_CACHE_KEY = 'rb_real_odds_cache_v1';
-    const REAL_ODDS_CACHE_TTL_MS = 6 * 60 * 60 * 1000; // 6 horas para economizar créditos gratuitos
+    const REAL_ODDS_CACHE_TTL_MS = 6 * 60 * 60 * 1000;
 
     (function setupDynamicManifest() {
       try {
@@ -1972,39 +1972,128 @@
 
     function getMatchMarketOptions(match, tab) {
       if (tab === 'goals') {
-        return [
-          { market: 'goals', pick: 'OVER_15', label: '+ de 1.5 Gols', odd: match.markets.goals.over15 },
-          { market: 'goals', pick: 'OVER_25', label: '+ de 2.5 Gols', odd: match.markets.goals.over25 },
-          { market: 'goals', pick: 'OVER_35', label: '+ de 3.5 Gols', odd: match.markets.goals.over35 },
-          { market: 'goals', pick: 'UNDER_15', label: '- de 1.5 Gols', odd: match.markets.goals.under15 },
-          { market: 'goals', pick: 'BTTS_YES', label: 'Ambos Marcam', odd: match.markets.goals.bttsYes }
-        ];
+        return {
+          mode: 'lines',
+          headers: ['Linha', 'Acima / Opção 1', 'Abaixo / Opção 2'],
+          rows: [
+            {
+              lineLabel: '1.5 Gols',
+              left: { market: 'goals', pick: 'OVER_15', label: 'Mais 1.5', odd: match.markets.goals.over15 },
+              right: { market: 'goals', pick: 'UNDER_15', label: 'Menos 1.5', odd: match.markets.goals.under15 }
+            },
+            {
+              lineLabel: '2.5 Gols',
+              left: { market: 'goals', pick: 'OVER_25', label: 'Mais 2.5', odd: match.markets.goals.over25 },
+              right: { market: 'goals', pick: 'BTTS_YES', label: 'Ambos Marcam', odd: match.markets.goals.bttsYes }
+            },
+            {
+              lineLabel: '3.5 Gols',
+              left: { market: 'goals', pick: 'OVER_35', label: 'Mais 3.5', odd: match.markets.goals.over35 },
+              right: null
+            }
+          ]
+        };
       }
       if (tab === 'corners') {
-        return [
-          { market: 'corners', pick: 'CORNERS_OVER_75', label: '+7.5 Esc.', odd: match.markets.corners.over75 },
-          { market: 'corners', pick: 'CORNERS_OVER_85', label: '+8.5 Esc.', odd: match.markets.corners.over85 },
-          { market: 'corners', pick: 'CORNERS_OVER_95', label: '+9.5 Esc.', odd: match.markets.corners.over95 },
-          { market: 'corners', pick: 'CORNERS_OVER_105', label: '+10.5 Esc.', odd: match.markets.corners.over105 },
-          { market: 'corners', pick: 'CORNERS_OVER_115', label: '+11.5 Esc.', odd: match.markets.corners.over115 }
-        ];
+        return {
+          mode: 'lines',
+          headers: ['Escanteios', 'Linha 1', 'Linha 2'],
+          rows: [
+            {
+              lineLabel: 'Mínima 7.5',
+              left: { market: 'corners', pick: 'CORNERS_OVER_75', label: 'Mais 7.5', odd: match.markets.corners.over75 },
+              right: null
+            },
+            {
+              lineLabel: 'Linha 8.5 / 9.5',
+              left: { market: 'corners', pick: 'CORNERS_OVER_85', label: 'Mais 8.5', odd: match.markets.corners.over85 },
+              right: { market: 'corners', pick: 'CORNERS_OVER_95', label: 'Mais 9.5', odd: match.markets.corners.over95 }
+            },
+            {
+              lineLabel: 'Linha 10.5 / 11.5',
+              left: { market: 'corners', pick: 'CORNERS_OVER_105', label: 'Mais 10.5', odd: match.markets.corners.over105 },
+              right: { market: 'corners', pick: 'CORNERS_OVER_115', label: 'Mais 11.5', odd: match.markets.corners.over115 }
+            }
+          ]
+        };
       }
       if (tab === 'throwIns') {
-        return [
-          { market: 'throwIns', pick: 'THROW_HOME_185', label: `${match.homeName} +18.5`, odd: match.markets.throwIns.homeOver185 },
-          { market: 'throwIns', pick: 'THROW_AWAY_185', label: `${match.awayName} +18.5`, odd: match.markets.throwIns.awayOver185 },
-          { market: 'throwIns', pick: 'THROW_TOTAL_375', label: '+37.5 Lat.', odd: match.markets.throwIns.totalOver375 },
-          { market: 'throwIns', pick: 'THROW_TOTAL_405', label: '+40.5 Lat.', odd: match.markets.throwIns.totalOver405 },
-          { market: 'throwIns', pick: 'THROW_UNDER_375', label: '-37.5 Lat.', odd: match.markets.throwIns.totalUnder375 }
-        ];
+        return {
+          mode: 'lines',
+          headers: ['Laterais', 'Opção 1', 'Opção 2'],
+          rows: [
+            {
+              lineLabel: 'Total 37.5',
+              left: { market: 'throwIns', pick: 'THROW_TOTAL_375', label: 'Mais 37.5', odd: match.markets.throwIns.totalOver375 },
+              right: { market: 'throwIns', pick: 'THROW_UNDER_375', label: 'Menos 37.5', odd: match.markets.throwIns.totalUnder375 }
+            },
+            {
+              lineLabel: 'Total 40.5',
+              left: { market: 'throwIns', pick: 'THROW_TOTAL_405', label: 'Mais 40.5', odd: match.markets.throwIns.totalOver405 },
+              right: null
+            },
+            {
+              lineLabel: 'Por Time (18.5)',
+              left: { market: 'throwIns', pick: 'THROW_HOME_185', label: `${match.homeName} +18.5`, odd: match.markets.throwIns.homeOver185 },
+              right: { market: 'throwIns', pick: 'THROW_AWAY_185', label: `${match.awayName} +18.5`, odd: match.markets.throwIns.awayOver185 }
+            }
+          ]
+        };
       }
-      return [
-        { market: 'result', pick: '1', label: 'Casa (1)', odd: match.markets.result.home },
-        { market: 'result', pick: 'X', label: 'Empate (X)', odd: match.markets.result.draw },
-        { market: 'result', pick: '2', label: 'Fora (2)', odd: match.markets.result.away },
-        { market: 'result', pick: 'DC_1X', label: 'Casa ou Emp.', odd: match.markets.result.dc1x },
-        { market: 'result', pick: 'DC_X2', label: 'Emp. ou Fora', odd: match.markets.result.dcx2 }
-      ];
+      return {
+        mode: '1x2',
+        headers: ['1', 'X', '2'],
+        mainThree: [
+          { market: 'result', pick: '1', label: 'Casa', odd: match.markets.result.home },
+          { market: 'result', pick: 'X', label: 'Empate', odd: match.markets.result.draw },
+          { market: 'result', pick: '2', label: 'Fora', odd: match.markets.result.away }
+        ],
+        doubleChance: [
+          { market: 'result', pick: 'DC_1X', label: '1X • Casa ou Empate', odd: match.markets.result.dc1x },
+          { market: 'result', pick: 'DC_X2', label: 'X2 • Empate ou Fora', odd: match.markets.result.dcx2 }
+        ]
+      };
+    }
+
+    function renderKtoOddBox(match, opt, isSelected, canBet, stacked = false) {
+      if (!opt) {
+        return `<div class="h-11 rounded-lg bg-gray-950/30 border border-gray-800/50"></div>`;
+      }
+      if (!canBet) {
+        return stacked
+          ? `
+            <div class="h-12 rounded-lg bg-gray-950/70 border border-gray-800/80 px-2 opacity-50 cursor-not-allowed flex flex-col items-center justify-center">
+              <span class="text-[10px] text-gray-500 font-semibold truncate max-w-full">${opt.label}</span>
+              <span class="text-xs font-bold text-gray-400 tabular-nums mt-0.5">${opt.odd.toFixed(2)}</span>
+            </div>`
+          : `
+            <div class="h-11 rounded-lg bg-gray-950/70 border border-gray-800/80 px-2.5 opacity-50 cursor-not-allowed flex items-center justify-between gap-2">
+              <span class="text-[11px] text-gray-500 font-semibold truncate">${opt.label}</span>
+              <span class="text-xs font-bold text-gray-400 tabular-nums shrink-0">${opt.odd.toFixed(2)}</span>
+            </div>`;
+      }
+
+      if (stacked) {
+        return `
+          <button type="button" onclick="toggleSelection('${match.id}', '${opt.market}', '${opt.pick}')" class="h-12 rounded-lg px-2 border transition flex flex-col items-center justify-center min-w-0 ${
+            isSelected
+              ? 'bg-emerald-500 border-emerald-400 text-black shadow-md shadow-emerald-500/20'
+              : 'bg-[#0b101b] hover:bg-gray-800/90 border-gray-800 hover:border-gray-700 text-white'
+          }">
+            <span class="text-[10px] font-semibold truncate max-w-full leading-none ${isSelected ? 'text-black/80' : 'text-gray-400'}">${opt.label}</span>
+            <span class="text-xs sm:text-sm font-black tabular-nums leading-tight mt-1">${opt.odd.toFixed(2)}</span>
+          </button>`;
+      }
+
+      return `
+        <button type="button" onclick="toggleSelection('${match.id}', '${opt.market}', '${opt.pick}')" class="h-11 rounded-lg px-2.5 border transition flex items-center justify-between gap-2 min-w-0 ${
+          isSelected
+            ? 'bg-emerald-500 border-emerald-400 text-black shadow-md shadow-emerald-500/20'
+            : 'bg-[#0b101b] hover:bg-gray-800/90 border-gray-800 hover:border-gray-700 text-white'
+        }">
+          <span class="text-[11px] font-bold truncate ${isSelected ? 'text-black/85' : 'text-gray-300'}">${opt.label}</span>
+          <span class="text-xs sm:text-sm font-black tabular-nums shrink-0">${opt.odd.toFixed(2)}</span>
+        </button>`;
     }
 
     function renderMatches() {
@@ -2045,14 +2134,14 @@
         const isPost = m.status === 'post';
         const canBet = m.status === 'pre';
         const activeTab = state.matchMarketTabs[m.id] || 'result';
-        const options = getMatchMarketOptions(m, activeTab);
+        const marketConfig = getMatchMarketOptions(m, activeTab);
         const matchPicksCount = state.slip.filter(s => s.matchId === m.id).length;
 
-        let statusBadge = `<span class="h-6 inline-flex items-center text-[11px] font-bold text-gray-300 bg-gray-950 border border-gray-800 px-2.5 rounded-full shrink-0">${formatMatchDateBrasilia(m.date)}</span>`;
+        let statusBadge = `<span class="h-6 inline-flex items-center text-[11px] font-bold text-gray-300 bg-gray-950 border border-gray-800 px-2.5 rounded-md shrink-0">${formatMatchDateBrasilia(m.date)}</span>`;
         if (isLive) {
-          statusBadge = `<span class="h-6 inline-flex items-center gap-1.5 text-[11px] font-black text-red-400 bg-red-500/10 border border-red-500/30 px-2.5 rounded-full shrink-0"><span class="w-1.5 h-1.5 rounded-full bg-red-500 live-dot shrink-0"></span><span>AO VIVO ${m.statusDetail ? `(${m.statusDetail})` : ''}</span></span>`;
+          statusBadge = `<span class="h-6 inline-flex items-center gap-1.5 text-[11px] font-black text-red-400 bg-red-500/10 border border-red-500/30 px-2.5 rounded-md shrink-0"><span class="w-1.5 h-1.5 rounded-full bg-red-500 live-dot shrink-0"></span><span>AO VIVO ${m.statusDetail ? `(${m.statusDetail})` : ''}</span></span>`;
         } else if (isPost) {
-          statusBadge = `<span class="h-6 inline-flex items-center text-[11px] font-bold text-gray-400 bg-gray-800 px-2.5 rounded-full shrink-0">ENCERRADO • ${formatMatchDateBrasilia(m.date)}</span>`;
+          statusBadge = `<span class="h-6 inline-flex items-center text-[11px] font-bold text-gray-400 bg-gray-800 px-2.5 rounded-md shrink-0">ENCERRADO • ${formatMatchDateBrasilia(m.date)}</span>`;
         }
 
         const marketTabsConfig = [
@@ -2062,40 +2151,87 @@
           { id: 'throwIns', label: 'Lateral' }
         ];
 
+        let marketsBodyHtml = '';
+        if (marketConfig.mode === '1x2') {
+          marketsBodyHtml = `
+            <div class="space-y-1.5">
+              <div class="grid grid-cols-3 text-center text-[10px] font-extrabold uppercase tracking-wider text-gray-500 px-1">
+                <span>${marketConfig.headers[0]}</span>
+                <span>${marketConfig.headers[1]}</span>
+                <span>${marketConfig.headers[2]}</span>
+              </div>
+              <div class="grid grid-cols-3 gap-1.5">
+                ${marketConfig.mainThree.map(opt => {
+                  const isSelected = state.slip.some(s => s.matchId === m.id && s.pick === opt.pick);
+                  return renderKtoOddBox(m, opt, isSelected, canBet, true);
+                }).join('')}
+              </div>
+              <div class="grid grid-cols-2 gap-1.5 pt-0.5">
+                ${marketConfig.doubleChance.map(opt => {
+                  const isSelected = state.slip.some(s => s.matchId === m.id && s.pick === opt.pick);
+                  return renderKtoOddBox(m, opt, isSelected, canBet, false);
+                }).join('')}
+              </div>
+            </div>`;
+        } else {
+          marketsBodyHtml = `
+            <div class="space-y-1.5">
+              <div class="hidden sm:grid sm:grid-cols-12 text-[10px] font-extrabold uppercase tracking-wider text-gray-500 px-2.5">
+                <span class="sm:col-span-4">${marketConfig.headers[0]}</span>
+                <span class="sm:col-span-4 text-center">${marketConfig.headers[1]}</span>
+                <span class="sm:col-span-4 text-center">${marketConfig.headers[2]}</span>
+              </div>
+              ${marketConfig.rows.map(row => {
+                const leftSelected = row.left && state.slip.some(s => s.matchId === m.id && s.pick === row.left.pick);
+                const rightSelected = row.right && state.slip.some(s => s.matchId === m.id && s.pick === row.right.pick);
+                return `
+                  <div class="bg-[#0b101b]/80 border border-gray-800/80 rounded-xl p-2 grid grid-cols-1 sm:grid-cols-12 items-center gap-1.5">
+                    <span class="sm:col-span-4 text-[11px] font-bold text-gray-300 px-1 truncate">${row.lineLabel}</span>
+                    <div class="sm:col-span-4">
+                      ${renderKtoOddBox(m, row.left, leftSelected, canBet, false)}
+                    </div>
+                    <div class="sm:col-span-4">
+                      ${renderKtoOddBox(m, row.right, rightSelected, canBet, false)}
+                    </div>
+                  </div>`;
+              }).join('')}
+            </div>`;
+        }
+
         return `
-          <div class="bg-gray-900/95 hover:bg-gray-900 border ${matchPicksCount > 0 ? 'border-emerald-500/50' : isLive ? 'border-red-500/40' : 'border-gray-800'} rounded-2xl p-4 transition space-y-3.5">
+          <div class="bg-gray-900/95 hover:bg-gray-900 border ${matchPicksCount > 0 ? 'border-emerald-500/60' : isLive ? 'border-red-500/40' : 'border-gray-800'} rounded-2xl p-4 transition space-y-3.5">
             <div class="flex flex-wrap items-center justify-between gap-2 border-b border-gray-800/80 pb-2.5">
               <div class="flex items-center gap-2 min-w-0">
                 <span class="h-6 inline-flex items-center px-2.5 rounded-md text-[11px] font-black uppercase tracking-wider bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 truncate">${m.leagueName}</span>
-                ${matchPicksCount > 0 ? `<span class="h-6 inline-flex items-center px-2 rounded-full text-[10px] font-black bg-amber-400/15 text-amber-300 shrink-0">${matchPicksCount} marcada</span>` : ''}
+                ${matchPicksCount > 0 ? `<span class="h-6 inline-flex items-center px-2 rounded-md text-[10px] font-black bg-emerald-500 text-black shrink-0">${matchPicksCount} no bilhete</span>` : ''}
               </div>
               ${statusBadge}
             </div>
 
             <div class="grid grid-cols-1 xl:grid-cols-12 gap-4 items-center">
-              <div class="xl:col-span-5 flex flex-col justify-between gap-2 min-w-0">
-                <div class="h-8 flex items-center justify-between gap-2">
+              <div class="xl:col-span-5 flex flex-col justify-between gap-2 min-w-0 bg-[#0b101b]/60 border border-gray-800/70 rounded-xl p-3">
+                <div class="h-7 flex items-center justify-between gap-2">
                   <div class="flex items-center gap-2.5 min-w-0">
-                    ${renderTeamCrest(m.homeName, m.homeLogo, 'w-7 h-7')}
+                    ${renderTeamCrest(m.homeName, m.homeLogo, 'w-6 h-6')}
                     <span class="font-bold text-sm text-white truncate">${m.homeName}</span>
                   </div>
                   ${(isLive || isPost) ? `<span class="w-6 text-right font-black text-base ${isLive ? 'text-amber-400' : 'text-white'} tabular-nums shrink-0">${m.homeScore}</span>` : ''}
                 </div>
-                <div class="h-8 flex items-center justify-between gap-2">
+                <div class="h-7 flex items-center justify-between gap-2">
                   <div class="flex items-center gap-2.5 min-w-0">
-                    ${renderTeamCrest(m.awayName, m.awayLogo, 'w-7 h-7')}
+                    ${renderTeamCrest(m.awayName, m.awayLogo, 'w-6 h-6')}
                     <span class="font-bold text-sm text-white truncate">${m.awayName}</span>
                   </div>
                   ${(isLive || isPost) ? `<span class="w-6 text-right font-black text-base ${isLive ? 'text-amber-400' : 'text-white'} tabular-nums shrink-0">${m.awayScore}</span>` : ''}
                 </div>
-                <div class="h-5 flex items-center gap-1.5 text-[11px] text-gray-400 truncate">
-                  <span class="text-emerald-400 font-bold shrink-0">Competição:</span>
-                  <span class="text-gray-200 font-semibold truncate">${m.leagueName}</span>
+                <div class="h-5 flex items-center justify-between gap-1.5 text-[11px] text-gray-400 pt-1 border-t border-gray-800/60 truncate">
+                  <span class="truncate">${m.leagueName}</span>
+                  <span class="text-emerald-400 font-bold shrink-0">+3 linhas</span>
                 </div>
               </div>
 
               <div class="xl:col-span-7 flex flex-col gap-2 min-w-0">
-                <div class="grid grid-cols-4 gap-1 bg-gray-950 p-1 rounded-xl border border-gray-800/90">
+                <div class="grid grid-cols-4 gap-1 bg-[#0b101b] p-1 rounded-xl border border-gray-800/90">
                   ${marketTabsConfig.map(mt => {
                     const isTabActive = activeTab === mt.id;
                     return `
@@ -2105,35 +2241,11 @@
                   }).join('')}
                 </div>
 
-                <div class="grid grid-cols-2 sm:grid-cols-3 gap-1.5">
-                  ${options.map(opt => {
-                    const isSelected = state.slip.some(s => s.matchId === m.id && s.pick === opt.pick);
-                    return renderOddButton(m, opt.market, opt.pick, opt.label, opt.odd, isSelected, canBet);
-                  }).join('')}
-                </div>
+                ${marketsBodyHtml}
               </div>
             </div>
           </div>`;
       }).join('');
-    }
-
-    function renderOddButton(match, market, pick, label, oddVal, isSelected, canBet) {
-      if (!canBet) {
-        return `
-          <div class="h-[50px] rounded-xl bg-gray-950/70 border border-gray-800/80 px-2 text-center opacity-50 cursor-not-allowed flex flex-col items-center justify-center">
-            <span class="text-[10px] text-gray-500 font-semibold leading-none truncate max-w-full">${label}</span>
-            <span class="text-xs font-bold text-gray-400 tabular-nums leading-tight mt-1">${oddVal.toFixed(2)}</span>
-          </div>`;
-      }
-      return `
-        <button type="button" onclick="toggleSelection('${match.id}', '${market}', '${pick}')" class="h-[50px] rounded-xl px-2 text-center border transition flex flex-col items-center justify-center ${
-          isSelected
-            ? 'bg-emerald-500 border-emerald-400 text-black shadow-lg shadow-emerald-500/20'
-            : 'bg-gray-950 hover:bg-gray-800 border-gray-800 text-white'
-        }">
-          <span class="text-[10px] font-bold leading-none truncate max-w-full ${isSelected ? 'text-black/80' : 'text-gray-400'}">${label}</span>
-          <span class="text-xs sm:text-sm font-black tabular-nums leading-tight mt-1">${oddVal.toFixed(2)}</span>
-        </button>`;
     }
 
     function getSelectionDetails(match, market, pick) {
