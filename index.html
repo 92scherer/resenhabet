@@ -39,11 +39,11 @@
 </head>
 <body class="min-h-screen flex flex-col justify-between antialiased selection:bg-emerald-500 selection:text-black">
 
-  <!-- SPLASH SCREEN -->
+  <!-- SPLASH SCREEN (LOGO LIVRE SEM MOLDURA) -->
   <div id="splash-screen" class="fixed inset-0 z-50 bg-[#05080f] flex flex-col items-center justify-center p-6">
     <div class="relative flex flex-col items-center">
-      <div class="w-56 h-56 sm:w-72 sm:h-72 rounded-3xl bg-gradient-to-br from-emerald-500/20 to-amber-400/10 border border-emerald-500/30 flex items-center justify-center shadow-2xl shadow-emerald-500/20 mb-6 overflow-hidden p-1.5">
-        <img src="logo.png" alt="Resenha Bet" class="w-full h-full object-contain" onerror="this.style.display='none'; document.getElementById('splash-fallback-svg').classList.remove('hidden');" />
+      <div class="flex items-center justify-center mb-6">
+        <img src="logo.png" alt="Resenha Bet" class="w-64 h-64 sm:w-80 sm:h-80 object-contain drop-shadow-[0_12px_32px_rgba(16,185,129,0.25)]" onerror="this.style.display='none'; document.getElementById('splash-fallback-svg').classList.remove('hidden');" />
         <div id="splash-fallback-svg" class="hidden flex flex-col items-center justify-center text-center">
           <svg class="w-24 h-24 text-emerald-400 mb-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <circle cx="12" cy="12" r="10"/>
@@ -63,9 +63,9 @@
   <div id="register-gate" class="fixed inset-0 z-40 hidden bg-[#05080f]/95 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
     <div class="bg-gray-900 border border-emerald-500/30 rounded-3xl max-w-md w-full p-6 sm:p-7 shadow-2xl shadow-emerald-500/10 space-y-4 my-auto">
       <div class="flex flex-col items-center text-center">
-        <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-gray-950 border border-emerald-500/40 flex items-center justify-center overflow-hidden p-1 mb-2.5 shadow-lg shadow-emerald-500/15">
-          <img src="logo.png" alt="Resenha Bet" class="w-full h-full object-contain" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');" />
-          <span class="hidden font-black text-emerald-400 text-2xl">RB</span>
+        <div class="flex items-center justify-center mb-2">
+          <img src="logo.png" alt="Resenha Bet" class="h-28 sm:h-32 w-auto object-contain drop-shadow-[0_6px_18px_rgba(16,185,129,0.25)]" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');" />
+          <span class="hidden font-black text-emerald-400 text-3xl">RESENHA BET</span>
         </div>
         <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
           100% Gratuito • Sem Depósito
@@ -182,14 +182,13 @@
     </div>
   </div>
 
-  <!-- HEADER PRINCIPAL -->
+  <!-- HEADER PRINCIPAL (LOGO GRANDE NO CANTO ESQUERDO SEM MOLDURA) -->
   <header class="sticky top-0 z-30 bg-[#090d16]/95 backdrop-blur-md border-b border-gray-800">
-    <div class="max-w-7xl mx-auto px-4 py-2.5 flex items-center justify-between gap-3">
+    <div class="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between gap-3">
       <div class="flex items-center gap-3.5 cursor-pointer" onclick="switchTab('jogos')">
-        <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gray-900 border border-emerald-500/40 flex items-center justify-center overflow-hidden p-0.5 shrink-0 shadow-lg shadow-emerald-500/10">
-          <img src="logo.png" alt="Logo" class="w-full h-full object-contain" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');" />
-          <span class="hidden font-black text-emerald-400 text-lg">RB</span>
-        </div>
+        <img src="logo.png" alt="Resenha Bet" class="h-20 sm:h-24 w-auto object-contain shrink-0 drop-shadow-[0_4px_14px_rgba(16,185,129,0.22)] transition-transform hover:scale-105" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');" />
+        <span class="hidden font-black text-emerald-400 text-2xl">RB</span>
+
         <div>
           <div class="flex items-center gap-1.5">
             <h1 class="font-black text-xl sm:text-2xl tracking-tight text-white leading-none">RESENHA <span class="text-amber-400">BET</span></h1>
