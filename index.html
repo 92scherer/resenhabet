@@ -1,1529 +1,979 @@
 <!DOCTYPE html>
 <html lang="pt-BR" class="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resenha Bet — Palpites Grátis, Ranking & Prêmios</title>
-    <meta name="description" content="Portal esportivo Free-to-Play. Palpite grátis com Resenha Coins, suba no ranking e concorra a prêmios patrocinados.">
-
-    <!-- Tailwind CSS via CDN (Zero build step para GitHub + Vercel) -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <!-- Google Fonts: Inter & JetBrains Mono -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
-
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        mono: ['JetBrains Mono', 'monospace'],
-                    },
-                    colors: {
-                        pitch: {
-                            950: '#000000',
-                            900: '#0A0D10',
-                            850: '#11161C',
-                            800: '#161D24',
-                            700: '#1F2933',
-                        },
-                        emerald: {
-                            400: '#34D399',
-                            500: '#10B981',
-                            600: '#059669',
-                        },
-                        gold: {
-                            400: '#FBBF24',
-                            500: '#F59E0B',
-                            600: '#D97706',
-                        }
-                    },
-                    animation: {
-                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                        'slide-up': 'slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards',
-                        'fade-in': 'fadeIn 0.25s ease-out forwards',
-                    },
-                    keyframes: {
-                        slideUp: {
-                            '0%': { opacity: '0', transform: 'translateY(16px)' },
-                            '100%': { opacity: '1', transform: 'translateY(0)' },
-                        },
-                        fadeIn: {
-                            '0%': { opacity: '0' },
-                            '100%': { opacity: '1' },
-                        }
-                    }
-                }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Resenha Bet — Portal de Palpites Esportivos Gratuitos</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          colors: {
+            brand: {
+              green: '#10b981',
+              neon: '#00e676',
+              gold: '#fbbf24',
+              dark: '#090d16',
+              card: '#111827',
+              border: '#1f2937'
             }
+          }
         }
-    </script>
-
-    <style>
-        body {
-            background-color: #000000;
-            color: #F4F4F5;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        /* Scrollbar discreta */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #0A0D10;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #1F2933;
-            border-radius: 9999px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #10B981;
-        }
-
-        /* Splash Screen Transition */
-        #splashScreen {
-            transition: opacity 0.55s ease, visibility 0.55s ease;
-        }
-        #splashScreen.splash-hidden {
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-        }
-
-        /* Glass & Glows */
-        .glass-nav {
-            background: rgba(10, 13, 16, 0.88);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
-        }
-
-        .emerald-glow {
-            box-shadow: 0 0 24px rgba(16, 185, 129, 0.16);
-        }
-
-        .gold-glow {
-            box-shadow: 0 0 24px rgba(245, 158, 11, 0.16);
-        }
-
-        .gold-gradient {
-            background: linear-gradient(135deg, #FBBF24 0%, #F59E0B 55%, #D97706 100%);
-        }
-        .gold-gradient:hover {
-            background: linear-gradient(135deg, #FCD34D 0%, #FBBF24 55%, #F59E0B 100%);
-        }
-    </style>
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #090d16;
+      color: #f3f4f6;
+      overflow-x: hidden;
+    }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #090d16; }
+    ::-webkit-scrollbar-thumb { background: #1f2937; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #10b981; }
+    @keyframes pulse-live {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(1.25); }
+    }
+    .live-dot { animation: pulse-live 1.5s infinite; }
+    #splash-screen { transition: opacity 0.45s ease, visibility 0.45s ease; }
+    .splash-hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+  </style>
 </head>
-<body class="min-h-screen flex flex-col selection:bg-emerald-500 selection:text-black">
+<body class="min-h-screen flex flex-col justify-between antialiased selection:bg-emerald-500 selection:text-black">
 
-    <!-- ========================================================================= -->
-    <!-- SPLASH SCREEN INICIAL (2 SEGUNDOS) COM LOGO.PNG + FALLBACK SVG ELEGANTE   -->
-    <!-- ========================================================================= -->
-    <div id="splashScreen" class="fixed inset-0 z-[100] bg-pitch-950 flex flex-col items-center justify-center p-6">
-        <div class="relative flex flex-col items-center text-center max-w-xs animate-slide-up">
-            <!-- Halo de luz -->
-            <div class="absolute -inset-6 bg-emerald-500/15 blur-3xl rounded-full pointer-events-none"></div>
-
-            <!-- Imagem logo.png da raiz do repositório com fallback SVG automático -->
-            <img
-                src="logo.png"
-                alt="Resenha Bet Logo"
-                class="w-40 h-40 object-contain relative z-10 drop-shadow-[0_10px_25px_rgba(16,185,129,0.28)]"
-                onerror="this.style.display='none'; document.getElementById('splashFallbackSvg').classList.remove('hidden');"
-            >
-
-            <!-- Fallback SVG caso logo.png ainda não tenha sido enviado ao GitHub -->
-            <div id="splashFallbackSvg" class="hidden relative z-10 flex flex-col items-center">
-                <div class="w-24 h-24 rounded-3xl bg-pitch-900 border-2 border-gold-500/60 flex items-center justify-center shadow-2xl gold-glow mb-4">
-                    <svg viewBox="0 0 64 64" class="w-14 h-14">
-                        <defs>
-                            <linearGradient id="rbGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stop-color="#10B981"/>
-                                <stop offset="100%" stop-color="#F59E0B"/>
-                            </linearGradient>
-                        </defs>
-                        <path d="M12 14 C12 10, 52 10, 52 14 L52 38 C52 42, 34 42, 26 42 L16 52 L16 42 C12 42, 12 40, 12 38 Z" fill="url(#rbGrad)" opacity="0.2" stroke="url(#rbGrad)" stroke-width="3"/>
-                        <circle cx="32" cy="27" r="10" fill="none" stroke="#10B981" stroke-width="2.5"/>
-                        <polygon points="32,21 37,25 35,31 29,31 27,25" fill="#F59E0B"/>
-                    </svg>
-                </div>
-                <div class="text-3xl font-black tracking-tight text-white">
-                    RESENHA <span class="text-emerald-500">BET</span>
-                </div>
-            </div>
-
-            <p class="text-xs font-mono uppercase tracking-[0.2em] text-zinc-400 mt-4 relative z-10">
-                Palpites Grátis • Ranking & Prêmios
-            </p>
-
-            <!-- Barra de carregamento -->
-            <div class="w-44 h-1.5 bg-pitch-800 rounded-full overflow-hidden mt-5 relative z-10">
-                <div id="splashProgressBar" class="h-full bg-gradient-to-r from-emerald-500 to-gold-500 w-0 transition-all duration-[1800ms] ease-out"></div>
-            </div>
+  <!-- SPLASH SCREEN (2 SEGUNDOS) -->
+  <div id="splash-screen" class="fixed inset-0 z-50 bg-[#05080f] flex flex-col items-center justify-center p-6">
+    <div class="relative flex flex-col items-center">
+      <div class="w-36 h-36 sm:w-44 sm:h-44 rounded-3xl bg-gradient-to-br from-emerald-500/20 to-amber-400/10 border border-emerald-500/30 flex items-center justify-center shadow-2xl shadow-emerald-500/20 mb-5 overflow-hidden p-3">
+        <img src="logo.png" alt="Resenha Bet" class="w-full h-full object-contain" onerror="this.style.display='none'; document.getElementById('splash-fallback-svg').classList.remove('hidden');" />
+        <div id="splash-fallback-svg" class="hidden flex flex-col items-center justify-center text-center">
+          <svg class="w-16 h-16 text-emerald-400 mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 6l3 4.5-1.5 4.5h-3L9 10.5 12 6z"/>
+          </svg>
+          <span class="font-black text-lg tracking-tight text-white">RESENHA <span class="text-amber-400">BET</span></span>
         </div>
+      </div>
+      <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-emerald-400">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+        Sincronizando jogos reais ESPN...
+      </div>
     </div>
+  </div>
 
-    <!-- ========================================================================= -->
-    <!-- CABEÇALHO PRINCIPAL FIXO                                                  -->
-    <!-- ========================================================================= -->
-    <header class="sticky top-0 z-40 glass-nav border-b border-white/[0.08]">
-        <div class="max-w-7xl mx-auto px-3 sm:px-6 py-2.5 flex items-center justify-between gap-2">
-            <!-- Marca & Logo -->
-            <a href="#" onclick="switchMainView('games'); return false;" class="flex items-center gap-2.5 shrink-0 group">
-                <img
-                    src="logo.png"
-                    alt="Resenha Bet"
-                    class="h-10 sm:h-11 w-auto object-contain transition-transform group-hover:scale-105"
-                    onerror="this.style.display='none'; document.getElementById('headerFallbackLogo').classList.remove('hidden');"
-                >
-                <div id="headerFallbackLogo" class="hidden flex items-center gap-2">
-                    <div class="w-9 h-9 rounded-xl bg-emerald-500/15 border border-emerald-500/40 flex items-center justify-center text-emerald-500">
-                        <i class="fa-solid fa-futbol text-base"></i>
-                    </div>
-                    <div class="leading-none">
-                        <span class="font-black text-base sm:text-lg tracking-tight text-white block">RESENHA <span class="text-emerald-500">BET</span></span>
-                        <span class="text-[9px] font-mono uppercase tracking-widest text-gold-400">Free-to-Play</span>
-                    </div>
-                </div>
-            </a>
-
-            <!-- Navegação Central (Desktop) -->
-            <nav class="hidden md:flex items-center gap-1 bg-pitch-950/90 p-1 rounded-xl border border-white/[0.07]">
-                <button onclick="switchMainView('games')" id="nav-games" class="main-nav-btn px-3.5 py-1.5 rounded-lg text-xs font-extrabold bg-emerald-500 text-black transition">
-                    <i class="fa-solid fa-fire mr-1"></i> Jogos & Odds
-                </button>
-                <button onclick="switchMainView('tickets')" id="nav-tickets" class="main-nav-btn px-3.5 py-1.5 rounded-lg text-xs font-bold text-zinc-400 hover:text-white transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-receipt"></i> Meus Bilhetes
-                    <span id="pendingTicketsBadge" class="font-mono text-[10px] px-1.5 py-0.2 rounded-full bg-white/10 text-zinc-300">0</span>
-                </button>
-                <button onclick="openMediaKitModal()" class="px-3.5 py-1.5 rounded-lg text-xs font-bold text-gold-400 hover:bg-gold-500/10 transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-bullhorn"></i> Mídia Kit & Anuncie
-                </button>
-            </nav>
-
-            <!-- Carteira Virtual (Resenha Coins) + Recarga Patrocinada -->
-            <div class="flex items-center gap-2 shrink-0">
-                <!-- Saldo RC$ -->
-                <div class="px-3 py-1.5 rounded-xl bg-pitch-950 border border-emerald-500/35 flex items-center gap-2">
-                    <div class="w-6 h-6 rounded-lg bg-emerald-500/15 text-emerald-400 flex items-center justify-center text-xs font-black">
-                        RC$
-                    </div>
-                    <div class="leading-tight">
-                        <span class="text-[9px] uppercase tracking-wider text-zinc-400 block">Banca Grátis</span>
-                        <span id="userBalanceDisplay" class="font-mono text-xs sm:text-sm font-extrabold text-emerald-400">1.000,00</span>
-                    </div>
-                </div>
-
-                <!-- Botão Recarga Patrocinada -->
-                <button onclick="openSponsoredRechargeModal()" class="px-3 py-2 rounded-xl gold-gradient text-black font-black text-xs shadow-lg shadow-gold-500/20 flex items-center gap-1.5 transition transform active:scale-95" title="Ganhe +RC$ 500 assistindo oferta do patrocinador">
-                    <i class="fa-solid fa-circle-plus"></i>
-                    <span class="hidden sm:inline">+RC$ 500</span>
-                    <span class="sm:hidden">+500</span>
-                </button>
-            </div>
-        </div>
-
-        <!-- Barra Secundária Mobile (Navegação + Simulador Rápido) -->
-        <div class="md:hidden border-t border-white/[0.06] px-3 py-1.5 flex items-center justify-between gap-2 bg-pitch-950/70">
-            <div class="flex items-center gap-1">
-                <button onclick="switchMainView('games')" id="m-nav-games" class="px-2.5 py-1 rounded-lg text-[11px] font-extrabold bg-emerald-500 text-black">
-                    Jogos
-                </button>
-                <button onclick="switchMainView('tickets')" id="m-nav-tickets" class="px-2.5 py-1 rounded-lg text-[11px] font-bold text-zinc-400 flex items-center gap-1">
-                    Bilhetes <span id="mPendingTicketsBadge" class="font-mono text-[10px] px-1 rounded bg-white/10">0</span>
-                </button>
-                <button onclick="openMediaKitModal()" class="px-2.5 py-1 rounded-lg text-[11px] font-bold text-gold-400">
-                    Anuncie
-                </button>
-            </div>
-
-            <button onclick="simulateRoundResults()" class="px-2.5 py-1 rounded-lg bg-emerald-500/15 border border-emerald-500/40 text-emerald-400 text-[10px] font-extrabold flex items-center gap-1 active:scale-95">
-                <i class="fa-solid fa-play"></i> Simular Rodada
-            </button>
-        </div>
-    </header>
-
-    <!-- ========================================================================= -->
-    <!-- BANNER TOPO: PATROCINADOR MASTER DA RODADA                                -->
-    <!-- ========================================================================= -->
-    <div class="max-w-7xl mx-auto w-full px-3 sm:px-6 pt-4">
-        <div class="rounded-2xl bg-gradient-to-r from-pitch-850 via-pitch-900 to-pitch-850 border border-gold-500/40 p-3.5 sm:p-4 gold-glow relative overflow-hidden">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 relative z-10">
-                <div class="flex items-start sm:items-center gap-3">
-                    <div class="w-11 h-11 rounded-xl bg-gold-500/15 border border-gold-500/40 text-gold-400 flex items-center justify-center text-lg shrink-0">
-                        <i class="fa-solid fa-trophy"></i>
-                    </div>
-                    <div>
-                        <div class="flex items-center gap-2 flex-wrap">
-                            <span class="px-2 py-0.5 rounded bg-gold-500 text-black font-black text-[9px] uppercase tracking-wider">
-                                Patrocinador Master da Rodada
-                            </span>
-                            <span class="px-2 py-0.5 rounded bg-white/[0.06] border border-white/10 text-zinc-300 font-mono text-[10px]">
-                                Cota Disponível • Anuncie Aqui
-                            </span>
-                        </div>
-                        <h2 class="text-sm sm:text-base font-extrabold text-white mt-1">
-                            Sua Marca Aqui no Topo + Naming Rights da Liga Semanal
-                        </h2>
-                        <p class="text-xs text-zinc-400">
-                            Impacte milhares de fãs de futebol todos os dias com 100% de visibilidade antes de cada palpite.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="flex items-center gap-2 shrink-0">
-                    <button onclick="openMediaKitModal()" class="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-gold-500/15 hover:bg-gold-500 hover:text-black border border-gold-500/50 text-gold-400 font-extrabold text-xs transition flex items-center justify-center gap-2">
-                        <span>Ver Mídia Kit & Cotas</span>
-                        <i class="fa-solid fa-arrow-right"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
+  <!-- TOPO: BARRA DE PATROCÍNIO MASTER -->
+  <div class="bg-gradient-to-r from-emerald-950 via-gray-900 to-amber-950/60 border-b border-emerald-500/20 text-xs py-2 px-4">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
+      <div class="flex items-center gap-2">
+        <span class="px-2 py-0.5 rounded bg-amber-400/15 text-amber-300 border border-amber-400/30 font-bold uppercase text-[10px] tracking-wider">Patrocinador Master</span>
+        <span class="text-gray-300">Copa <strong class="text-white">Resenha Bet</strong> — Prêmio de <strong class="text-emerald-400">R$ 1.000 em Produtos</strong> para o Top 1 do mês!</span>
+      </div>
+      <button onclick="openMediaKitModal()" class="text-amber-300 hover:text-amber-200 font-semibold underline underline-offset-2 transition">
+        Anuncie sua marca aqui →
+      </button>
     </div>
+  </div>
 
-    <!-- ========================================================================= -->
-    <!-- CONTEÚDO PRINCIPAL: GRID DE 3 COLUNAS (JOGOS | BETSLIP | RANKING/RESENHA) -->
-    <!-- ========================================================================= -->
-    <main class="max-w-7xl mx-auto w-full px-3 sm:px-6 py-5 flex-1">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
-
-            <!-- ===================================================================== -->
-            <!-- COLUNA ESQUERDA/CENTRAL (7 COLUNAS): JOGOS & MEUS BILHETES            -->
-            <!-- ===================================================================== -->
-            <div class="lg:col-span-7 space-y-4">
-
-                <!-- Barra de Ação & Simulador de Rodada (Desktop) -->
-                <div class="p-3.5 rounded-2xl bg-pitch-900 border border-white/[0.08] flex flex-wrap items-center justify-between gap-3">
-                    <div>
-                        <span class="text-[11px] font-bold text-zinc-400 uppercase tracking-wider block">Modo Demonstração & Testes</span>
-                        <p class="text-xs text-zinc-300">Faça seus palpites grátis e clique ao lado para liquidar a rodada.</p>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <button onclick="simulateRoundResults()" class="px-3.5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-black text-xs shadow-lg shadow-emerald-500/20 flex items-center gap-1.5 transition transform active:scale-95">
-                            <i class="fa-solid fa-bolt"></i>
-                            <span>Simular Resultados da Rodada</span>
-                        </button>
-                        <button onclick="resetSeason()" class="px-3 py-2 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] border border-white/10 text-zinc-300 text-xs font-bold transition" title="Resetar Banca e Nova Temporada">
-                            <i class="fa-solid fa-rotate-left"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- VIEW 1: GRADE DE JOGOS & ODDS -->
-                <div id="viewGames" class="space-y-4">
-                    <!-- Filtros de Campeonato -->
-                    <div class="flex items-center gap-2 overflow-x-auto pb-1">
-                        <button onclick="filterLeague('all')" id="league-all" class="league-pill shrink-0 px-3.5 py-2 rounded-xl bg-emerald-500 text-black font-extrabold text-xs transition">
-                            Todos os Jogos
-                        </button>
-                        <button onclick="filterLeague('Brasileirão Série A')" id="league-Brasileirão Série A" class="league-pill shrink-0 px-3.5 py-2 rounded-xl bg-pitch-900 hover:bg-pitch-800 border border-white/[0.08] text-zinc-300 font-bold text-xs transition">
-                            🇧🇷 Brasileirão Série A
-                        </button>
-                        <button onclick="filterLeague('Champions League')" id="league-Champions League" class="league-pill shrink-0 px-3.5 py-2 rounded-xl bg-pitch-900 hover:bg-pitch-800 border border-white/[0.08] text-zinc-300 font-bold text-xs transition">
-                            🇪🇺 Champions League
-                        </button>
-                        <button onclick="filterLeague('NBA')" id="league-NBA" class="league-pill shrink-0 px-3.5 py-2 rounded-xl bg-pitch-900 hover:bg-pitch-800 border border-white/[0.08] text-zinc-300 font-bold text-xs transition">
-                            🏀 NBA
-                        </button>
-                    </div>
-
-                    <!-- Lista de Partidas (Com Banner Intermediário injetado no meio) -->
-                    <div id="matchesListContainer" class="space-y-3">
-                        <!-- Renderizado via JS -->
-                    </div>
-                </div>
-
-                <!-- VIEW 2: MEUS BILHETES (HISTÓRICO & PENDENTES) -->
-                <div id="viewTickets" class="hidden space-y-3">
-                    <div class="flex items-center justify-between">
-                        <h2 class="text-base font-black text-white flex items-center gap-2">
-                            <i class="fa-solid fa-receipt text-emerald-500"></i>
-                            <span>Meus Bilhetes (Grátis)</span>
-                        </h2>
-                        <button onclick="switchMainView('games')" class="text-xs font-bold text-emerald-400 hover:underline">
-                            + Fazer Novo Palpite
-                        </button>
-                    </div>
-
-                    <div id="myTicketsContainer" class="space-y-3">
-                        <!-- Renderizado via JS -->
-                    </div>
-                </div>
-            </div>
-
-            <!-- ===================================================================== -->
-            <!-- COLUNA DIREITA (5 COLUNAS): BETSLIP + RANKING + RESENHA AO VIVO       -->
-            <!-- ===================================================================== -->
-            <div class="lg:col-span-5 space-y-5">
-
-                <!-- BOLETIM DE APOSTAS (BETSLIP INTERATIVO - DESKTOP) -->
-                <section id="desktopBetSlip" class="rounded-2xl bg-pitch-900 border border-white/[0.1] overflow-hidden shadow-xl">
-                    <div class="px-4 py-3 bg-pitch-850 border-b border-white/[0.08] flex items-center justify-between">
-                        <div class="flex items-center gap-2">
-                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                            <h3 class="text-sm font-black text-white">Boletim de Palpites</h3>
-                            <span id="slipCountBadge" class="font-mono text-xs font-extrabold px-2 py-0.5 rounded-full bg-emerald-500 text-black">0</span>
-                        </div>
-                        <button onclick="clearBetSlip()" class="text-[11px] font-bold text-zinc-400 hover:text-red-400 transition">
-                            Limpar
-                        </button>
-                    </div>
-
-                    <div id="betSlipContent" class="p-4">
-                        <!-- Renderizado dinamicamente via JS -->
-                    </div>
-                </section>
-
-                <!-- CARD DE PRÊMIO PATROCINADO + RANKING TOP TIPSTERS -->
-                <section class="rounded-2xl bg-pitch-900 border border-white/[0.08] overflow-hidden">
-                    <!-- Banner Prêmio da Semana Patrocinado -->
-                    <div class="p-4 bg-gradient-to-br from-gold-500/20 via-pitch-850 to-pitch-900 border-b border-gold-500/30">
-                        <div class="flex items-center justify-between gap-2 mb-1.5">
-                            <span class="text-[10px] font-black uppercase tracking-wider text-gold-400 flex items-center gap-1.5">
-                                <i class="fa-solid fa-gift"></i> Prêmio da Semana Patrocinado
-                            </span>
-                            <button onclick="openMediaKitModal()" class="text-[10px] font-bold underline text-zinc-300 hover:text-gold-400">
-                                Patrocinar Prêmio
-                            </button>
-                        </div>
-                        <div class="flex items-center gap-3">
-                            <div class="w-11 h-11 rounded-xl bg-gold-500 text-black flex items-center justify-center text-xl font-black shrink-0 shadow-lg">
-                                <i class="fa-solid fa-shirt"></i>
-                            </div>
-                            <div>
-                                <h4 class="text-sm font-black text-white">Camisa Oficial do Seu Time + Pix R$ 300</h4>
-                                <p class="text-[11px] text-zinc-300">Oferecimento: <strong class="text-gold-400">[Sua Marca Aqui]</strong> • Líder do Ranking até Domingo 23h59.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Cabeçalho Ranking + Edição de Arroba -->
-                    <div class="px-4 py-3 border-b border-white/[0.07] flex items-center justify-between gap-2">
-                        <div>
-                            <h3 class="text-sm font-black text-white flex items-center gap-1.5">
-                                <i class="fa-solid fa-ranking-star text-emerald-500"></i>
-                                <span>Ranking Top Tipsters</span>
-                            </h3>
-                            <p class="text-[11px] text-zinc-400">Classificação em tempo real por banca acumulada</p>
-                        </div>
-                        <button onclick="openProfileEditModal()" class="px-2.5 py-1.5 rounded-lg bg-white/[0.05] hover:bg-white/[0.1] border border-white/10 text-[11px] font-bold text-zinc-200 flex items-center gap-1 transition">
-                            <i class="fa-solid fa-user-pen text-emerald-400"></i>
-                            <span>Meu @</span>
-                        </button>
-                    </div>
-
-                    <!-- Tabela de Classificação -->
-                    <div id="rankingContainer" class="divide-y divide-white/[0.06]">
-                        <!-- Renderizado via JS -->
-                    </div>
-                </section>
-
-                <!-- MINI FEED: RESENHA AO VIVO DA GALERA -->
-                <section class="rounded-2xl bg-pitch-900 border border-white/[0.08] overflow-hidden">
-                    <div class="px-4 py-3 bg-pitch-850 border-b border-white/[0.07] flex items-center justify-between">
-                        <h3 class="text-sm font-black text-white flex items-center gap-2">
-                            <i class="fa-solid fa-comments text-emerald-500"></i>
-                            <span>Resenha ao Vivo</span>
-                        </h3>
-                        <span class="text-[10px] font-mono text-emerald-400 flex items-center gap-1">
-                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span> 148 online
-                        </span>
-                    </div>
-
-                    <div id="chatMessagesContainer" class="p-3.5 space-y-2.5 max-h-60 overflow-y-auto">
-                        <!-- Renderizado via JS -->
-                    </div>
-
-                    <form onsubmit="sendChatMessage(event)" class="p-3 border-t border-white/[0.07] bg-pitch-950/60 flex items-center gap-2">
-                        <input type="text" id="chatInput" maxlength="120" placeholder="Mande seu palpite na resenha..." class="w-full bg-pitch-900 border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
-                        <button type="submit" class="px-3.5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-black text-xs shrink-0 transition active:scale-95">
-                            <i class="fa-solid fa-paper-plane"></i>
-                        </button>
-                    </form>
-                </section>
-
-            </div>
+  <!-- HEADER PRINCIPAL -->
+  <header class="sticky top-0 z-30 bg-[#090d16]/95 backdrop-blur-md border-b border-gray-800">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
+      <!-- Marca -->
+      <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('jogos')">
+        <div class="w-11 h-11 rounded-xl bg-gray-900 border border-emerald-500/40 flex items-center justify-center overflow-hidden p-1 shrink-0">
+          <img src="logo.png" alt="Logo" class="w-full h-full object-contain" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');" />
+          <span class="hidden font-black text-emerald-400 text-sm">RB</span>
         </div>
-    </main>
+        <div>
+          <div class="flex items-center gap-1.5">
+            <h1 class="font-black text-lg sm:text-xl tracking-tight text-white leading-none">RESENHA <span class="text-amber-400">BET</span></h1>
+            <span class="hidden sm:inline-block text-[10px] font-bold uppercase px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">Free-to-Play</span>
+          </div>
+          <p class="text-[11px] text-gray-400 mt-0.5">Palpites grátis • Jogos reais ESPN</p>
+        </div>
+      </div>
 
-    <!-- ========================================================================= -->
-    <!-- GAVETA FLUTUANTE MOBILE DO BETSLIP                                        -->
-    <!-- ========================================================================= -->
-    <div id="mobileSlipBar" class="lg:hidden fixed bottom-0 inset-x-0 z-30 p-3 bg-pitch-900/95 backdrop-blur-md border-t border-emerald-500/40 shadow-2xl hidden">
-        <button onclick="openMobileSlipDrawer()" class="w-full py-3 px-4 rounded-xl bg-emerald-500 text-black font-black text-xs flex items-center justify-between shadow-lg">
-            <span class="flex items-center gap-2">
-                <span id="mobileSlipCount" class="px-2 py-0.5 rounded-full bg-black text-emerald-400 font-mono text-xs">1</span>
-                <span>ABRIR BOLETIM DE PALPITES</span>
-            </span>
-            <span id="mobileSlipOdd" class="font-mono text-sm">Odd Total: 1.85</span>
+      <!-- Navegação Desktop -->
+      <nav class="hidden md:flex items-center gap-1 bg-gray-900/90 p-1 rounded-xl border border-gray-800">
+        <button onclick="switchTab('jogos')" id="nav-jogos" class="tab-btn px-4 py-2 rounded-lg text-sm font-bold bg-emerald-500 text-black transition">
+          Jogos Reais
         </button>
-    </div>
+        <button onclick="switchTab('bilhetes')" id="nav-bilhetes" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold text-gray-300 hover:text-white transition flex items-center gap-1.5">
+          Meus Bilhetes
+          <span id="badge-bilhetes" class="px-1.5 py-0.2 text-[11px] rounded-full bg-gray-800 text-emerald-400 font-bold">0</span>
+        </button>
+        <button onclick="switchTab('ranking')" id="nav-ranking" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold text-gray-300 hover:text-white transition">
+          Ranking & Prêmios
+        </button>
+      </nav>
 
-    <!-- Modal Gaveta Mobile BetSlip -->
-    <div id="mobileSlipModal" class="lg:hidden fixed inset-0 z-50 hidden items-end bg-black/80 backdrop-blur-sm">
-        <div class="w-full bg-pitch-900 border-t border-white/15 rounded-t-3xl p-4 max-h-[85vh] overflow-y-auto animate-slide-up">
-            <div class="flex items-center justify-between pb-3 mb-3 border-b border-white/10">
-                <h3 class="text-sm font-black text-white">Seu Boletim de Palpites</h3>
-                <button onclick="closeMobileSlipDrawer()" class="w-8 h-8 rounded-full bg-white/10 text-zinc-300 flex items-center justify-center">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
-            <div id="mobileBetSlipContent"></div>
+      <!-- Banca Virtual + Recarga -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        <div class="bg-gray-900 border border-gray-800 rounded-xl px-3 py-1.5 text-right">
+          <div class="text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Banca Virtual</div>
+          <div id="user-balance" class="font-black text-sm sm:text-base text-emerald-400 tabular-nums">RC$ 1.000,00</div>
         </div>
+        <button onclick="openRechargeModal()" class="bg-gradient-to-r from-amber-400 to-yellow-500 hover:from-amber-300 hover:to-yellow-400 text-black font-extrabold text-xs sm:text-sm px-3 py-2.5 rounded-xl shadow-lg shadow-amber-500/20 transition flex items-center gap-1.5 shrink-0">
+          <span>+RC$ 500</span>
+          <span class="hidden sm:inline text-[10px] bg-black/20 px-1.5 py-0.5 rounded font-bold">GRÁTIS</span>
+        </button>
+      </div>
     </div>
 
-    <!-- ========================================================================= -->
-    <!-- MODAL 1: RECARGA PATROCINADA (+RC$ 500 COM CONTAGEM DE ANÚNCIO 5S)        -->
-    <!-- ========================================================================= -->
-    <div id="sponsoredRechargeModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/85 backdrop-blur-sm animate-fade-in">
-        <div class="w-full max-w-md bg-pitch-900 border border-gold-500/40 rounded-3xl shadow-2xl overflow-hidden animate-slide-up">
-            <div class="px-5 py-4 bg-pitch-950 border-b border-white/[0.08] flex items-center justify-between">
-                <div class="flex items-center gap-2">
-                    <span class="px-2 py-0.5 rounded bg-gold-500 text-black font-black text-[10px] uppercase">Oferta Patrocinada</span>
-                    <span class="text-xs font-bold text-zinc-300">Recarga Grátis +RC$ 500</span>
-                </div>
-                <button onclick="closeSponsoredRechargeModal()" class="w-8 h-8 rounded-full bg-white/[0.06] text-zinc-400 hover:text-white flex items-center justify-center">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
+    <!-- Navegação Mobile -->
+    <div class="md:hidden grid grid-cols-3 border-t border-gray-800 bg-gray-950 text-xs font-bold">
+      <button onclick="switchTab('jogos')" id="mnav-jogos" class="py-2.5 text-emerald-400 border-b-2 border-emerald-400">Jogos Reais</button>
+      <button onclick="switchTab('bilhetes')" id="mnav-bilhetes" class="py-2.5 text-gray-400 border-b-2 border-transparent">Meus Bilhetes (<span id="mbadge-bilhetes">0</span>)</button>
+      <button onclick="switchTab('ranking')" id="mnav-ranking" class="py-2.5 text-gray-400 border-b-2 border-transparent">Ranking</button>
+    </div>
+  </header>
+
+  <!-- CONTEÚDO PRINCIPAL -->
+  <main class="max-w-7xl w-full mx-auto px-4 py-6 flex-1">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+      <!-- COLUNA ESQUERDA / CENTRAL (8 cols) -->
+      <div class="lg:col-span-8 space-y-6">
+
+        <!-- BANNER PUBLICITÁRIO TOPO (ESPAÇO COMERCIAL #1) -->
+        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-gray-900 via-emerald-950/60 to-gray-900 border border-emerald-500/30 p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div class="space-y-1">
+            <div class="flex items-center gap-2">
+              <span class="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded bg-white/10 text-gray-300">Publicidade • Cota Ouro</span>
+              <span id="espn-sync-status" class="text-[11px] text-emerald-400 font-semibold">● Feed ESPN Conectado</span>
             </div>
-
-            <div class="p-5 space-y-4 text-center">
-                <!-- Espaço Publicitário do Patrocinador -->
-                <div class="p-5 rounded-2xl bg-gradient-to-br from-pitch-800 to-pitch-950 border border-gold-500/35 space-y-2.5">
-                    <div class="w-14 h-14 rounded-2xl bg-gold-500/15 border border-gold-500/40 text-gold-400 flex items-center justify-center text-2xl mx-auto">
-                        <i class="fa-solid fa-crown"></i>
-                    </div>
-                    <span class="text-[10px] font-mono uppercase tracking-widest text-gold-400 block">Anúncio do Patrocinador Oficial</span>
-                    <h4 class="text-base font-black text-white">Quer levar seus palpites para o próximo nível?</h4>
-                    <p class="text-xs text-zinc-300 leading-relaxed">
-                        Este espaço exibe o banner ou vídeo curto do patrocinador que financia suas <strong>Resenha Coins</strong> gratuitas.
-                    </p>
-                    <a href="#anuncie" onclick="closeSponsoredRechargeModal(); openMediaKitModal(); return false;" class="inline-block text-xs font-extrabold text-gold-400 hover:underline pt-1">
-                        Quer anunciar sua marca aqui? Clique para ver o Mídia Kit →
-                    </a>
-                </div>
-
-                <!-- Barra de Progresso de 5 Segundos -->
-                <div class="space-y-1.5">
-                    <div class="flex items-center justify-between text-xs font-bold">
-                        <span id="adTimerLabel" class="text-zinc-400">Aguarde 5s para liberar suas moedas...</span>
-                        <span id="adTimerSeconds" class="font-mono text-gold-400">5s</span>
-                    </div>
-                    <div class="w-full h-2 bg-pitch-950 rounded-full overflow-hidden border border-white/10">
-                        <div id="adProgressBar" class="h-full bg-gold-500 w-0 transition-all duration-1000 linear"></div>
-                    </div>
-                </div>
-
-                <button id="claimCoinsBtn" disabled onclick="claimSponsoredCoins()" class="w-full py-3.5 px-4 rounded-xl bg-zinc-800 text-zinc-500 font-black text-sm flex items-center justify-center gap-2 transition cursor-not-allowed">
-                    <i class="fa-solid fa-hourglass-half"></i>
-                    <span>Aguardando Anúncio (5s)...</span>
-                </button>
-            </div>
+            <h2 class="text-base sm:text-lg font-extrabold text-white">Palpite sem arriscar seu bolso e concorra a prêmios reais toda semana!</h2>
+            <p class="text-xs text-gray-300">Resultados oficiais sincronizados automaticamente via ESPN. Acumule Resenha Coins (RC$) e suba no ranking.</p>
+          </div>
+          <div class="flex items-center gap-2 shrink-0">
+            <button onclick="syncESPNData(true)" id="btn-sync-espn" class="bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold text-xs px-4 py-2.5 rounded-xl transition flex items-center gap-1.5 shadow-lg shadow-emerald-500/20">
+              <svg id="sync-icon" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+              <span>Atualizar ESPN</span>
+            </button>
+          </div>
         </div>
-    </div>
 
-    <!-- ========================================================================= -->
-    <!-- MODAL 2: MÍDIA KIT & PROPOSTA COMERCIAL PARA PATROCINADORES                -->
-    <!-- ========================================================================= -->
-    <div id="mediaKitModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/85 backdrop-blur-sm animate-fade-in">
-        <div class="w-full max-w-lg bg-pitch-900 border border-gold-500/40 rounded-3xl shadow-2xl overflow-hidden animate-slide-up max-h-[90vh] flex flex-col">
-            <div class="px-5 py-4 bg-pitch-950 border-b border-white/[0.08] flex items-center justify-between shrink-0">
-                <div class="flex items-center gap-2.5">
-                    <div class="w-9 h-9 rounded-xl bg-gold-500 text-black flex items-center justify-center font-black">
-                        <i class="fa-solid fa-bullhorn"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-sm font-black text-white">Mídia Kit & Cotas de Patrocínio</h3>
-                        <p class="text-[11px] text-zinc-400">Resenha Bet • Entretenimento Esportivo 100% Legal (Free-to-Play)</p>
-                    </div>
-                </div>
-                <button onclick="closeMediaKitModal()" class="w-8 h-8 rounded-full bg-white/[0.06] text-zinc-400 hover:text-white flex items-center justify-center">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
+        <!-- ABA: JOGOS REAIS -->
+        <section id="tab-jogos" class="space-y-4">
+          <!-- Filtros de Campeonato & Status -->
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <div id="league-filters" class="flex items-center gap-2 overflow-x-auto pb-1">
+              <button onclick="setLeagueFilter('ALL')" data-league="ALL" class="league-pill px-3.5 py-1.5 rounded-full text-xs font-bold bg-emerald-500 text-black whitespace-nowrap">Todos os Jogos</button>
+              <button onclick="setLeagueFilter('bra.1')" data-league="bra.1" class="league-pill px-3.5 py-1.5 rounded-full text-xs font-semibold bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700 whitespace-nowrap">Brasileirão Série A</button>
+              <button onclick="setLeagueFilter('conmebol.libertadores')" data-league="conmebol.libertadores" class="league-pill px-3.5 py-1.5 rounded-full text-xs font-semibold bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700 whitespace-nowrap">Libertadores</button>
+              <button onclick="setLeagueFilter('uefa.champions')" data-league="uefa.champions" class="league-pill px-3.5 py-1.5 rounded-full text-xs font-semibold bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700 whitespace-nowrap">Champions League</button>
+              <button onclick="setLeagueFilter('eng.1')" data-league="eng.1" class="league-pill px-3.5 py-1.5 rounded-full text-xs font-semibold bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700 whitespace-nowrap">Premier League</button>
+              <button onclick="setLeagueFilter('esp.1')" data-league="esp.1" class="league-pill px-3.5 py-1.5 rounded-full text-xs font-semibold bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700 whitespace-nowrap">La Liga</button>
+            </div>
+          </div>
+
+          <!-- Lista de Partidas -->
+          <div id="matches-container" class="space-y-3">
+            <!-- Renderizado via JS -->
+          </div>
+        </section>
+
+        <!-- ABA: MEUS BILHETES -->
+        <section id="tab-bilhetes" class="hidden space-y-4">
+          <div class="flex items-center justify-between">
+            <h2 class="text-lg font-extrabold text-white">Histórico de Bilhetes</h2>
+            <span class="text-xs text-gray-400">Liquidação automática pelo placar final da ESPN</span>
+          </div>
+          <div id="tickets-container" class="space-y-3">
+            <!-- Renderizado via JS -->
+          </div>
+        </section>
+
+        <!-- ABA: RANKING & PRÊMIOS -->
+        <section id="tab-ranking" class="hidden space-y-4">
+          <div class="bg-gray-900 border border-gray-800 rounded-2xl p-5">
+            <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+              <div>
+                <span class="text-[11px] font-bold uppercase tracking-wider text-amber-400">Liga Oficial do Mês</span>
+                <h2 class="text-xl font-black text-white">Ranking Top Tipsters — Resenha Bet</h2>
+              </div>
+              <div class="bg-amber-400/10 border border-amber-400/30 rounded-xl px-3.5 py-2 text-right">
+                <div class="text-[10px] text-amber-300 uppercase font-bold">Premiação Patrocinada</div>
+                <div class="text-sm font-black text-white">1º Lugar: Camisa Oficial + R$ 500</div>
+              </div>
+            </div>
+            <div id="ranking-container" class="divide-y divide-gray-800">
+              <!-- Renderizado via JS -->
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- COLUNA DIREITA: BOLETIM DE PALPITES + ESPAÇO PATROCINADOR (4 cols) -->
+      <aside class="lg:col-span-4 space-y-5 lg:sticky lg:top-24">
+
+        <!-- BOLETIM DE PALPITES (BETSLIP) -->
+        <div class="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-xl">
+          <div class="bg-gray-950 px-4 py-3.5 border-b border-gray-800 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
+              <h3 class="font-extrabold text-sm text-white uppercase tracking-wide">Boletim de Palpites</h3>
+            </div>
+            <span id="slip-count" class="text-xs font-black px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400">0 seleções</span>
+          </div>
+
+          <div id="betslip-items" class="p-4 space-y-2.5 max-h-80 overflow-y-auto">
+            <div class="text-center py-8 text-gray-500 text-xs">
+              Clique em uma odd (<strong class="text-gray-300">1</strong>, <strong class="text-gray-300">X</strong> ou <strong class="text-gray-300">2</strong>) nos jogos abertos para montar seu bilhete gratuito.
+            </div>
+          </div>
+
+          <div id="betslip-footer" class="hidden p-4 bg-gray-950/90 border-t border-gray-800 space-y-3">
+            <div class="flex items-center justify-between text-xs">
+              <span class="text-gray-400 font-medium">Tipo de Bilhete:</span>
+              <span id="slip-type-label" class="font-bold text-amber-400">Simples</span>
+            </div>
+            <div class="flex items-center justify-between text-xs">
+              <span class="text-gray-400 font-medium">Odd Total:</span>
+              <span id="slip-total-odd" class="font-black text-white text-sm">1.00</span>
             </div>
 
-            <div class="p-5 space-y-4 overflow-y-auto">
-                <p class="text-xs sm:text-sm text-zinc-300 leading-relaxed">
-                    A <strong class="text-white">Resenha Bet</strong> é um portal de palpites esportivos gratuitos onde os usuários competem por prêmios semanais sem envolver apostas em dinheiro real — garantindo <strong class="text-emerald-400">segurança jurídica e brand safety total</strong> para marcas patrocinadoras.
-                </p>
-
-                <!-- Métricas Projetadas -->
-                <div class="grid grid-cols-3 gap-2.5 text-center">
-                    <div class="p-3 rounded-2xl bg-pitch-950 border border-white/[0.08]">
-                        <span class="font-mono text-base sm:text-lg font-black text-emerald-400 block">+45 mil</span>
-                        <span class="text-[10px] text-zinc-400">Pageviews / mês</span>
-                    </div>
-                    <div class="p-3 rounded-2xl bg-pitch-950 border border-white/[0.08]">
-                        <span class="font-mono text-base sm:text-lg font-black text-gold-400 block">6m 40s</span>
-                        <span class="text-[10px] text-zinc-400">Tempo Médio</span>
-                    </div>
-                    <div class="p-3 rounded-2xl bg-pitch-950 border border-white/[0.08]">
-                        <span class="font-mono text-base sm:text-lg font-black text-white block">18–44</span>
-                        <span class="text-[10px] text-zinc-400">Público Fã Esporte</span>
-                    </div>
+            <div>
+              <div class="flex items-center justify-between text-xs mb-1">
+                <label for="stake-input" class="text-gray-400 font-semibold">Valor do Palpite (RC$)</label>
+                <div class="flex gap-1">
+                  <button onclick="setQuickStake(50)" class="px-2 py-0.5 rounded bg-gray-800 hover:bg-gray-700 text-[11px] font-bold text-gray-300">50</button>
+                  <button onclick="setQuickStake(100)" class="px-2 py-0.5 rounded bg-gray-800 hover:bg-gray-700 text-[11px] font-bold text-gray-300">100</button>
+                  <button onclick="setQuickStake(250)" class="px-2 py-0.5 rounded bg-gray-800 hover:bg-gray-700 text-[11px] font-bold text-gray-300">250</button>
                 </div>
-
-                <!-- Formatos Disponíveis -->
-                <div class="space-y-2">
-                    <h4 class="text-xs font-black uppercase tracking-wider text-gold-400">Formatos Comerciais Disponíveis</h4>
-
-                    <div class="p-3 rounded-xl bg-pitch-850 border border-white/[0.07] flex items-center justify-between gap-2">
-                        <div>
-                            <p class="text-xs font-extrabold text-white">1. Patrocinador Master (Topo + Naming Rights)</p>
-                            <p class="text-[11px] text-zinc-400">Banner fixo no topo + nome da liga semanal.</p>
-                        </div>
-                        <span class="font-mono text-xs font-black text-gold-400 shrink-0">R$ 1.500/mês</span>
-                    </div>
-
-                    <div class="p-3 rounded-xl bg-pitch-850 border border-white/[0.07] flex items-center justify-between gap-2">
-                        <div>
-                            <p class="text-xs font-extrabold text-white">2. Prêmio da Semana + Recarga Patrocinada</p>
-                            <p class="text-[11px] text-zinc-400">Sua marca entrega o prêmio e aparece na recarga de moedas.</p>
-                        </div>
-                        <span class="font-mono text-xs font-black text-emerald-400 shrink-0">R$ 800/mês</span>
-                    </div>
-
-                    <div class="p-3 rounded-xl bg-pitch-850 border border-white/[0.07] flex items-center justify-between gap-2">
-                        <div>
-                            <p class="text-xs font-extrabold text-white">3. Banner Intermediário na Grade de Jogos</p>
-                            <p class="text-[11px] text-zinc-400">Alta taxa de clique entre os confrontos da rodada.</p>
-                        </div>
-                        <span class="font-mono text-xs font-black text-zinc-200 shrink-0">R$ 450/mês</span>
-                    </div>
-                </div>
-
-                <!-- Botão Contato Comercial -->
-                <div class="pt-1 flex flex-col sm:flex-row gap-2">
-                    <button onclick="copyCommercialEmail()" class="w-full py-3 px-4 rounded-xl gold-gradient text-black font-black text-xs flex items-center justify-center gap-2 shadow-lg">
-                        <i class="fa-solid fa-envelope"></i>
-                        <span>Copiar Contato Comercial (comercial@resenhabet.com.br)</span>
-                    </button>
-                </div>
+              </div>
+              <input id="stake-input" type="number" min="10" step="10" value="100" oninput="updateSlipTotals()" class="w-full bg-gray-900 border border-gray-700 focus:border-emerald-500 rounded-xl px-3 py-2 text-sm font-black text-white outline-none" />
             </div>
+
+            <div class="flex items-center justify-between pt-1 border-t border-gray-800">
+              <span class="text-xs text-gray-400 font-semibold">Retorno Potencial:</span>
+              <span id="slip-potential-return" class="text-base font-black text-emerald-400">RC$ 0,00</span>
+            </div>
+
+            <div class="flex gap-2">
+              <button onclick="clearSlip()" class="px-3 py-2.5 rounded-xl bg-gray-800 hover:bg-gray-700 text-xs font-bold text-gray-300 transition">Limpar</button>
+              <button onclick="placeBet()" class="flex-1 bg-emerald-500 hover:bg-emerald-400 text-black font-black text-sm py-2.5 rounded-xl shadow-lg shadow-emerald-500/20 transition">
+                Confirmar Palpite Grátis
+              </button>
+            </div>
+          </div>
         </div>
-    </div>
 
-    <!-- ========================================================================= -->
-    <!-- MODAL 3: EDITAR PERFIL / @ARROBA NO RANKING                               -->
-    <!-- ========================================================================= -->
-    <div id="profileEditModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/85 backdrop-blur-sm animate-fade-in">
-        <div class="w-full max-w-sm bg-pitch-900 border border-white/15 rounded-3xl shadow-2xl p-5 space-y-4 animate-slide-up">
-            <div class="flex items-center justify-between">
-                <h3 class="text-sm font-black text-white">Seu Perfil no Ranking</h3>
-                <button onclick="closeProfileEditModal()" class="w-8 h-8 rounded-full bg-white/10 text-zinc-400 flex items-center justify-center">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
-            <form onsubmit="saveUserProfile(event)" class="space-y-3">
-                <div>
-                    <label class="block text-[11px] font-bold text-zinc-400 mb-1">Seu Nome ou Apelido</label>
-                    <input type="text" id="inpUserName" required maxlength="22" class="w-full bg-pitch-950 border border-white/10 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
-                </div>
-                <div>
-                    <label class="block text-[11px] font-bold text-zinc-400 mb-1">Seu @Arroba</label>
-                    <input type="text" id="inpUserHandle" required maxlength="20" class="w-full font-mono bg-pitch-950 border border-white/10 rounded-xl px-3 py-2.5 text-xs text-emerald-400 focus:outline-none focus:border-emerald-500">
-                </div>
-                <button type="submit" class="w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-black text-xs transition">
-                    Salvar no Ranking
-                </button>
-            </form>
+        <!-- ESPAÇO PUBLICITÁRIO LATERAL (COTA PATROCINADOR) -->
+        <div class="rounded-2xl bg-gradient-to-b from-gray-900 to-gray-950 border border-amber-400/30 p-5 text-center space-y-3">
+          <span class="inline-block text-[10px] font-bold uppercase tracking-widest px-2.5 py-0.5 rounded-full bg-amber-400/15 text-amber-300 border border-amber-400/30">
+            Espaço Patrocinado
+          </span>
+          <h4 class="font-black text-base text-white">Sua Marca no Centro da Resenha</h4>
+          <p class="text-xs text-gray-400 leading-relaxed">
+            Impacte milhares de fãs de futebol todos os dias com banners exclusivos, naming rights de ligas e recargas patrocinadas.
+          </p>
+          <button onclick="openMediaKitModal()" class="w-full py-2.5 rounded-xl bg-amber-400/15 hover:bg-amber-400/25 border border-amber-400/40 text-amber-300 font-bold text-xs transition">
+            Ver Mídia Kit & Cotas
+          </button>
         </div>
+
+      </aside>
     </div>
+  </main>
 
-    <!-- ========================================================================= -->
-    <!-- RODAPÉ DISCRETO COM ATRIBUIÇÃO CLICÁVEL                                   -->
-    <!-- ========================================================================= -->
-    <footer class="border-t border-white/[0.07] bg-pitch-950 py-5 px-4 text-center space-y-2 mt-8">
-        <p class="text-[11px] text-zinc-500 max-w-2xl mx-auto">
-            Resenha Bet é uma plataforma de entretenimento esportivo 100% gratuita (Free-to-Play). As Resenha Coins (RC$) são moedas virtuais sem valor monetário real.
-        </p>
-        <p class="text-[11px] text-zinc-500">
-            Desenvolvido para escala & patrocínios •
-            <a href="https://vercel.com" target="_blank" rel="noopener noreferrer" class="text-zinc-400 hover:text-emerald-400 underline transition">
-                Hospedado com Vercel & GitHub
-            </a>
-            •
-            <a href="#anuncie" onclick="openMediaKitModal(); return false;" class="text-gold-400 hover:underline transition">
-                Seja um Patrocinador
-            </a>
-        </p>
-    </footer>
+  <!-- MODAL: RECARGA PATROCINADA -->
+  <div id="recharge-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-gray-900 border border-gray-800 rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
+      <div class="flex items-center justify-between">
+        <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded bg-amber-400/15 text-amber-300">Recarga Gratuita Patrocinada</span>
+        <button onclick="closeRechargeModal()" class="text-gray-400 hover:text-white text-lg font-bold">✕</button>
+      </div>
+      <h3 class="text-xl font-black text-white">Ganhe +RC$ 500,00 agora</h3>
+      <p class="text-xs text-gray-300 leading-relaxed">
+        Na <strong>Resenha Bet</strong> você nunca tira dinheiro do bolso. Assista ao destaque do nosso patrocinador por 5 segundos para liberar mais moedas virtuais na sua banca.
+      </p>
+      <div class="rounded-xl bg-gradient-to-r from-emerald-950 to-gray-950 border border-emerald-500/30 p-4 text-center space-y-2">
+        <div class="text-[10px] uppercase tracking-widest text-emerald-400 font-bold">Anúncio Parceiro</div>
+        <div class="text-sm font-extrabold text-white">Cupom RESENHA10 — 10% OFF em Artigos Esportivos</div>
+        <div id="ad-countdown-text" class="text-xs text-amber-300 font-bold pt-1">Aguarde 5s para liberar...</div>
+      </div>
+      <button id="btn-claim-recharge" disabled onclick="claimRecharge()" class="w-full py-3 rounded-xl bg-gray-800 text-gray-500 font-black text-sm transition cursor-not-allowed">
+        Liberando em 5s...
+      </button>
+    </div>
+  </div>
 
-    <!-- Container Toast -->
-    <div id="toastContainer" class="fixed bottom-16 lg:bottom-5 left-1/2 -translate-x-1/2 z-50 pointer-events-none flex flex-col items-center gap-2 w-full max-w-sm px-4"></div>
+  <!-- MODAL: MÍDIA KIT & PATROCÍNIO -->
+  <div id="mediakit-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-gray-900 border border-gray-800 rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-2xl">
+      <div class="flex items-center justify-between">
+        <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded bg-emerald-500/15 text-emerald-400">Comercial & Parcerias</span>
+        <button onclick="closeMediaKitModal()" class="text-gray-400 hover:text-white text-lg font-bold">✕</button>
+      </div>
+      <h3 class="text-xl font-black text-white">Anuncie na Resenha Bet</h3>
+      <p class="text-xs text-gray-300 leading-relaxed">
+        Somos uma plataforma 100% gratuita de entretenimento e palpites esportivos com dados ao vivo. Sem bloqueios de anúncios e com alta retenção diária.
+      </p>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-left">
+        <div class="p-3 rounded-xl bg-gray-950 border border-gray-800">
+          <div class="text-[10px] font-bold text-amber-400 uppercase">Cota Master</div>
+          <div class="text-sm font-black text-white mt-0.5">Naming Rights</div>
+          <p class="text-[11px] text-gray-400 mt-1">Logo no topo + nome da Liga Mensal oficial.</p>
+        </div>
+        <div class="p-3 rounded-xl bg-gray-950 border border-gray-800">
+          <div class="text-[10px] font-bold text-emerald-400 uppercase">Recarga VIP</div>
+          <div class="text-sm font-black text-white mt-0.5">Modal de Bônus</div>
+          <p class="text-[11px] text-gray-400 mt-1">Exibição garantida toda vez que o usuário recarrega moedas.</p>
+        </div>
+        <div class="p-3 rounded-xl bg-gray-950 border border-gray-800">
+          <div class="text-[10px] font-bold text-sky-400 uppercase">Banner Feed</div>
+          <div class="text-sm font-black text-white mt-0.5">Display & Link</div>
+          <p class="text-[11px] text-gray-400 mt-1">Destaque fixo na grade de jogos e lateral do boletim.</p>
+        </div>
+      </div>
+      <div class="pt-2 flex flex-col sm:flex-row gap-2">
+        <a href="https://wa.me/5551992743197?text=Ol%C3%A1!%20Tenho%20interesse%20em%20patrocinar%20o%20portal%20Resenha%20Bet." target="_blank" rel="noopener noreferrer" class="flex-1 text-center py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-black text-xs transition">
+          Falar com Comercial no WhatsApp
+        </a>
+        <button onclick="closeMediaKitModal()" class="px-4 py-3 rounded-xl bg-gray-800 hover:bg-gray-700 text-xs font-bold text-gray-300">Fechar</button>
+      </div>
+    </div>
+  </div>
 
-    <!-- ========================================================================= -->
-    <!-- JAVASCRIPT: MOTOR COMPLETO DO PORTAL RESENHA BET                          -->
-    <!-- ========================================================================= -->
-    <script>
-        const STORAGE_KEY = 'resenha_bet_portal_v1';
+  <!-- TOAST DE NOTIFICAÇÃO -->
+  <div id="toast" class="fixed bottom-5 right-5 z-50 hidden bg-gray-900 border border-emerald-500/50 text-white px-4 py-3 rounded-xl shadow-2xl text-xs font-bold flex items-center gap-2">
+    <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+    <span id="toast-msg">Mensagem</span>
+  </div>
 
-        const INITIAL_MATCHES = [
-            {
-                id: 'm-1',
-                league: 'Brasileirão Série A',
-                time: 'Hoje • 21:30',
-                home: 'Flamengo',
-                away: 'Palmeiras',
-                trendHome: 54,
-                trendDraw: 22,
-                trendAway: 24,
-                odds: { '1': 2.05, 'X': 3.30, '2': 3.60 }
-            },
-            {
-                id: 'm-2',
-                league: 'Brasileirão Série A',
-                time: 'Hoje • 20:00',
-                home: 'Botafogo',
-                away: 'São Paulo',
-                trendHome: 62,
-                trendDraw: 20,
-                trendAway: 18,
-                odds: { '1': 1.88, 'X': 3.40, '2': 4.10 }
-            },
-            {
-                id: 'm-3',
-                league: 'Champions League',
-                time: 'Amanhã • 16:00',
-                home: 'Real Madrid',
-                away: 'Manchester City',
-                trendHome: 48,
-                trendDraw: 24,
-                trendAway: 28,
-                odds: { '1': 2.35, 'X': 3.55, '2': 2.85 }
-            },
-            {
-                id: 'm-4',
-                league: 'Champions League',
-                time: 'Amanhã • 16:00',
-                home: 'Bayern de Munique',
-                away: 'Arsenal',
-                trendHome: 51,
-                trendDraw: 23,
-                trendAway: 26,
-                odds: { '1': 2.15, 'X': 3.45, '2': 3.20 }
-            },
-            {
-                id: 'm-5',
-                league: 'NBA',
-                time: 'Hoje • 23:00',
-                home: 'LA Lakers',
-                away: 'Boston Celtics',
-                trendHome: 42,
-                trendDraw: 0,
-                trendAway: 58,
-                odds: { '1': 2.25, 'X': null, '2': 1.68 }
-            },
-            {
-                id: 'm-6',
-                league: 'Brasileirão Série A',
-                time: 'Domingo • 16:00',
-                home: 'Grêmio',
-                away: 'Internacional',
-                trendHome: 46,
-                trendDraw: 29,
-                trendAway: 25,
-                odds: { '1': 2.45, 'X': 3.10, '2': 2.95 }
-            }
-        ];
+  <!-- FOOTER -->
+  <footer class="border-t border-gray-800/80 bg-[#060911] py-6 px-4 mt-10">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-500">
+      <div>
+        <strong class="text-gray-300">Resenha Bet</strong> — Plataforma recreativa gratuita (Free-to-Play). Não envolve apostas com dinheiro real.
+      </div>
+      <div>
+        Desenvolvido por <a href="https://instagram.com/cristianscherer.dev" target="_blank" rel="noopener noreferrer" class="text-emerald-400 hover:underline font-semibold">@cristianscherer.dev</a>
+      </div>
+    </div>
+  </footer>
 
-        const RIVAL_TIPSTERS = [
-            { name: 'Lucas Craque', handle: '@lucascraque', balance: 2840.00, greens: 14 },
-            { name: 'Mestre do Green', handle: '@mestredogreen', balance: 2190.50, greens: 11 },
-            { name: 'Camisa 10 Tips', handle: '@camisa10', balance: 1650.00, greens: 9 },
-            { name: 'Biel Analista', handle: '@biel_fut', balance: 1280.00, greens: 7 },
-            { name: 'Rafa Resenha', handle: '@rafaresenha', balance: 890.00, greens: 5 }
-        ];
+  <script>
+    // =========================================================
+    // CONFIGURAÇÃO DE LIGAS ESPN (ENDPOINTS PÚBLICOS)
+    // =========================================================
+    const ESPN_LEAGUES = [
+      { code: 'bra.1', name: 'Brasileirão Série A' },
+      { code: 'conmebol.libertadores', name: 'Copa Libertadores' },
+      { code: 'uefa.champions', name: 'Champions League' },
+      { code: 'eng.1', name: 'Premier League' },
+      { code: 'esp.1', name: 'La Liga' }
+    ];
 
-        const INITIAL_CHAT = [
-            { user: '@lucascraque', text: 'Fui pesado no Flamengo seco @2.05 hoje! Maracanã lotado 🔥', time: '2m' },
-            { user: '@mestredogreen', text: 'Múltipla Real Madrid + Celtics pagando quase 4.00, bora!', time: '5m' },
-            { user: '@camisa10', text: 'Acabei de pegar +500 RC$ no botão do patrocinador pra salvar a rodada 😂', time: '9m' }
-        ];
+    // Estado persistente
+    let state = {
+      balance: parseFloat(localStorage.getItem('rb_balance')) || 1000.00,
+      tickets: JSON.parse(localStorage.getItem('rb_tickets')) || [],
+      slip: [],
+      matches: [],
+      activeLeague: 'ALL'
+    };
 
-        let state = {
-            userName: 'Você (Tipster)',
-            userHandle: '@voce.resenha',
-            balance: 1000.00,
-            greensCount: 0,
-            selectedLeague: 'all',
-            betSlip: [], // [{ matchId, matchLabel, pick, pickLabel, odd }]
-            stake: 100,
-            tickets: [], // [{ id, createdAt, selections, totalOdd, stake, potentialReturn, status: 'pending'|'green'|'red', scoreSummary }]
-            chat: JSON.parse(JSON.stringify(INITIAL_CHAT))
+    // Splash screen 2s
+    window.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        document.getElementById('splash-screen').classList.add('splash-hidden');
+      }, 1800);
+
+      updateBalanceUI();
+      renderTickets();
+      renderRanking();
+      syncESPNData(false);
+    });
+
+    function saveState() {
+      localStorage.setItem('rb_balance', state.balance.toFixed(2));
+      localStorage.setItem('rb_tickets', JSON.stringify(state.tickets));
+    }
+
+    function formatCurrency(val) {
+      return 'RC$ ' + Number(val).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toast-msg').textContent = msg;
+      toast.classList.remove('hidden');
+      clearTimeout(window._toastTimer);
+      window._toastTimer = setTimeout(() => toast.classList.add('hidden'), 3200);
+    }
+
+    function updateBalanceUI() {
+      document.getElementById('user-balance').textContent = formatCurrency(state.balance);
+      document.getElementById('badge-bilhetes').textContent = state.tickets.length;
+      document.getElementById('mbadge-bilhetes').textContent = state.tickets.length;
+    }
+
+    // =========================================================
+    // INTEGRAÇÃO REAL COM A API PÚBLICA DA ESPN
+    // =========================================================
+    function getESPNDateRange() {
+      const fmt = (d) => d.toISOString().slice(0, 10).replace(/-/g, '');
+      const start = new Date();
+      start.setDate(start.getDate() - 1); // Inclui jogos encerrados ontem para liquidação
+      const end = new Date();
+      end.setDate(end.getDate() + 4); // Próximos 4 dias de rodada
+      return `${fmt(start)}-${fmt(end)}`;
+    }
+
+    function generateRealisticOdds(homeComp, awayComp, eventId) {
+      // Tenta usar odds oficiais caso a ESPN forneça
+      // Caso contrário, calcula odds equilibradas e determinísticas baseadas no retrospecto (record)
+      const parseWinRate = (comp) => {
+        try {
+          const summary = comp.records?.[0]?.summary; // ex: "15-6-5"
+          if (!summary) return 0.45;
+          const parts = summary.split('-').map(Number);
+          const total = parts.reduce((a, b) => a + b, 0);
+          return total > 0 ? (parts[0] + parts[1] * 0.3) / total : 0.45;
+        } catch { return 0.45; }
+      };
+
+      const hRate = parseWinRate(homeComp) + 0.08; // fator casa
+      const aRate = parseWinRate(awayComp);
+      const seed = (parseInt(String(eventId).slice(-3), 10) || 50) / 1000;
+
+      let odd1 = Math.max(1.35, Math.min(4.80, (1 / Math.max(0.22, hRate)) * 0.88 + seed));
+      let odd2 = Math.max(1.45, Math.min(5.50, (1 / Math.max(0.18, aRate)) * 0.92 - seed));
+      let oddX = Math.max(2.85, Math.min(4.20, 3.15 + Math.abs(odd1 - odd2) * 0.25));
+
+      return {
+        home: Number(odd1.toFixed(2)),
+        draw: Number(oddX.toFixed(2)),
+        away: Number(odd2.toFixed(2))
+      };
+    }
+
+    async function syncESPNData(manual = false) {
+      const container = document.getElementById('matches-container');
+      const statusEl = document.getElementById('espn-sync-status');
+      const icon = document.getElementById('sync-icon');
+
+      if (manual) icon.classList.add('animate-spin');
+      statusEl.textContent = '● Buscando jogos na ESPN...';
+
+      if (state.matches.length === 0) {
+        container.innerHTML = `
+          <div class="bg-gray-900 border border-gray-800 rounded-2xl p-8 text-center space-y-2">
+            <div class="w-8 h-8 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
+            <p class="text-sm font-bold text-white">Carregando partidas reais da ESPN...</p>
+            <p class="text-xs text-gray-400">Brasileirão, Libertadores, Champions, Premier League e La Liga</p>
+          </div>`;
+      }
+
+      const dateRange = getESPNDateRange();
+      const fetchedMatches = [];
+
+      await Promise.all(ESPN_LEAGUES.map(async (league) => {
+        try {
+          const url = `https://site.api.espn.com/apis/site/v2/sports/soccer/${league.code}/scoreboard?dates=${dateRange}`;
+          const res = await fetch(url);
+          if (!res.ok) return;
+          const data = await res.json();
+          const events = data.events || [];
+
+          events.forEach(ev => {
+            const comp = ev.competitions?.[0];
+            if (!comp || !comp.competitors || comp.competitors.length < 2) return;
+
+            const home = comp.competitors.find(c => c.homeAway === 'home') || comp.competitors[0];
+            const away = comp.competitors.find(c => c.homeAway === 'away') || comp.competitors[1];
+
+            const statusType = ev.status?.type?.state || 'pre'; // 'pre' | 'in' | 'post'
+            const statusDetail = ev.status?.type?.shortDetail || '';
+
+            fetchedMatches.push({
+              id: String(ev.id),
+              leagueCode: league.code,
+              leagueName: league.name,
+              date: ev.date,
+              status: statusType,
+              statusDetail,
+              homeName: home.team?.shortDisplayName || home.team?.displayName || 'Casa',
+              homeLogo: home.team?.logo || '',
+              homeScore: parseInt(home.score ?? '0', 10),
+              awayName: away.team?.shortDisplayName || away.team?.displayName || 'Fora',
+              awayLogo: away.team?.logo || '',
+              awayScore: parseInt(away.score ?? '0', 10),
+              odds: generateRealisticOdds(home, away, ev.id)
+            });
+          });
+        } catch (err) {
+          console.warn('Falha ao buscar liga ESPN:', league.code, err);
+        }
+      }));
+
+      // Ordena: Ao vivo primeiro, depois próximos jogos por horário, depois encerrados recentes
+      const orderWeight = { in: 0, pre: 1, post: 2 };
+      fetchedMatches.sort((a, b) => {
+        if (orderWeight[a.status] !== orderWeight[b.status]) {
+          return orderWeight[a.status] - orderWeight[b.status];
+        }
+        return new Date(a.date) - new Date(b.date);
+      });
+
+      state.matches = fetchedMatches;
+      settleTicketsWithRealScores();
+      renderMatches();
+
+      const nowStr = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+      statusEl.textContent = `● ESPN Ao Vivo (${fetchedMatches.length} jogos • ${nowStr})`;
+      if (manual) {
+        icon.classList.remove('animate-spin');
+        showToast(`${fetchedMatches.length} jogos reais sincronizados com a ESPN!`);
+      }
+    }
+
+    // =========================================================
+    // LIQUIDAÇÃO AUTOMÁTICA BASEADA NO PLACAR REAL DA ESPN
+    // =========================================================
+    function settleTicketsWithRealScores() {
+      if (!state.tickets.length || !state.matches.length) return;
+      const matchMap = new Map(state.matches.map(m => [m.id, m]));
+      let newlyWonAmount = 0;
+      let changed = false;
+
+      state.tickets.forEach(ticket => {
+        if (ticket.status !== 'pending') return;
+
+        let allFinished = true;
+        let anyLost = false;
+
+        ticket.selections.forEach(sel => {
+          const realMatch = matchMap.get(sel.matchId);
+          if (!realMatch || realMatch.status !== 'post') {
+            allFinished = false;
+            return;
+          }
+
+          let realOutcome = 'X';
+          if (realMatch.homeScore > realMatch.awayScore) realOutcome = '1';
+          else if (realMatch.awayScore > realMatch.homeScore) realOutcome = '2';
+
+          sel.finalScore = `${realMatch.homeScore} x ${realMatch.awayScore}`;
+          sel.won = (sel.pick === realOutcome);
+          if (!sel.won) anyLost = true;
+        });
+
+        if (anyLost) {
+          ticket.status = 'lost';
+          changed = true;
+        } else if (allFinished) {
+          ticket.status = 'won';
+          newlyWonAmount += ticket.potentialReturn;
+          changed = true;
+        }
+      });
+
+      if (changed) {
+        if (newlyWonAmount > 0) {
+          state.balance += newlyWonAmount;
+          showToast(`GREEN! Você ganhou ${formatCurrency(newlyWonAmount)} com resultados reais!`);
+        }
+        saveState();
+        updateBalanceUI();
+        renderTickets();
+        renderRanking();
+      }
+    }
+
+    // =========================================================
+    // RENDERIZAÇÃO DA GRADE DE JOGOS
+    // =========================================================
+    function setLeagueFilter(code) {
+      state.activeLeague = code;
+      document.querySelectorAll('.league-pill').forEach(btn => {
+        const isSelected = btn.getAttribute('data-league') === code;
+        btn.className = isSelected
+          ? 'league-pill px-3.5 py-1.5 rounded-full text-xs font-bold bg-emerald-500 text-black whitespace-nowrap'
+          : 'league-pill px-3.5 py-1.5 rounded-full text-xs font-semibold bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700 whitespace-nowrap';
+      });
+      renderMatches();
+    }
+
+    function formatMatchDate(isoDate) {
+      const d = new Date(isoDate);
+      const today = new Date();
+      const isToday = d.toDateString() === today.toDateString();
+      const time = d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+      if (isToday) return `Hoje • ${time}`;
+      const day = d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+      return `${day} • ${time}`;
+    }
+
+    function renderMatches() {
+      const container = document.getElementById('matches-container');
+      const filtered = state.activeLeague === 'ALL'
+        ? state.matches
+        : state.matches.filter(m => m.leagueCode === state.activeLeague);
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="bg-gray-900 border border-gray-800 rounded-2xl p-8 text-center space-y-2">
+            <p class="text-sm font-bold text-gray-300">Nenhuma partida agendada neste campeonato para esta janela.</p>
+            <button onclick="setLeagueFilter('ALL')" class="text-xs font-bold text-emerald-400 underline">Ver todos os campeonatos</button>
+          </div>`;
+        return;
+      }
+
+      container.innerHTML = filtered.map(m => {
+        const isLive = m.status === 'in';
+        const isPost = m.status === 'post';
+        const canBet = m.status === 'pre';
+
+        const isSel1 = state.slip.some(s => s.matchId === m.id && s.pick === '1');
+        const isSelX = state.slip.some(s => s.matchId === m.id && s.pick === 'X');
+        const isSel2 = state.slip.some(s => s.matchId === m.id && s.pick === '2');
+
+        let statusBadge = `<span class="text-[11px] font-semibold text-gray-400">${formatMatchDate(m.date)}</span>`;
+        if (isLive) {
+          statusBadge = `<span class="inline-flex items-center gap-1.5 text-[11px] font-black text-red-400 bg-red-500/10 border border-red-500/30 px-2 py-0.5 rounded-full"><span class="w-1.5 h-1.5 rounded-full bg-red-500 live-dot"></span>AO VIVO ${m.statusDetail}</span>`;
+        } else if (isPost) {
+          statusBadge = `<span class="text-[11px] font-bold text-gray-400 bg-gray-800 px-2 py-0.5 rounded">ENCERRADO</span>`;
+        }
+
+        return `
+          <div class="bg-gray-900/95 hover:bg-gray-900 border ${isLive ? 'border-red-500/40' : 'border-gray-800'} rounded-2xl p-4 transition">
+            <div class="flex items-center justify-between gap-2 mb-3">
+              <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-400">${m.leagueName}</span>
+              ${statusBadge}
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+              <!-- Confronto + Placar Real -->
+              <div class="md:col-span-6 space-y-2">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2.5 min-w-0">
+                    <img src="${m.homeLogo}" alt="" class="w-6 h-6 object-contain shrink-0" onerror="this.style.display='none'" />
+                    <span class="font-bold text-sm text-white truncate">${m.homeName}</span>
+                  </div>
+                  ${(isLive || isPost) ? `<span class="font-black text-base ${isLive ? 'text-amber-400' : 'text-white'} tabular-nums">${m.homeScore}</span>` : ''}
+                </div>
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2.5 min-w-0">
+                    <img src="${m.awayLogo}" alt="" class="w-6 h-6 object-contain shrink-0" onerror="this.style.display='none'" />
+                    <span class="font-bold text-sm text-white truncate">${m.awayName}</span>
+                  </div>
+                  ${(isLive || isPost) ? `<span class="font-black text-base ${isLive ? 'text-amber-400' : 'text-white'} tabular-nums">${m.awayScore}</span>` : ''}
+                </div>
+              </div>
+
+              <!-- Botões de Odds (1 X 2) -->
+              <div class="md:col-span-6 grid grid-cols-3 gap-2">
+                ${renderOddButton(m, '1', 'Casa', m.odds.home, isSel1, canBet)}
+                ${renderOddButton(m, 'X', 'Empate', m.odds.draw, isSelX, canBet)}
+                ${renderOddButton(m, '2', 'Fora', m.odds.away, isSel2, canBet)}
+              </div>
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    function renderOddButton(match, pick, label, oddVal, isSelected, canBet) {
+      if (!canBet) {
+        return `
+          <div class="rounded-xl bg-gray-950/70 border border-gray-800/80 py-2 px-2 text-center opacity-50 cursor-not-allowed">
+            <div class="text-[10px] text-gray-500 font-semibold">${label}</div>
+            <div class="text-xs font-bold text-gray-400">${oddVal.toFixed(2)}</div>
+          </div>`;
+      }
+      return `
+        <button onclick="toggleSelection('${match.id}', '${pick}')" class="rounded-xl py-2 px-2 text-center border transition ${
+          isSelected
+            ? 'bg-emerald-500 border-emerald-400 text-black shadow-lg shadow-emerald-500/20'
+            : 'bg-gray-950 hover:bg-gray-800 border-gray-800 text-white'
+        }">
+          <div class="text-[10px] font-bold ${isSelected ? 'text-black/80' : 'text-gray-400'}">${label}</div>
+          <div class="text-sm font-black tabular-nums">${oddVal.toFixed(2)}</div>
+        </button>`;
+    }
+
+    // =========================================================
+    // BOLETIM DE PALPITES (BETSLIP)
+    // =========================================================
+    function toggleSelection(matchId, pick) {
+      const match = state.matches.find(m => m.id === matchId);
+      if (!match || match.status !== 'pre') return;
+
+      const existingIdx = state.slip.findIndex(s => s.matchId === matchId);
+      if (existingIdx !== -1) {
+        const samePick = state.slip[existingIdx].pick === pick;
+        state.slip.splice(existingIdx, 1);
+        if (samePick) {
+          renderMatches();
+          renderSlip();
+          return;
+        }
+      }
+
+      const oddMap = { '1': match.odds.home, 'X': match.odds.draw, '2': match.odds.away };
+      const labelMap = { '1': `Vitória ${match.homeName}`, 'X': 'Empate', '2': `Vitória ${match.awayName}` };
+
+      state.slip.push({
+        matchId: match.id,
+        matchTitle: `${match.homeName} x ${match.awayName}`,
+        leagueName: match.leagueName,
+        pick,
+        pickLabel: labelMap[pick],
+        odd: oddMap[pick]
+      });
+
+      renderMatches();
+      renderSlip();
+    }
+
+    function renderSlip() {
+      const container = document.getElementById('betslip-items');
+      const footer = document.getElementById('betslip-footer');
+      const countEl = document.getElementById('slip-count');
+
+      countEl.textContent = `${state.slip.length} ${state.slip.length === 1 ? 'seleção' : 'seleções'}`;
+
+      if (state.slip.length === 0) {
+        footer.classList.add('hidden');
+        container.innerHTML = `
+          <div class="text-center py-8 text-gray-500 text-xs">
+            Clique em uma odd (<strong class="text-gray-300">1</strong>, <strong class="text-gray-300">X</strong> ou <strong class="text-gray-300">2</strong>) nos jogos abertos para montar seu bilhete gratuito.
+          </div>`;
+        return;
+      }
+
+      footer.classList.remove('hidden');
+      container.innerHTML = state.slip.map(item => `
+        <div class="bg-gray-950 border border-gray-800 rounded-xl p-3 flex items-start justify-between gap-2">
+          <div class="min-w-0">
+            <div class="text-[10px] text-emerald-400 font-bold uppercase truncate">${item.leagueName}</div>
+            <div class="text-xs font-bold text-white truncate">${item.matchTitle}</div>
+            <div class="text-xs text-amber-300 font-semibold mt-0.5">${item.pickLabel}</div>
+          </div>
+          <div class="flex items-center gap-2 shrink-0">
+            <span class="px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-400 font-black text-xs">@${item.odd.toFixed(2)}</span>
+            <button onclick="toggleSelection('${item.matchId}', '${item.pick}')" class="text-gray-500 hover:text-red-400 text-xs font-bold">✕</button>
+          </div>
+        </div>
+      `).join('');
+
+      updateSlipTotals();
+    }
+
+    function setQuickStake(val) {
+      document.getElementById('stake-input').value = val;
+      updateSlipTotals();
+    }
+
+    function updateSlipTotals() {
+      const totalOdd = state.slip.reduce((acc, item) => acc * item.odd, 1);
+      const stake = Math.max(0, parseFloat(document.getElementById('stake-input').value) || 0);
+      const potential = stake * totalOdd;
+
+      document.getElementById('slip-type-label').textContent = state.slip.length > 1 ? `Múltipla (${state.slip.length} jogos)` : 'Simples';
+      document.getElementById('slip-total-odd').textContent = totalOdd.toFixed(2);
+      document.getElementById('slip-potential-return').textContent = formatCurrency(potential);
+    }
+
+    function clearSlip() {
+      state.slip = [];
+      renderMatches();
+      renderSlip();
+    }
+
+    function placeBet() {
+      if (state.slip.length === 0) return;
+      const stake = parseFloat(document.getElementById('stake-input').value) || 0;
+
+      if (stake < 10) {
+        showToast('O palpite mínimo é de RC$ 10,00.');
+        return;
+      }
+      if (stake > state.balance) {
+        showToast('Saldo insuficiente! Clique em +RC$ 500 Grátis no topo.');
+        openRechargeModal();
+        return;
+      }
+
+      const totalOdd = Number(state.slip.reduce((acc, item) => acc * item.odd, 1).toFixed(2));
+      const potentialReturn = Number((stake * totalOdd).toFixed(2));
+
+      state.balance -= stake;
+      state.tickets.unshift({
+        id: 'RB-' + Math.floor(100000 + Math.random() * 900000),
+        createdAt: new Date().toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }),
+        stake,
+        totalOdd,
+        potentialReturn,
+        status: 'pending',
+        selections: JSON.parse(JSON.stringify(state.slip))
+      });
+
+      state.slip = [];
+      saveState();
+      updateBalanceUI();
+      renderMatches();
+      renderSlip();
+      renderTickets();
+      showToast('Bilhete registrado! Aguardando resultado oficial na ESPN.');
+    }
+
+    // =========================================================
+    // RENDERIZAÇÃO DE BILHETES & RANKING
+    // =========================================================
+    function renderTickets() {
+      const container = document.getElementById('tickets-container');
+      if (state.tickets.length === 0) {
+        container.innerHTML = `
+          <div class="bg-gray-900 border border-gray-800 rounded-2xl p-8 text-center space-y-2">
+            <p class="text-sm font-bold text-gray-300">Você ainda não fez nenhum palpite.</p>
+            <button onclick="switchTab('jogos')" class="px-4 py-2 rounded-xl bg-emerald-500 text-black font-bold text-xs">Ver Jogos Reais</button>
+          </div>`;
+        return;
+      }
+
+      container.innerHTML = state.tickets.map(t => {
+        const badgeMap = {
+          pending: '<span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-400/15 text-amber-300 border border-amber-400/30">Aguardando Placar Real</span>',
+          won: '<span class="px-2.5 py-0.5 rounded-full text-[11px] font-black bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">GREEN • PAGO</span>',
+          lost: '<span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-red-500/15 text-red-400 border border-red-500/30">RED</span>'
         };
 
-        let adInterval = null;
-
-        // =====================================================================
-        // PERSISTÊNCIA LOCALSTORAGE
-        // =====================================================================
-        function loadState() {
-            try {
-                const raw = localStorage.getItem(STORAGE_KEY);
-                if (raw) {
-                    const parsed = JSON.parse(raw);
-                    state = { ...state, ...parsed };
-                }
-            } catch (e) {
-                console.warn('Erro ao ler localStorage:', e);
-            }
-        }
-
-        function saveState() {
-            try {
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-            } catch (e) {
-                console.warn('Erro ao salvar localStorage:', e);
-            }
-        }
-
-        function formatRC(value) {
-            return Number(value).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-        }
-
-        // =====================================================================
-        // RENDERIZAÇÃO GERAL
-        // =====================================================================
-        function renderAll() {
-            document.getElementById('userBalanceDisplay').textContent = formatRC(state.balance);
-
-            const pendingCount = state.tickets.filter(t => t.status === 'pending').length;
-            document.getElementById('pendingTicketsBadge').textContent = pendingCount;
-            document.getElementById('mPendingTicketsBadge').textContent = pendingCount;
-
-            renderMatches();
-            renderBetSlip();
-            renderMyTickets();
-            renderRanking();
-            renderChat();
-        }
-
-        // =====================================================================
-        // GRADE DE JOGOS + BANNER INTERMEDIÁRIO DE PATROCÍNIO
-        // =====================================================================
-        function filterLeague(league) {
-            state.selectedLeague = league;
-            saveState();
-
-            document.querySelectorAll('.league-pill').forEach(btn => {
-                btn.classList.remove('bg-emerald-500', 'text-black', 'font-extrabold');
-                btn.classList.add('bg-pitch-900', 'text-zinc-300', 'font-bold');
-            });
-
-            const activeBtn = document.getElementById(`league-${league}`);
-            if (activeBtn) {
-                activeBtn.classList.remove('bg-pitch-900', 'text-zinc-300', 'font-bold');
-                activeBtn.classList.add('bg-emerald-500', 'text-black', 'font-extrabold');
-            }
-
-            renderMatches();
-        }
-
-        function renderMatches() {
-            const container = document.getElementById('matchesListContainer');
-            const filtered = INITIAL_MATCHES.filter(m => state.selectedLeague === 'all' || m.league === state.selectedLeague);
-
-            let html = '';
-
-            filtered.forEach((match, index) => {
-                const selectedItem = state.betSlip.find(s => s.matchId === match.id);
-
-                html += `
-                <div class="rounded-2xl bg-pitch-900 border border-white/[0.08] p-4 hover:border-white/15 transition">
-                    <!-- Topo do Card -->
-                    <div class="flex items-center justify-between gap-2 mb-3">
-                        <span class="text-[11px] font-extrabold text-emerald-400 flex items-center gap-1.5">
-                            <i class="fa-solid fa-trophy text-[10px]"></i> ${match.league}
-                        </span>
-                        <span class="font-mono text-[11px] text-zinc-400 bg-pitch-950 px-2.5 py-0.5 rounded-lg border border-white/[0.06]">
-                            ${match.time}
-                        </span>
-                    </div>
-
-                    <!-- Times -->
-                    <div class="flex items-center justify-between gap-3 mb-3">
-                        <div class="flex-1">
-                            <p class="text-sm sm:text-base font-black text-white">${match.home} <span class="text-zinc-500 font-normal mx-1">vs</span> ${match.away}</p>
-                            <!-- Barra de Tendência da Comunidade -->
-                            <div class="mt-2 space-y-1">
-                                <div class="flex items-center justify-between text-[10px] text-zinc-400">
-                                    <span>Tendência da Galera: <strong class="text-emerald-400">${match.trendHome}% ${match.home}</strong></span>
-                                    <span>${match.trendAway}% ${match.away}</span>
-                                </div>
-                                <div class="w-full h-1.5 rounded-full bg-pitch-950 overflow-hidden flex">
-                                    <div style="width: ${match.trendHome}%" class="bg-emerald-500 h-full"></div>
-                                    <div style="width: ${match.trendDraw}%" class="bg-zinc-600 h-full"></div>
-                                    <div style="width: ${match.trendAway}%" class="bg-gold-500 h-full"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Botões de Odds (1, X, 2) -->
-                    <div class="grid ${match.odds['X'] ? 'grid-cols-3' : 'grid-cols-2'} gap-2 pt-1">
-                        ${renderOddButton(match, '1', `Casa (${match.home})`, match.odds['1'], selectedItem?.pick === '1')}
-                        ${match.odds['X'] ? renderOddButton(match, 'X', 'Empate', match.odds['X'], selectedItem?.pick === 'X') : ''}
-                        ${renderOddButton(match, '2', `Fora (${match.away})`, match.odds['2'], selectedItem?.pick === '2')}
-                    </div>
+        return `
+          <div class="bg-gray-900 border border-gray-800 rounded-2xl p-4 space-y-3">
+            <div class="flex flex-wrap items-center justify-between gap-2 border-b border-gray-800 pb-2.5">
+              <div class="flex items-center gap-2">
+                <span class="font-black text-xs text-white">${t.id}</span>
+                <span class="text-[11px] text-gray-500">• ${t.createdAt}</span>
+              </div>
+              ${badgeMap[t.status]}
+            </div>
+            <div class="space-y-2">
+              ${t.selections.map(s => `
+                <div class="flex items-center justify-between text-xs bg-gray-950/80 px-3 py-2 rounded-xl">
+                  <div>
+                    <div class="font-bold text-gray-200">${s.matchTitle} ${s.finalScore ? `<span class="text-emerald-400 font-black ml-1">(${s.finalScore})</span>` : ''}</div>
+                    <div class="text-amber-300 font-semibold">${s.pickLabel}</div>
+                  </div>
+                  <span class="font-black text-gray-300">@${s.odd.toFixed(2)}</span>
                 </div>
-                `;
+              `).join('')}
+            </div>
+            <div class="flex items-center justify-between text-xs pt-1">
+              <span class="text-gray-400">Palpite: <strong class="text-white">${formatCurrency(t.stake)}</strong> (Odd ${t.totalOdd.toFixed(2)})</span>
+              <span class="text-gray-400">Retorno: <strong class="${t.status === 'won' ? 'text-emerald-400' : 'text-white'}">${formatCurrency(t.potentialReturn)}</strong></span>
+            </div>
+          </div>`;
+      }).join('');
+    }
 
-                // Injeta Banner Comercial Intermediário após o 2º jogo
-                if (index === 1) {
-                    html += `
-                    <div class="rounded-2xl bg-gradient-to-r from-emerald-500/10 via-pitch-900 to-gold-500/10 border border-dashed border-emerald-500/40 p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center shrink-0">
-                                <i class="fa-solid fa-ad"></i>
-                            </div>
-                            <div>
-                                <span class="text-[9px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded bg-white/10 text-zinc-300">Publicidade • Banner Intermediário</span>
-                                <p class="text-xs font-extrabold text-white mt-0.5">Espaço de Alta Conversão no Meio da Rodada</p>
-                                <p class="text-[11px] text-zinc-400">Ideal para lojas esportivas, barbearias, canais VIP ou marcas parceiras.</p>
-                            </div>
-                        </div>
-                        <button onclick="openMediaKitModal()" class="shrink-0 px-3.5 py-2 rounded-xl bg-emerald-500/15 hover:bg-emerald-500 hover:text-black border border-emerald-500/40 text-emerald-400 text-xs font-extrabold transition">
-                            Anunciar Aqui
-                        </button>
-                    </div>
-                    `;
-                }
-            });
+    function renderRanking() {
+      const leaders = [
+        { name: 'Lucas_TricolorRS', winrate: '74%', balance: 4850.00 },
+        { name: 'GabrielTips_Oficial', winrate: '71%', balance: 3920.50 },
+        { name: 'CamilaFutebol', winrate: '68%', balance: 3110.00 },
+        { name: 'Você (Sua Banca)', winrate: '—', balance: state.balance, isUser: true },
+        { name: 'RafaGol_SP', winrate: '62%', balance: 1640.00 }
+      ].sort((a, b) => b.balance - a.balance);
 
-            container.innerHTML = html;
+      document.getElementById('ranking-container').innerHTML = leaders.map((u, idx) => `
+        <div class="py-3 flex items-center justify-between gap-3 ${u.isUser ? 'bg-emerald-500/10 -mx-3 px-3 rounded-xl border border-emerald-500/30' : ''}">
+          <div class="flex items-center gap-3">
+            <span class="w-7 h-7 rounded-lg flex items-center justify-center font-black text-xs ${
+              idx === 0 ? 'bg-amber-400 text-black' : idx === 1 ? 'bg-gray-300 text-black' : idx === 2 ? 'bg-amber-700 text-white' : 'bg-gray-800 text-gray-300'
+            }">${idx + 1}º</span>
+            <div>
+              <div class="font-bold text-sm text-white">${u.name}</div>
+              <div class="text-[11px] text-gray-400">Assertividade: ${u.winrate}</div>
+            </div>
+          </div>
+          <div class="font-black text-sm text-emerald-400 tabular-nums">${formatCurrency(u.balance)}</div>
+        </div>
+      `).join('');
+    }
+
+    // =========================================================
+    // NAVEGAÇÃO & MODAIS DE MONETIZAÇÃO
+    // =========================================================
+    function switchTab(tab) {
+      ['jogos', 'bilhetes', 'ranking'].forEach(t => {
+        document.getElementById(`tab-${t}`).classList.toggle('hidden', t !== tab);
+        const btn = document.getElementById(`nav-${t}`);
+        const mbtn = document.getElementById(`mnav-${t}`);
+        if (btn) {
+          btn.className = t === tab
+            ? 'tab-btn px-4 py-2 rounded-lg text-sm font-bold bg-emerald-500 text-black transition flex items-center gap-1.5'
+            : 'tab-btn px-4 py-2 rounded-lg text-sm font-semibold text-gray-300 hover:text-white transition flex items-center gap-1.5';
         }
-
-        function renderOddButton(match, pick, label, odd, isSelected) {
-            return `
-            <button onclick="toggleSelection('${match.id}', '${pick}')" class="py-2.5 px-3 rounded-xl border text-left flex items-center justify-between transition transform active:scale-95 ${
-                isSelected
-                    ? 'bg-emerald-500 border-emerald-400 text-black shadow-lg shadow-emerald-500/20'
-                    : 'bg-pitch-950 hover:bg-pitch-800 border-white/[0.08] text-zinc-200'
-            }">
-                <span class="text-[11px] font-bold truncate pr-1">${pick === 'X' ? 'Empate' : pick === '1' ? '1 • Casa' : '2 • Fora'}</span>
-                <span class="font-mono text-xs sm:text-sm font-black ${isSelected ? 'text-black' : 'text-emerald-400'}">
-                    ${odd.toFixed(2)}
-                </span>
-            </button>
-            `;
+        if (mbtn) {
+          mbtn.className = t === tab
+            ? 'py-2.5 text-emerald-400 border-b-2 border-emerald-400'
+            : 'py-2.5 text-gray-400 border-b-2 border-transparent';
         }
+      });
+      if (tab === 'ranking') renderRanking();
+    }
 
-        // =====================================================================
-        // BOLETIM DE APOSTAS (BETSLIP SIMPLES & MÚLTIPLA)
-        // =====================================================================
-        function toggleSelection(matchId, pick) {
-            const match = INITIAL_MATCHES.find(m => m.id === matchId);
-            if (!match) return;
+    let rechargeTimer = null;
+    function openRechargeModal() {
+      const modal = document.getElementById('recharge-modal');
+      const btn = document.getElementById('btn-claim-recharge');
+      const txt = document.getElementById('ad-countdown-text');
+      modal.classList.remove('hidden');
 
-            const odd = match.odds[pick];
-            const pickLabel = pick === '1' ? `Vitória ${match.home}` : pick === '2' ? `Vitória ${match.away}` : 'Empate';
+      let sec = 5;
+      btn.disabled = true;
+      btn.className = 'w-full py-3 rounded-xl bg-gray-800 text-gray-500 font-black text-sm transition cursor-not-allowed';
+      btn.textContent = `Liberando em ${sec}s...`;
+      txt.textContent = `Aguarde ${sec}s para liberar...`;
 
-            const existingIndex = state.betSlip.findIndex(s => s.matchId === matchId);
-
-            if (existingIndex > -1) {
-                if (state.betSlip[existingIndex].pick === pick) {
-                    // Remove se clicar na mesma odd
-                    state.betSlip.splice(existingIndex, 1);
-                } else {
-                    // Troca o mercado no mesmo jogo
-                    state.betSlip[existingIndex] = {
-                        matchId,
-                        matchLabel: `${match.home} x ${match.away}`,
-                        pick,
-                        pickLabel,
-                        odd
-                    };
-                }
-            } else {
-                state.betSlip.push({
-                    matchId,
-                    matchLabel: `${match.home} x ${match.away}`,
-                    pick,
-                    pickLabel,
-                    odd
-                });
-            }
-
-            saveState();
-            renderMatches();
-            renderBetSlip();
+      clearInterval(rechargeTimer);
+      rechargeTimer = setInterval(() => {
+        sec--;
+        if (sec > 0) {
+          btn.textContent = `Liberando em ${sec}s...`;
+          txt.textContent = `Aguarde ${sec}s para liberar...`;
+        } else {
+          clearInterval(rechargeTimer);
+          btn.disabled = false;
+          btn.className = 'w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-black text-sm transition cursor-pointer shadow-lg shadow-emerald-500/20';
+          btn.textContent = 'Resgatar +RC$ 500,00 Agora';
+          txt.textContent = 'Anúncio concluído! Bônus liberado.';
         }
-
-        function clearBetSlip() {
-            state.betSlip = [];
-            saveState();
-            renderMatches();
-            renderBetSlip();
-        }
-
-        function setStakeAmount(amount) {
-            state.stake = amount === 'all' ? Math.floor(state.balance) : amount;
-            saveState();
-            renderBetSlip();
-        }
-
-        function updateStakeFromInput(val) {
-            const num = parseFloat(val);
-            state.stake = isNaN(num) || num < 0 ? 0 : num;
-            saveState();
-            renderBetSlip(true);
-        }
-
-        function getTotalOdd() {
-            if (state.betSlip.length === 0) return 0;
-            return state.betSlip.reduce((acc, item) => acc * item.odd, 1);
-        }
-
-        function renderBetSlip(skipInputOverwrite = false) {
-            const count = state.betSlip.length;
-            const totalOdd = getTotalOdd();
-            const potentialReturn = state.stake * totalOdd;
-
-            document.getElementById('slipCountBadge').textContent = count;
-
-            // Atualiza barra flutuante mobile
-            const mobileBar = document.getElementById('mobileSlipBar');
-            if (count > 0) {
-                mobileBar.classList.remove('hidden');
-                document.getElementById('mobileSlipCount').textContent = count;
-                document.getElementById('mobileSlipOdd').textContent = `${count > 1 ? 'Múltipla' : 'Simples'} • Odd ${totalOdd.toFixed(2)}`;
-            } else {
-                mobileBar.classList.add('hidden');
-                closeMobileSlipDrawer();
-            }
-
-            let html = '';
-
-            if (count === 0) {
-                html = `
-                <div class="py-8 text-center space-y-2">
-                    <div class="w-12 h-12 rounded-2xl bg-pitch-950 border border-white/[0.07] text-zinc-500 flex items-center justify-center text-lg mx-auto">
-                        <i class="fa-solid fa-hand-pointer"></i>
-                    </div>
-                    <p class="text-xs font-bold text-zinc-300">Seu boletim está vazio</p>
-                    <p class="text-[11px] text-zinc-500 max-w-xs mx-auto">Clique nas odds dos jogos ao lado para montar seu palpite simples ou múltiplo grátis.</p>
-                </div>
-                `;
-            } else {
-                html = `
-                <div class="space-y-3">
-                    <div class="flex items-center justify-between text-[11px]">
-                        <span class="font-extrabold uppercase tracking-wider ${count > 1 ? 'text-gold-400' : 'text-emerald-400'}">
-                            ${count > 1 ? `🔥 Aposta Múltipla (${count} jogos)` : '⚡ Aposta Simples'}
-                        </span>
-                        <span class="font-mono font-bold text-zinc-400">Odd Total: <strong class="text-white">${totalOdd.toFixed(2)}</strong></span>
-                    </div>
-
-                    <!-- Lista de Seleções -->
-                    <div class="space-y-2 max-h-56 overflow-y-auto pr-1">
-                        ${state.betSlip.map(item => `
-                            <div class="p-2.5 rounded-xl bg-pitch-950 border border-white/[0.08] flex items-center justify-between gap-2">
-                                <div class="min-w-0">
-                                    <p class="text-[11px] text-zinc-400 truncate">${item.matchLabel}</p>
-                                    <p class="text-xs font-extrabold text-white truncate">${item.pickLabel}</p>
-                                </div>
-                                <div class="flex items-center gap-2 shrink-0">
-                                    <span class="font-mono text-xs font-black text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded">
-                                        @${item.odd.toFixed(2)}
-                                    </span>
-                                    <button onclick="toggleSelection('${item.matchId}', '${item.pick}')" class="text-zinc-500 hover:text-red-400 text-xs">
-                                        <i class="fa-solid fa-xmark"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        `).join('')}
-                    </div>
-
-                    <!-- Valor da Aposta (Stake em RC$) -->
-                    <div class="pt-2 border-t border-white/[0.08] space-y-2">
-                        <div class="flex items-center justify-between">
-                            <label class="text-[11px] font-bold text-zinc-400">Valor do Palpite (RC$)</label>
-                            <div class="flex items-center gap-1">
-                                <button onclick="setStakeAmount(50)" class="px-2 py-0.5 rounded bg-pitch-950 hover:bg-pitch-800 border border-white/10 font-mono text-[10px] text-zinc-300">50</button>
-                                <button onclick="setStakeAmount(100)" class="px-2 py-0.5 rounded bg-pitch-950 hover:bg-pitch-800 border border-white/10 font-mono text-[10px] text-zinc-300">100</button>
-                                <button onclick="setStakeAmount(250)" class="px-2 py-0.5 rounded bg-pitch-950 hover:bg-pitch-800 border border-white/10 font-mono text-[10px] text-zinc-300">250</button>
-                                <button onclick="setStakeAmount('all')" class="px-2 py-0.5 rounded bg-gold-500/20 border border-gold-500/40 font-mono text-[10px] font-bold text-gold-400">All-In</button>
-                            </div>
-                        </div>
-
-                        <input
-                            type="number"
-                            min="1"
-                            step="10"
-                            value="${state.stake}"
-                            oninput="updateStakeFromInput(this.value)"
-                            class="w-full font-mono bg-pitch-950 border border-white/15 rounded-xl px-3 py-2.5 text-sm font-extrabold text-white focus:outline-none focus:border-emerald-500"
-                        >
-
-                        <div class="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/25 flex items-center justify-between">
-                            <span class="text-xs font-bold text-zinc-300">Retorno Potencial</span>
-                            <span id="potentialReturnDisplay" class="font-mono text-base font-black text-emerald-400">
-                                RC$ ${formatRC(potentialReturn)}
-                            </span>
-                        </div>
-
-                        <button onclick="confirmBetSlip()" class="w-full py-3.5 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-black text-xs sm:text-sm shadow-lg shadow-emerald-500/25 flex items-center justify-center gap-2 transition transform active:scale-[0.98]">
-                            <i class="fa-solid fa-check-circle"></i>
-                            <span>Confirmar Palpite Grátis</span>
-                        </button>
-                    </div>
-                </div>
-                `;
-            }
-
-            if (!skipInputOverwrite) {
-                document.getElementById('betSlipContent').innerHTML = html;
-                document.getElementById('mobileBetSlipContent').innerHTML = html;
-            } else {
-                const retEl = document.getElementById('potentialReturnDisplay');
-                if (retEl) retEl.textContent = `RC$ ${formatRC(potentialReturn)}`;
-            }
-        }
-
-        function confirmBetSlip() {
-            if (state.betSlip.length === 0) return;
-
-            if (state.stake <= 0) {
-                showToast('⚠️ Defina um valor maior que RC$ 0.');
-                return;
-            }
-
-            if (state.stake > state.balance) {
-                showToast('⚠️ Saldo insuficiente! Use o botão +RC$ 500 no topo.');
-                return;
-            }
-
-            const totalOdd = getTotalOdd();
-            const potentialReturn = state.stake * totalOdd;
-
-            state.balance -= state.stake;
-
-            const newTicket = {
-                id: 'RB-' + Math.floor(100000 + Math.random() * 900000),
-                createdAt: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
-                selections: [...state.betSlip],
-                totalOdd,
-                stake: state.stake,
-                potentialReturn,
-                status: 'pending',
-                scoreSummary: null
-            };
-
-            state.tickets.unshift(newTicket);
-            state.betSlip = [];
-            saveState();
-            closeMobileSlipDrawer();
-            renderAll();
-
-            showToast(`✅ Bilhete ${newTicket.id} registrado! Clique em "Simular Rodada" para ver o resultado.`);
-        }
-
-        // =====================================================================
-        // MEUS BILHETES & SIMULADOR DE RODADA (LIQUIDAÇÃO AUTOMÁTICA)
-        // =====================================================================
-        function renderMyTickets() {
-            const container = document.getElementById('myTicketsContainer');
-
-            if (state.tickets.length === 0) {
-                container.innerHTML = `
-                <div class="rounded-2xl bg-pitch-900 border border-white/[0.08] p-8 text-center space-y-2">
-                    <i class="fa-solid fa-ticket text-2xl text-zinc-600"></i>
-                    <p class="text-sm font-bold text-zinc-300">Nenhum bilhete registrado ainda</p>
-                    <p class="text-xs text-zinc-500">Escolha seus palpites na aba Jogos & Odds para começar a pontuar.</p>
-                </div>
-                `;
-                return;
-            }
-
-            container.innerHTML = state.tickets.map(tk => {
-                const statusBadge = tk.status === 'green'
-                    ? `<span class="px-2.5 py-0.5 rounded-lg bg-emerald-500 text-black font-mono font-black text-[10px]">✅ GREEN (+RC$ ${formatRC(tk.potentialReturn)})</span>`
-                    : tk.status === 'red'
-                        ? `<span class="px-2.5 py-0.5 rounded-lg bg-red-500/20 border border-red-500/40 text-red-400 font-mono font-bold text-[10px]">❌ RED</span>`
-                        : `<span class="px-2.5 py-0.5 rounded-lg bg-gold-500/20 border border-gold-500/40 text-gold-400 font-mono font-bold text-[10px]">⏳ AGUARDANDO RODADA</span>`;
-
-                return `
-                <div class="rounded-2xl bg-pitch-900 border ${tk.status === 'green' ? 'border-emerald-500/45' : 'border-white/[0.08]'} p-4 space-y-3">
-                    <div class="flex items-center justify-between gap-2 flex-wrap">
-                        <div class="flex items-center gap-2">
-                            <span class="font-mono text-xs font-black text-white">${tk.id}</span>
-                            <span class="text-[11px] text-zinc-500">• ${tk.createdAt}</span>
-                        </div>
-                        ${statusBadge}
-                    </div>
-
-                    <div class="space-y-1.5">
-                        ${tk.selections.map(sel => `
-                            <div class="p-2.5 rounded-xl bg-pitch-950 border border-white/[0.06] flex items-center justify-between text-xs">
-                                <div>
-                                    <span class="text-zinc-400 block text-[11px]">${sel.matchLabel}</span>
-                                    <strong class="text-white">${sel.pickLabel}</strong>
-                                </div>
-                                <span class="font-mono font-bold text-emerald-400">@${sel.odd.toFixed(2)}</span>
-                            </div>
-                        `).join('')}
-                    </div>
-
-                    ${tk.scoreSummary ? `
-                        <p class="text-[11px] font-mono text-zinc-400 bg-pitch-950 px-3 py-2 rounded-lg border border-white/[0.05]">
-                            Placares simulados: ${tk.scoreSummary}
-                        </p>
-                    ` : ''}
-
-                    <div class="flex items-center justify-between pt-2 border-t border-white/[0.07] text-xs">
-                        <span class="text-zinc-400">Apostado: <strong class="font-mono text-white">RC$ ${formatRC(tk.stake)}</strong> • Odd <strong class="font-mono text-white">${tk.totalOdd.toFixed(2)}</strong></span>
-                        <span class="font-mono font-black ${tk.status === 'green' ? 'text-emerald-400' : 'text-zinc-300'}">
-                            Retorno: RC$ ${formatRC(tk.potentialReturn)}
-                        </span>
-                    </div>
-                </div>
-                `;
-            }).join('');
-        }
-
-        function simulateRoundResults() {
-            const pendingTickets = state.tickets.filter(t => t.status === 'pending');
-
-            if (pendingTickets.length === 0) {
-                showToast('ℹ️ Faça pelo menos 1 palpite antes de simular a rodada!');
-                return;
-            }
-
-            // Sorteia resultados aleatórios para cada partida
-            const matchOutcomes = {};
-            INITIAL_MATCHES.forEach(m => {
-                const outcomes = m.odds['X'] ? ['1', 'X', '2'] : ['1', '2'];
-                // Favorece levemente o lado com maior tendência da galera
-                const roll = Math.random() * 100;
-                let winner = outcomes[0];
-                if (roll < m.trendHome) winner = '1';
-                else if (m.odds['X'] && roll < m.trendHome + m.trendDraw) winner = 'X';
-                else winner = '2';
-
-                const hGoals = winner === '1' ? Math.floor(Math.random() * 3) + 1 : winner === 'X' ? 1 : Math.floor(Math.random() * 2);
-                const aGoals = winner === '2' ? Math.floor(Math.random() * 3) + 1 : winner === 'X' ? 1 : Math.floor(Math.random() * 2);
-
-                matchOutcomes[m.id] = {
-                    winner,
-                    scoreText: `${m.home} ${hGoals}x${aGoals} ${m.away}`
-                };
-            });
-
-            let totalWon = 0;
-            let greenTicketsCount = 0;
-
-            pendingTickets.forEach(tk => {
-                const allHit = tk.selections.every(sel => matchOutcomes[sel.matchId]?.winner === sel.pick);
-                tk.scoreSummary = tk.selections.map(sel => matchOutcomes[sel.matchId]?.scoreText).join(' | ');
-
-                if (allHit) {
-                    tk.status = 'green';
-                    state.balance += tk.potentialReturn;
-                    state.greensCount += 1;
-                    totalWon += tk.potentialReturn;
-                    greenTicketsCount += 1;
-                } else {
-                    tk.status = 'red';
-                }
-            });
-
-            saveState();
-            renderAll();
-            switchMainView('tickets');
-
-            if (greenTicketsCount > 0) {
-                showToast(`🎉 GREEN! Você acertou ${greenTicketsCount} bilhete(s) e ganhou +RC$ ${formatRC(totalWon)}!`);
-            } else {
-                showToast('⚽ Rodada encerrada! Desta vez bateu na trave. Tente na próxima!');
-            }
-        }
-
-        function resetSeason() {
-            localStorage.removeItem(STORAGE_KEY);
-            state = {
-                userName: 'Você (Tipster)',
-                userHandle: '@voce.resenha',
-                balance: 1000.00,
-                greensCount: 0,
-                selectedLeague: 'all',
-                betSlip: [],
-                stake: 100,
-                tickets: [],
-                chat: JSON.parse(JSON.stringify(INITIAL_CHAT))
-            };
-            saveState();
-            switchMainView('games');
-            renderAll();
-            showToast('🔄 Nova temporada iniciada! Banca resetada para RC$ 1.000,00.');
-        }
-
-        // =====================================================================
-        // RANKING TOP TIPSTERS + RESENHA AO VIVO
-        // =====================================================================
-        function renderRanking() {
-            const container = document.getElementById('rankingContainer');
-
-            const allPlayers = [
-                ...RIVAL_TIPSTERS,
-                {
-                    name: state.userName,
-                    handle: state.userHandle,
-                    balance: state.balance,
-                    greens: state.greensCount,
-                    isCurrentUser: true
-                }
-            ].sort((a, b) => b.balance - a.balance);
-
-            container.innerHTML = allPlayers.map((player, idx) => {
-                const pos = idx + 1;
-                const medal = pos === 1 ? '🥇' : pos === 2 ? '🥈' : pos === 3 ? '🥉' : `#${pos}`;
-
-                return `
-                <div class="px-4 py-3 flex items-center justify-between gap-2 ${player.isCurrentUser ? 'bg-emerald-500/10' : ''}">
-                    <div class="flex items-center gap-3 min-w-0">
-                        <span class="font-mono text-xs font-black w-6 text-center ${pos <= 3 ? 'text-gold-400 text-sm' : 'text-zinc-500'}">
-                            ${medal}
-                        </span>
-                        <div class="min-w-0">
-                            <div class="flex items-center gap-1.5">
-                                <p class="text-xs font-extrabold text-white truncate">${player.name}</p>
-                                ${player.isCurrentUser ? `<span class="px-1.5 py-0.2 rounded bg-emerald-500 text-black text-[9px] font-black">VOCÊ</span>` : ''}
-                            </div>
-                            <span class="font-mono text-[10px] text-zinc-400 block truncate">${player.handle} • ${player.greens} greens</span>
-                        </div>
-                    </div>
-
-                    <div class="text-right shrink-0">
-                        <span class="font-mono text-xs font-black ${player.isCurrentUser ? 'text-emerald-400' : 'text-zinc-200'}">
-                            RC$ ${formatRC(player.balance)}
-                        </span>
-                    </div>
-                </div>
-                `;
-            }).join('');
-        }
-
-        function renderChat() {
-            const container = document.getElementById('chatMessagesContainer');
-            container.innerHTML = state.chat.map(msg => `
-                <div class="p-2.5 rounded-xl bg-pitch-950 border border-white/[0.06] text-xs space-y-0.5">
-                    <div class="flex items-center justify-between">
-                        <span class="font-mono text-[10px] font-bold text-emerald-400">${msg.user}</span>
-                        <span class="text-[10px] text-zinc-500">${msg.time}</span>
-                    </div>
-                    <p class="text-zinc-300 leading-snug">${msg.text}</p>
-                </div>
-            `).join('');
-            container.scrollTop = container.scrollHeight;
-        }
-
-        function sendChatMessage(e) {
-            e.preventDefault();
-            const input = document.getElementById('chatInput');
-            const text = input.value.trim();
-            if (!text) return;
-
-            state.chat.push({
-                user: state.userHandle,
-                text,
-                time: 'agora'
-            });
-            input.value = '';
-            saveState();
-            renderChat();
-        }
-
-        // =====================================================================
-        // RECARGA PATROCINADA (+RC$ 500 COM CONTAGEM DE 5 SEGUNDOS)
-        // =====================================================================
-        function openSponsoredRechargeModal() {
-            const modal = document.getElementById('sponsoredRechargeModal');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-
-            const btn = document.getElementById('claimCoinsBtn');
-            const bar = document.getElementById('adProgressBar');
-            const secEl = document.getElementById('adTimerSeconds');
-            const labelEl = document.getElementById('adTimerLabel');
-
-            let secondsLeft = 5;
-            btn.disabled = true;
-            btn.className = 'w-full py-3.5 px-4 rounded-xl bg-zinc-800 text-zinc-500 font-black text-sm flex items-center justify-center gap-2 cursor-not-allowed';
-            btn.innerHTML = `<i class="fa-solid fa-hourglass-half"></i> <span>Aguardando Anúncio (${secondsLeft}s)...</span>`;
-            bar.style.width = '0%';
-            secEl.textContent = `${secondsLeft}s`;
-            labelEl.textContent = 'Aguarde 5s para liberar suas moedas...';
-
-            clearInterval(adInterval);
-            adInterval = setInterval(() => {
-                secondsLeft -= 1;
-                const pct = ((5 - secondsLeft) / 5) * 100;
-                bar.style.width = `${pct}%`;
-                secEl.textContent = `${Math.max(0, secondsLeft)}s`;
-
-                if (secondsLeft > 0) {
-                    btn.innerHTML = `<i class="fa-solid fa-hourglass-half"></i> <span>Aguardando Anúncio (${secondsLeft}s)...</span>`;
-                } else {
-                    clearInterval(adInterval);
-                    labelEl.textContent = 'Anúncio concluído! Resgate suas moedas:';
-                    btn.disabled = false;
-                    btn.className = 'w-full py-3.5 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-black text-sm shadow-lg shadow-emerald-500/25 flex items-center justify-center gap-2 transition cursor-pointer';
-                    btn.innerHTML = `<i class="fa-solid fa-coins"></i> <span>Resgatar +RC$ 500,00 Agora</span>`;
-                }
-            }, 1000);
-        }
-
-        function closeSponsoredRechargeModal() {
-            clearInterval(adInterval);
-            const modal = document.getElementById('sponsoredRechargeModal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-        }
-
-        function claimSponsoredCoins() {
-            state.balance += 500;
-            saveState();
-            renderAll();
-            closeSponsoredRechargeModal();
-            showToast('💰 +RC$ 500,00 adicionados à sua banca grátis!');
-        }
-
-        // =====================================================================
-        // MODAIS AUXILIARES & NAVEGAÇÃO
-        // =====================================================================
-        function switchMainView(view) {
-            const viewGames = document.getElementById('viewGames');
-            const viewTickets = document.getElementById('viewTickets');
-
-            if (view === 'games') {
-                viewGames.classList.remove('hidden');
-                viewTickets.classList.add('hidden');
-
-                document.getElementById('nav-games').className = 'main-nav-btn px-3.5 py-1.5 rounded-lg text-xs font-extrabold bg-emerald-500 text-black transition';
-                document.getElementById('nav-tickets').className = 'main-nav-btn px-3.5 py-1.5 rounded-lg text-xs font-bold text-zinc-400 hover:text-white transition flex items-center gap-1.5';
-
-                document.getElementById('m-nav-games').className = 'px-2.5 py-1 rounded-lg text-[11px] font-extrabold bg-emerald-500 text-black';
-                document.getElementById('m-nav-tickets').className = 'px-2.5 py-1 rounded-lg text-[11px] font-bold text-zinc-400 flex items-center gap-1';
-            } else {
-                viewGames.classList.add('hidden');
-                viewTickets.classList.remove('hidden');
-
-                document.getElementById('nav-tickets').className = 'main-nav-btn px-3.5 py-1.5 rounded-lg text-xs font-extrabold bg-emerald-500 text-black transition flex items-center gap-1.5';
-                document.getElementById('nav-games').className = 'main-nav-btn px-3.5 py-1.5 rounded-lg text-xs font-bold text-zinc-400 hover:text-white transition';
-
-                document.getElementById('m-nav-tickets').className = 'px-2.5 py-1 rounded-lg text-[11px] font-extrabold bg-emerald-500 text-black flex items-center gap-1';
-                document.getElementById('m-nav-games').className = 'px-2.5 py-1 rounded-lg text-[11px] font-bold text-zinc-400';
-            }
-        }
-
-        function openMobileSlipDrawer() {
-            const modal = document.getElementById('mobileSlipModal');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-        }
-
-        function closeMobileSlipDrawer() {
-            const modal = document.getElementById('mobileSlipModal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-        }
-
-        function openMediaKitModal() {
-            const modal = document.getElementById('mediaKitModal');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-        }
-
-        function closeMediaKitModal() {
-            const modal = document.getElementById('mediaKitModal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-        }
-
-        function copyCommercialEmail() {
-            const temp = document.createElement('input');
-            temp.value = 'comercial@resenhabet.com.br';
-            document.body.appendChild(temp);
-            temp.select();
-            try {
-                document.execCommand('copy');
-                showToast('📧 E-mail comercial@resenhabet.com.br copiado!');
-            } catch (e) {
-                showToast('Contato: comercial@resenhabet.com.br');
-            }
-            document.body.removeChild(temp);
-        }
-
-        function openProfileEditModal() {
-            document.getElementById('inpUserName').value = state.userName;
-            document.getElementById('inpUserHandle').value = state.userHandle;
-            const modal = document.getElementById('profileEditModal');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-        }
-
-        function closeProfileEditModal() {
-            const modal = document.getElementById('profileEditModal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-        }
-
-        function saveUserProfile(e) {
-            e.preventDefault();
-            const name = document.getElementById('inpUserName').value.trim();
-            let handle = document.getElementById('inpUserHandle').value.trim();
-            if (!handle.startsWith('@')) handle = '@' + handle;
-
-            state.userName = name || 'Você (Tipster)';
-            state.userHandle = handle || '@voce.resenha';
-            saveState();
-            renderRanking();
-            closeProfileEditModal();
-            showToast('✅ Perfil atualizado no Ranking!');
-        }
-
-        function showToast(message) {
-            const container = document.getElementById('toastContainer');
-            const toast = document.createElement('div');
-            toast.className = 'px-4 py-3 rounded-2xl bg-pitch-850 border border-emerald-500/40 text-white text-xs font-bold shadow-2xl flex items-center gap-2.5 animate-slide-up';
-            toast.innerHTML = `
-                <span class="w-2 h-2 rounded-full bg-emerald-500 shrink-0"></span>
-                <span>${message}</span>
-            `;
-            container.appendChild(toast);
-
-            setTimeout(() => {
-                toast.style.opacity = '0';
-                toast.style.transform = 'translateY(8px)';
-                toast.style.transition = 'all 0.3s ease';
-                setTimeout(() => toast.remove(), 300);
-            }, 3200);
-        }
-
-        // =====================================================================
-        // INICIALIZAÇÃO + SPLASH SCREEN DE 2 SEGUNDOS
-        // =====================================================================
-        window.addEventListener('DOMContentLoaded', () => {
-            loadState();
-            renderAll();
-
-            // Anima barra de progresso do splash e oculta após 2 segundos
-            setTimeout(() => {
-                const bar = document.getElementById('splashProgressBar');
-                if (bar) bar.style.width = '100%';
-            }, 50);
-
-            setTimeout(() => {
-                const splash = document.getElementById('splashScreen');
-                if (splash) splash.classList.add('splash-hidden');
-            }, 2000);
-        });
-    </script>
+      }, 1000);
+    }
+
+    function closeRechargeModal() {
+      clearInterval(rechargeTimer);
+      document.getElementById('recharge-modal').classList.add('hidden');
+    }
+
+    function claimRecharge() {
+      state.balance += 500;
+      saveState();
+      updateBalanceUI();
+      renderRanking();
+      closeRechargeModal();
+      showToast('+RC$ 500,00 adicionados à sua banca virtual!');
+    }
+
+    function openMediaKitModal() {
+      document.getElementById('mediakit-modal').classList.remove('hidden');
+    }
+
+    function closeMediaKitModal() {
+      document.getElementById('mediakit-modal').classList.add('hidden');
+    }
+  </script>
 </body>
 </html>
