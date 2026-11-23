@@ -1,0 +1,1529 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resenha Bet — Palpites Grátis, Ranking & Prêmios</title>
+    <meta name="description" content="Portal esportivo Free-to-Play. Palpite grátis com Resenha Coins, suba no ranking e concorra a prêmios patrocinados.">
+
+    <!-- Tailwind CSS via CDN (Zero build step para GitHub + Vercel) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Google Fonts: Inter & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        pitch: {
+                            950: '#000000',
+                            900: '#0A0D10',
+                            850: '#11161C',
+                            800: '#161D24',
+                            700: '#1F2933',
+                        },
+                        emerald: {
+                            400: '#34D399',
+                            500: '#10B981',
+                            600: '#059669',
+                        },
+                        gold: {
+                            400: '#FBBF24',
+                            500: '#F59E0B',
+                            600: '#D97706',
+                        }
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'slide-up': 'slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                        'fade-in': 'fadeIn 0.25s ease-out forwards',
+                    },
+                    keyframes: {
+                        slideUp: {
+                            '0%': { opacity: '0', transform: 'translateY(16px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #000000;
+            color: #F4F4F5;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Scrollbar discreta */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0A0D10;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1F2933;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #10B981;
+        }
+
+        /* Splash Screen Transition */
+        #splashScreen {
+            transition: opacity 0.55s ease, visibility 0.55s ease;
+        }
+        #splashScreen.splash-hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        /* Glass & Glows */
+        .glass-nav {
+            background: rgba(10, 13, 16, 0.88);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+        }
+
+        .emerald-glow {
+            box-shadow: 0 0 24px rgba(16, 185, 129, 0.16);
+        }
+
+        .gold-glow {
+            box-shadow: 0 0 24px rgba(245, 158, 11, 0.16);
+        }
+
+        .gold-gradient {
+            background: linear-gradient(135deg, #FBBF24 0%, #F59E0B 55%, #D97706 100%);
+        }
+        .gold-gradient:hover {
+            background: linear-gradient(135deg, #FCD34D 0%, #FBBF24 55%, #F59E0B 100%);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-emerald-500 selection:text-black">
+
+    <!-- ========================================================================= -->
+    <!-- SPLASH SCREEN INICIAL (2 SEGUNDOS) COM LOGO.PNG + FALLBACK SVG ELEGANTE   -->
+    <!-- ========================================================================= -->
+    <div id="splashScreen" class="fixed inset-0 z-[100] bg-pitch-950 flex flex-col items-center justify-center p-6">
+        <div class="relative flex flex-col items-center text-center max-w-xs animate-slide-up">
+            <!-- Halo de luz -->
+            <div class="absolute -inset-6 bg-emerald-500/15 blur-3xl rounded-full pointer-events-none"></div>
+
+            <!-- Imagem logo.png da raiz do repositório com fallback SVG automático -->
+            <img
+                src="logo.png"
+                alt="Resenha Bet Logo"
+                class="w-40 h-40 object-contain relative z-10 drop-shadow-[0_10px_25px_rgba(16,185,129,0.28)]"
+                onerror="this.style.display='none'; document.getElementById('splashFallbackSvg').classList.remove('hidden');"
+            >
+
+            <!-- Fallback SVG caso logo.png ainda não tenha sido enviado ao GitHub -->
+            <div id="splashFallbackSvg" class="hidden relative z-10 flex flex-col items-center">
+                <div class="w-24 h-24 rounded-3xl bg-pitch-900 border-2 border-gold-500/60 flex items-center justify-center shadow-2xl gold-glow mb-4">
+                    <svg viewBox="0 0 64 64" class="w-14 h-14">
+                        <defs>
+                            <linearGradient id="rbGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#10B981"/>
+                                <stop offset="100%" stop-color="#F59E0B"/>
+                            </linearGradient>
+                        </defs>
+                        <path d="M12 14 C12 10, 52 10, 52 14 L52 38 C52 42, 34 42, 26 42 L16 52 L16 42 C12 42, 12 40, 12 38 Z" fill="url(#rbGrad)" opacity="0.2" stroke="url(#rbGrad)" stroke-width="3"/>
+                        <circle cx="32" cy="27" r="10" fill="none" stroke="#10B981" stroke-width="2.5"/>
+                        <polygon points="32,21 37,25 35,31 29,31 27,25" fill="#F59E0B"/>
+                    </svg>
+                </div>
+                <div class="text-3xl font-black tracking-tight text-white">
+                    RESENHA <span class="text-emerald-500">BET</span>
+                </div>
+            </div>
+
+            <p class="text-xs font-mono uppercase tracking-[0.2em] text-zinc-400 mt-4 relative z-10">
+                Palpites Grátis • Ranking & Prêmios
+            </p>
+
+            <!-- Barra de carregamento -->
+            <div class="w-44 h-1.5 bg-pitch-800 rounded-full overflow-hidden mt-5 relative z-10">
+                <div id="splashProgressBar" class="h-full bg-gradient-to-r from-emerald-500 to-gold-500 w-0 transition-all duration-[1800ms] ease-out"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- CABEÇALHO PRINCIPAL FIXO                                                  -->
+    <!-- ========================================================================= -->
+    <header class="sticky top-0 z-40 glass-nav border-b border-white/[0.08]">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 py-2.5 flex items-center justify-between gap-2">
+            <!-- Marca & Logo -->
+            <a href="#" onclick="switchMainView('games'); return false;" class="flex items-center gap-2.5 shrink-0 group">
+                <img
+                    src="logo.png"
+                    alt="Resenha Bet"
+                    class="h-10 sm:h-11 w-auto object-contain transition-transform group-hover:scale-105"
+                    onerror="this.style.display='none'; document.getElementById('headerFallbackLogo').classList.remove('hidden');"
+                >
+                <div id="headerFallbackLogo" class="hidden flex items-center gap-2">
+                    <div class="w-9 h-9 rounded-xl bg-emerald-500/15 border border-emerald-500/40 flex items-center justify-center text-emerald-500">
+                        <i class="fa-solid fa-futbol text-base"></i>
+                    </div>
+                    <div class="leading-none">
+                        <span class="font-black text-base sm:text-lg tracking-tight text-white block">RESENHA <span class="text-emerald-500">BET</span></span>
+                        <span class="text-[9px] font-mono uppercase tracking-widest text-gold-400">Free-to-Play</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Navegação Central (Desktop) -->
+            <nav class="hidden md:flex items-center gap-1 bg-pitch-950/90 p-1 rounded-xl border border-white/[0.07]">
+                <button onclick="switchMainView('games')" id="nav-games" class="main-nav-btn px-3.5 py-1.5 rounded-lg text-xs font-extrabold bg-emerald-500 text-black transition">
+                    <i class="fa-solid fa-fire mr-1"></i> Jogos & Odds
+                </button>
+                <button onclick="switchMainView('tickets')" id="nav-tickets" class="main-nav-btn px-3.5 py-1.5 rounded-lg text-xs font-bold text-zinc-400 hover:text-white transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-receipt"></i> Meus Bilhetes
+                    <span id="pendingTicketsBadge" class="font-mono text-[10px] px-1.5 py-0.2 rounded-full bg-white/10 text-zinc-300">0</span>
+                </button>
+                <button onclick="openMediaKitModal()" class="px-3.5 py-1.5 rounded-lg text-xs font-bold text-gold-400 hover:bg-gold-500/10 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-bullhorn"></i> Mídia Kit & Anuncie
+                </button>
+            </nav>
+
+            <!-- Carteira Virtual (Resenha Coins) + Recarga Patrocinada -->
+            <div class="flex items-center gap-2 shrink-0">
+                <!-- Saldo RC$ -->
+                <div class="px-3 py-1.5 rounded-xl bg-pitch-950 border border-emerald-500/35 flex items-center gap-2">
+                    <div class="w-6 h-6 rounded-lg bg-emerald-500/15 text-emerald-400 flex items-center justify-center text-xs font-black">
+                        RC$
+                    </div>
+                    <div class="leading-tight">
+                        <span class="text-[9px] uppercase tracking-wider text-zinc-400 block">Banca Grátis</span>
+                        <span id="userBalanceDisplay" class="font-mono text-xs sm:text-sm font-extrabold text-emerald-400">1.000,00</span>
+                    </div>
+                </div>
+
+                <!-- Botão Recarga Patrocinada -->
+                <button onclick="openSponsoredRechargeModal()" class="px-3 py-2 rounded-xl gold-gradient text-black font-black text-xs shadow-lg shadow-gold-500/20 flex items-center gap-1.5 transition transform active:scale-95" title="Ganhe +RC$ 500 assistindo oferta do patrocinador">
+                    <i class="fa-solid fa-circle-plus"></i>
+                    <span class="hidden sm:inline">+RC$ 500</span>
+                    <span class="sm:hidden">+500</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Barra Secundária Mobile (Navegação + Simulador Rápido) -->
+        <div class="md:hidden border-t border-white/[0.06] px-3 py-1.5 flex items-center justify-between gap-2 bg-pitch-950/70">
+            <div class="flex items-center gap-1">
+                <button onclick="switchMainView('games')" id="m-nav-games" class="px-2.5 py-1 rounded-lg text-[11px] font-extrabold bg-emerald-500 text-black">
+                    Jogos
+                </button>
+                <button onclick="switchMainView('tickets')" id="m-nav-tickets" class="px-2.5 py-1 rounded-lg text-[11px] font-bold text-zinc-400 flex items-center gap-1">
+                    Bilhetes <span id="mPendingTicketsBadge" class="font-mono text-[10px] px-1 rounded bg-white/10">0</span>
+                </button>
+                <button onclick="openMediaKitModal()" class="px-2.5 py-1 rounded-lg text-[11px] font-bold text-gold-400">
+                    Anuncie
+                </button>
+            </div>
+
+            <button onclick="simulateRoundResults()" class="px-2.5 py-1 rounded-lg bg-emerald-500/15 border border-emerald-500/40 text-emerald-400 text-[10px] font-extrabold flex items-center gap-1 active:scale-95">
+                <i class="fa-solid fa-play"></i> Simular Rodada
+            </button>
+        </div>
+    </header>
+
+    <!-- ========================================================================= -->
+    <!-- BANNER TOPO: PATROCINADOR MASTER DA RODADA                                -->
+    <!-- ========================================================================= -->
+    <div class="max-w-7xl mx-auto w-full px-3 sm:px-6 pt-4">
+        <div class="rounded-2xl bg-gradient-to-r from-pitch-850 via-pitch-900 to-pitch-850 border border-gold-500/40 p-3.5 sm:p-4 gold-glow relative overflow-hidden">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 relative z-10">
+                <div class="flex items-start sm:items-center gap-3">
+                    <div class="w-11 h-11 rounded-xl bg-gold-500/15 border border-gold-500/40 text-gold-400 flex items-center justify-center text-lg shrink-0">
+                        <i class="fa-solid fa-trophy"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <span class="px-2 py-0.5 rounded bg-gold-500 text-black font-black text-[9px] uppercase tracking-wider">
+                                Patrocinador Master da Rodada
+                            </span>
+                            <span class="px-2 py-0.5 rounded bg-white/[0.06] border border-white/10 text-zinc-300 font-mono text-[10px]">
+                                Cota Disponível • Anuncie Aqui
+                            </span>
+                        </div>
+                        <h2 class="text-sm sm:text-base font-extrabold text-white mt-1">
+                            Sua Marca Aqui no Topo + Naming Rights da Liga Semanal
+                        </h2>
+                        <p class="text-xs text-zinc-400">
+                            Impacte milhares de fãs de futebol todos os dias com 100% de visibilidade antes de cada palpite.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-2 shrink-0">
+                    <button onclick="openMediaKitModal()" class="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-gold-500/15 hover:bg-gold-500 hover:text-black border border-gold-500/50 text-gold-400 font-extrabold text-xs transition flex items-center justify-center gap-2">
+                        <span>Ver Mídia Kit & Cotas</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- CONTEÚDO PRINCIPAL: GRID DE 3 COLUNAS (JOGOS | BETSLIP | RANKING/RESENHA) -->
+    <!-- ========================================================================= -->
+    <main class="max-w-7xl mx-auto w-full px-3 sm:px-6 py-5 flex-1">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+
+            <!-- ===================================================================== -->
+            <!-- COLUNA ESQUERDA/CENTRAL (7 COLUNAS): JOGOS & MEUS BILHETES            -->
+            <!-- ===================================================================== -->
+            <div class="lg:col-span-7 space-y-4">
+
+                <!-- Barra de Ação & Simulador de Rodada (Desktop) -->
+                <div class="p-3.5 rounded-2xl bg-pitch-900 border border-white/[0.08] flex flex-wrap items-center justify-between gap-3">
+                    <div>
+                        <span class="text-[11px] font-bold text-zinc-400 uppercase tracking-wider block">Modo Demonstração & Testes</span>
+                        <p class="text-xs text-zinc-300">Faça seus palpites grátis e clique ao lado para liquidar a rodada.</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="simulateRoundResults()" class="px-3.5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-black text-xs shadow-lg shadow-emerald-500/20 flex items-center gap-1.5 transition transform active:scale-95">
+                            <i class="fa-solid fa-bolt"></i>
+                            <span>Simular Resultados da Rodada</span>
+                        </button>
+                        <button onclick="resetSeason()" class="px-3 py-2 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] border border-white/10 text-zinc-300 text-xs font-bold transition" title="Resetar Banca e Nova Temporada">
+                            <i class="fa-solid fa-rotate-left"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- VIEW 1: GRADE DE JOGOS & ODDS -->
+                <div id="viewGames" class="space-y-4">
+                    <!-- Filtros de Campeonato -->
+                    <div class="flex items-center gap-2 overflow-x-auto pb-1">
+                        <button onclick="filterLeague('all')" id="league-all" class="league-pill shrink-0 px-3.5 py-2 rounded-xl bg-emerald-500 text-black font-extrabold text-xs transition">
+                            Todos os Jogos
+                        </button>
+                        <button onclick="filterLeague('Brasileirão Série A')" id="league-Brasileirão Série A" class="league-pill shrink-0 px-3.5 py-2 rounded-xl bg-pitch-900 hover:bg-pitch-800 border border-white/[0.08] text-zinc-300 font-bold text-xs transition">
+                            🇧🇷 Brasileirão Série A
+                        </button>
+                        <button onclick="filterLeague('Champions League')" id="league-Champions League" class="league-pill shrink-0 px-3.5 py-2 rounded-xl bg-pitch-900 hover:bg-pitch-800 border border-white/[0.08] text-zinc-300 font-bold text-xs transition">
+                            🇪🇺 Champions League
+                        </button>
+                        <button onclick="filterLeague('NBA')" id="league-NBA" class="league-pill shrink-0 px-3.5 py-2 rounded-xl bg-pitch-900 hover:bg-pitch-800 border border-white/[0.08] text-zinc-300 font-bold text-xs transition">
+                            🏀 NBA
+                        </button>
+                    </div>
+
+                    <!-- Lista de Partidas (Com Banner Intermediário injetado no meio) -->
+                    <div id="matchesListContainer" class="space-y-3">
+                        <!-- Renderizado via JS -->
+                    </div>
+                </div>
+
+                <!-- VIEW 2: MEUS BILHETES (HISTÓRICO & PENDENTES) -->
+                <div id="viewTickets" class="hidden space-y-3">
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-base font-black text-white flex items-center gap-2">
+                            <i class="fa-solid fa-receipt text-emerald-500"></i>
+                            <span>Meus Bilhetes (Grátis)</span>
+                        </h2>
+                        <button onclick="switchMainView('games')" class="text-xs font-bold text-emerald-400 hover:underline">
+                            + Fazer Novo Palpite
+                        </button>
+                    </div>
+
+                    <div id="myTicketsContainer" class="space-y-3">
+                        <!-- Renderizado via JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===================================================================== -->
+            <!-- COLUNA DIREITA (5 COLUNAS): BETSLIP + RANKING + RESENHA AO VIVO       -->
+            <!-- ===================================================================== -->
+            <div class="lg:col-span-5 space-y-5">
+
+                <!-- BOLETIM DE APOSTAS (BETSLIP INTERATIVO - DESKTOP) -->
+                <section id="desktopBetSlip" class="rounded-2xl bg-pitch-900 border border-white/[0.1] overflow-hidden shadow-xl">
+                    <div class="px-4 py-3 bg-pitch-850 border-b border-white/[0.08] flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                            <h3 class="text-sm font-black text-white">Boletim de Palpites</h3>
+                            <span id="slipCountBadge" class="font-mono text-xs font-extrabold px-2 py-0.5 rounded-full bg-emerald-500 text-black">0</span>
+                        </div>
+                        <button onclick="clearBetSlip()" class="text-[11px] font-bold text-zinc-400 hover:text-red-400 transition">
+                            Limpar
+                        </button>
+                    </div>
+
+                    <div id="betSlipContent" class="p-4">
+                        <!-- Renderizado dinamicamente via JS -->
+                    </div>
+                </section>
+
+                <!-- CARD DE PRÊMIO PATROCINADO + RANKING TOP TIPSTERS -->
+                <section class="rounded-2xl bg-pitch-900 border border-white/[0.08] overflow-hidden">
+                    <!-- Banner Prêmio da Semana Patrocinado -->
+                    <div class="p-4 bg-gradient-to-br from-gold-500/20 via-pitch-850 to-pitch-900 border-b border-gold-500/30">
+                        <div class="flex items-center justify-between gap-2 mb-1.5">
+                            <span class="text-[10px] font-black uppercase tracking-wider text-gold-400 flex items-center gap-1.5">
+                                <i class="fa-solid fa-gift"></i> Prêmio da Semana Patrocinado
+                            </span>
+                            <button onclick="openMediaKitModal()" class="text-[10px] font-bold underline text-zinc-300 hover:text-gold-400">
+                                Patrocinar Prêmio
+                            </button>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-11 h-11 rounded-xl bg-gold-500 text-black flex items-center justify-center text-xl font-black shrink-0 shadow-lg">
+                                <i class="fa-solid fa-shirt"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-black text-white">Camisa Oficial do Seu Time + Pix R$ 300</h4>
+                                <p class="text-[11px] text-zinc-300">Oferecimento: <strong class="text-gold-400">[Sua Marca Aqui]</strong> • Líder do Ranking até Domingo 23h59.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Cabeçalho Ranking + Edição de Arroba -->
+                    <div class="px-4 py-3 border-b border-white/[0.07] flex items-center justify-between gap-2">
+                        <div>
+                            <h3 class="text-sm font-black text-white flex items-center gap-1.5">
+                                <i class="fa-solid fa-ranking-star text-emerald-500"></i>
+                                <span>Ranking Top Tipsters</span>
+                            </h3>
+                            <p class="text-[11px] text-zinc-400">Classificação em tempo real por banca acumulada</p>
+                        </div>
+                        <button onclick="openProfileEditModal()" class="px-2.5 py-1.5 rounded-lg bg-white/[0.05] hover:bg-white/[0.1] border border-white/10 text-[11px] font-bold text-zinc-200 flex items-center gap-1 transition">
+                            <i class="fa-solid fa-user-pen text-emerald-400"></i>
+                            <span>Meu @</span>
+                        </button>
+                    </div>
+
+                    <!-- Tabela de Classificação -->
+                    <div id="rankingContainer" class="divide-y divide-white/[0.06]">
+                        <!-- Renderizado via JS -->
+                    </div>
+                </section>
+
+                <!-- MINI FEED: RESENHA AO VIVO DA GALERA -->
+                <section class="rounded-2xl bg-pitch-900 border border-white/[0.08] overflow-hidden">
+                    <div class="px-4 py-3 bg-pitch-850 border-b border-white/[0.07] flex items-center justify-between">
+                        <h3 class="text-sm font-black text-white flex items-center gap-2">
+                            <i class="fa-solid fa-comments text-emerald-500"></i>
+                            <span>Resenha ao Vivo</span>
+                        </h3>
+                        <span class="text-[10px] font-mono text-emerald-400 flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span> 148 online
+                        </span>
+                    </div>
+
+                    <div id="chatMessagesContainer" class="p-3.5 space-y-2.5 max-h-60 overflow-y-auto">
+                        <!-- Renderizado via JS -->
+                    </div>
+
+                    <form onsubmit="sendChatMessage(event)" class="p-3 border-t border-white/[0.07] bg-pitch-950/60 flex items-center gap-2">
+                        <input type="text" id="chatInput" maxlength="120" placeholder="Mande seu palpite na resenha..." class="w-full bg-pitch-900 border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
+                        <button type="submit" class="px-3.5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-black text-xs shrink-0 transition active:scale-95">
+                            <i class="fa-solid fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </section>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- ========================================================================= -->
+    <!-- GAVETA FLUTUANTE MOBILE DO BETSLIP                                        -->
+    <!-- ========================================================================= -->
+    <div id="mobileSlipBar" class="lg:hidden fixed bottom-0 inset-x-0 z-30 p-3 bg-pitch-900/95 backdrop-blur-md border-t border-emerald-500/40 shadow-2xl hidden">
+        <button onclick="openMobileSlipDrawer()" class="w-full py-3 px-4 rounded-xl bg-emerald-500 text-black font-black text-xs flex items-center justify-between shadow-lg">
+            <span class="flex items-center gap-2">
+                <span id="mobileSlipCount" class="px-2 py-0.5 rounded-full bg-black text-emerald-400 font-mono text-xs">1</span>
+                <span>ABRIR BOLETIM DE PALPITES</span>
+            </span>
+            <span id="mobileSlipOdd" class="font-mono text-sm">Odd Total: 1.85</span>
+        </button>
+    </div>
+
+    <!-- Modal Gaveta Mobile BetSlip -->
+    <div id="mobileSlipModal" class="lg:hidden fixed inset-0 z-50 hidden items-end bg-black/80 backdrop-blur-sm">
+        <div class="w-full bg-pitch-900 border-t border-white/15 rounded-t-3xl p-4 max-h-[85vh] overflow-y-auto animate-slide-up">
+            <div class="flex items-center justify-between pb-3 mb-3 border-b border-white/10">
+                <h3 class="text-sm font-black text-white">Seu Boletim de Palpites</h3>
+                <button onclick="closeMobileSlipDrawer()" class="w-8 h-8 rounded-full bg-white/10 text-zinc-300 flex items-center justify-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div id="mobileBetSlipContent"></div>
+        </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- MODAL 1: RECARGA PATROCINADA (+RC$ 500 COM CONTAGEM DE ANÚNCIO 5S)        -->
+    <!-- ========================================================================= -->
+    <div id="sponsoredRechargeModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/85 backdrop-blur-sm animate-fade-in">
+        <div class="w-full max-w-md bg-pitch-900 border border-gold-500/40 rounded-3xl shadow-2xl overflow-hidden animate-slide-up">
+            <div class="px-5 py-4 bg-pitch-950 border-b border-white/[0.08] flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <span class="px-2 py-0.5 rounded bg-gold-500 text-black font-black text-[10px] uppercase">Oferta Patrocinada</span>
+                    <span class="text-xs font-bold text-zinc-300">Recarga Grátis +RC$ 500</span>
+                </div>
+                <button onclick="closeSponsoredRechargeModal()" class="w-8 h-8 rounded-full bg-white/[0.06] text-zinc-400 hover:text-white flex items-center justify-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="p-5 space-y-4 text-center">
+                <!-- Espaço Publicitário do Patrocinador -->
+                <div class="p-5 rounded-2xl bg-gradient-to-br from-pitch-800 to-pitch-950 border border-gold-500/35 space-y-2.5">
+                    <div class="w-14 h-14 rounded-2xl bg-gold-500/15 border border-gold-500/40 text-gold-400 flex items-center justify-center text-2xl mx-auto">
+                        <i class="fa-solid fa-crown"></i>
+                    </div>
+                    <span class="text-[10px] font-mono uppercase tracking-widest text-gold-400 block">Anúncio do Patrocinador Oficial</span>
+                    <h4 class="text-base font-black text-white">Quer levar seus palpites para o próximo nível?</h4>
+                    <p class="text-xs text-zinc-300 leading-relaxed">
+                        Este espaço exibe o banner ou vídeo curto do patrocinador que financia suas <strong>Resenha Coins</strong> gratuitas.
+                    </p>
+                    <a href="#anuncie" onclick="closeSponsoredRechargeModal(); openMediaKitModal(); return false;" class="inline-block text-xs font-extrabold text-gold-400 hover:underline pt-1">
+                        Quer anunciar sua marca aqui? Clique para ver o Mídia Kit →
+                    </a>
+                </div>
+
+                <!-- Barra de Progresso de 5 Segundos -->
+                <div class="space-y-1.5">
+                    <div class="flex items-center justify-between text-xs font-bold">
+                        <span id="adTimerLabel" class="text-zinc-400">Aguarde 5s para liberar suas moedas...</span>
+                        <span id="adTimerSeconds" class="font-mono text-gold-400">5s</span>
+                    </div>
+                    <div class="w-full h-2 bg-pitch-950 rounded-full overflow-hidden border border-white/10">
+                        <div id="adProgressBar" class="h-full bg-gold-500 w-0 transition-all duration-1000 linear"></div>
+                    </div>
+                </div>
+
+                <button id="claimCoinsBtn" disabled onclick="claimSponsoredCoins()" class="w-full py-3.5 px-4 rounded-xl bg-zinc-800 text-zinc-500 font-black text-sm flex items-center justify-center gap-2 transition cursor-not-allowed">
+                    <i class="fa-solid fa-hourglass-half"></i>
+                    <span>Aguardando Anúncio (5s)...</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- MODAL 2: MÍDIA KIT & PROPOSTA COMERCIAL PARA PATROCINADORES                -->
+    <!-- ========================================================================= -->
+    <div id="mediaKitModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/85 backdrop-blur-sm animate-fade-in">
+        <div class="w-full max-w-lg bg-pitch-900 border border-gold-500/40 rounded-3xl shadow-2xl overflow-hidden animate-slide-up max-h-[90vh] flex flex-col">
+            <div class="px-5 py-4 bg-pitch-950 border-b border-white/[0.08] flex items-center justify-between shrink-0">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-xl bg-gold-500 text-black flex items-center justify-center font-black">
+                        <i class="fa-solid fa-bullhorn"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-black text-white">Mídia Kit & Cotas de Patrocínio</h3>
+                        <p class="text-[11px] text-zinc-400">Resenha Bet • Entretenimento Esportivo 100% Legal (Free-to-Play)</p>
+                    </div>
+                </div>
+                <button onclick="closeMediaKitModal()" class="w-8 h-8 rounded-full bg-white/[0.06] text-zinc-400 hover:text-white flex items-center justify-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="p-5 space-y-4 overflow-y-auto">
+                <p class="text-xs sm:text-sm text-zinc-300 leading-relaxed">
+                    A <strong class="text-white">Resenha Bet</strong> é um portal de palpites esportivos gratuitos onde os usuários competem por prêmios semanais sem envolver apostas em dinheiro real — garantindo <strong class="text-emerald-400">segurança jurídica e brand safety total</strong> para marcas patrocinadoras.
+                </p>
+
+                <!-- Métricas Projetadas -->
+                <div class="grid grid-cols-3 gap-2.5 text-center">
+                    <div class="p-3 rounded-2xl bg-pitch-950 border border-white/[0.08]">
+                        <span class="font-mono text-base sm:text-lg font-black text-emerald-400 block">+45 mil</span>
+                        <span class="text-[10px] text-zinc-400">Pageviews / mês</span>
+                    </div>
+                    <div class="p-3 rounded-2xl bg-pitch-950 border border-white/[0.08]">
+                        <span class="font-mono text-base sm:text-lg font-black text-gold-400 block">6m 40s</span>
+                        <span class="text-[10px] text-zinc-400">Tempo Médio</span>
+                    </div>
+                    <div class="p-3 rounded-2xl bg-pitch-950 border border-white/[0.08]">
+                        <span class="font-mono text-base sm:text-lg font-black text-white block">18–44</span>
+                        <span class="text-[10px] text-zinc-400">Público Fã Esporte</span>
+                    </div>
+                </div>
+
+                <!-- Formatos Disponíveis -->
+                <div class="space-y-2">
+                    <h4 class="text-xs font-black uppercase tracking-wider text-gold-400">Formatos Comerciais Disponíveis</h4>
+
+                    <div class="p-3 rounded-xl bg-pitch-850 border border-white/[0.07] flex items-center justify-between gap-2">
+                        <div>
+                            <p class="text-xs font-extrabold text-white">1. Patrocinador Master (Topo + Naming Rights)</p>
+                            <p class="text-[11px] text-zinc-400">Banner fixo no topo + nome da liga semanal.</p>
+                        </div>
+                        <span class="font-mono text-xs font-black text-gold-400 shrink-0">R$ 1.500/mês</span>
+                    </div>
+
+                    <div class="p-3 rounded-xl bg-pitch-850 border border-white/[0.07] flex items-center justify-between gap-2">
+                        <div>
+                            <p class="text-xs font-extrabold text-white">2. Prêmio da Semana + Recarga Patrocinada</p>
+                            <p class="text-[11px] text-zinc-400">Sua marca entrega o prêmio e aparece na recarga de moedas.</p>
+                        </div>
+                        <span class="font-mono text-xs font-black text-emerald-400 shrink-0">R$ 800/mês</span>
+                    </div>
+
+                    <div class="p-3 rounded-xl bg-pitch-850 border border-white/[0.07] flex items-center justify-between gap-2">
+                        <div>
+                            <p class="text-xs font-extrabold text-white">3. Banner Intermediário na Grade de Jogos</p>
+                            <p class="text-[11px] text-zinc-400">Alta taxa de clique entre os confrontos da rodada.</p>
+                        </div>
+                        <span class="font-mono text-xs font-black text-zinc-200 shrink-0">R$ 450/mês</span>
+                    </div>
+                </div>
+
+                <!-- Botão Contato Comercial -->
+                <div class="pt-1 flex flex-col sm:flex-row gap-2">
+                    <button onclick="copyCommercialEmail()" class="w-full py-3 px-4 rounded-xl gold-gradient text-black font-black text-xs flex items-center justify-center gap-2 shadow-lg">
+                        <i class="fa-solid fa-envelope"></i>
+                        <span>Copiar Contato Comercial (comercial@resenhabet.com.br)</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- MODAL 3: EDITAR PERFIL / @ARROBA NO RANKING                               -->
+    <!-- ========================================================================= -->
+    <div id="profileEditModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/85 backdrop-blur-sm animate-fade-in">
+        <div class="w-full max-w-sm bg-pitch-900 border border-white/15 rounded-3xl shadow-2xl p-5 space-y-4 animate-slide-up">
+            <div class="flex items-center justify-between">
+                <h3 class="text-sm font-black text-white">Seu Perfil no Ranking</h3>
+                <button onclick="closeProfileEditModal()" class="w-8 h-8 rounded-full bg-white/10 text-zinc-400 flex items-center justify-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <form onsubmit="saveUserProfile(event)" class="space-y-3">
+                <div>
+                    <label class="block text-[11px] font-bold text-zinc-400 mb-1">Seu Nome ou Apelido</label>
+                    <input type="text" id="inpUserName" required maxlength="22" class="w-full bg-pitch-950 border border-white/10 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500">
+                </div>
+                <div>
+                    <label class="block text-[11px] font-bold text-zinc-400 mb-1">Seu @Arroba</label>
+                    <input type="text" id="inpUserHandle" required maxlength="20" class="w-full font-mono bg-pitch-950 border border-white/10 rounded-xl px-3 py-2.5 text-xs text-emerald-400 focus:outline-none focus:border-emerald-500">
+                </div>
+                <button type="submit" class="w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-black text-xs transition">
+                    Salvar no Ranking
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- RODAPÉ DISCRETO COM ATRIBUIÇÃO CLICÁVEL                                   -->
+    <!-- ========================================================================= -->
+    <footer class="border-t border-white/[0.07] bg-pitch-950 py-5 px-4 text-center space-y-2 mt-8">
+        <p class="text-[11px] text-zinc-500 max-w-2xl mx-auto">
+            Resenha Bet é uma plataforma de entretenimento esportivo 100% gratuita (Free-to-Play). As Resenha Coins (RC$) são moedas virtuais sem valor monetário real.
+        </p>
+        <p class="text-[11px] text-zinc-500">
+            Desenvolvido para escala & patrocínios •
+            <a href="https://vercel.com" target="_blank" rel="noopener noreferrer" class="text-zinc-400 hover:text-emerald-400 underline transition">
+                Hospedado com Vercel & GitHub
+            </a>
+            •
+            <a href="#anuncie" onclick="openMediaKitModal(); return false;" class="text-gold-400 hover:underline transition">
+                Seja um Patrocinador
+            </a>
+        </p>
+    </footer>
+
+    <!-- Container Toast -->
+    <div id="toastContainer" class="fixed bottom-16 lg:bottom-5 left-1/2 -translate-x-1/2 z-50 pointer-events-none flex flex-col items-center gap-2 w-full max-w-sm px-4"></div>
+
+    <!-- ========================================================================= -->
+    <!-- JAVASCRIPT: MOTOR COMPLETO DO PORTAL RESENHA BET                          -->
+    <!-- ========================================================================= -->
+    <script>
+        const STORAGE_KEY = 'resenha_bet_portal_v1';
+
+        const INITIAL_MATCHES = [
+            {
+                id: 'm-1',
+                league: 'Brasileirão Série A',
+                time: 'Hoje • 21:30',
+                home: 'Flamengo',
+                away: 'Palmeiras',
+                trendHome: 54,
+                trendDraw: 22,
+                trendAway: 24,
+                odds: { '1': 2.05, 'X': 3.30, '2': 3.60 }
+            },
+            {
+                id: 'm-2',
+                league: 'Brasileirão Série A',
+                time: 'Hoje • 20:00',
+                home: 'Botafogo',
+                away: 'São Paulo',
+                trendHome: 62,
+                trendDraw: 20,
+                trendAway: 18,
+                odds: { '1': 1.88, 'X': 3.40, '2': 4.10 }
+            },
+            {
+                id: 'm-3',
+                league: 'Champions League',
+                time: 'Amanhã • 16:00',
+                home: 'Real Madrid',
+                away: 'Manchester City',
+                trendHome: 48,
+                trendDraw: 24,
+                trendAway: 28,
+                odds: { '1': 2.35, 'X': 3.55, '2': 2.85 }
+            },
+            {
+                id: 'm-4',
+                league: 'Champions League',
+                time: 'Amanhã • 16:00',
+                home: 'Bayern de Munique',
+                away: 'Arsenal',
+                trendHome: 51,
+                trendDraw: 23,
+                trendAway: 26,
+                odds: { '1': 2.15, 'X': 3.45, '2': 3.20 }
+            },
+            {
+                id: 'm-5',
+                league: 'NBA',
+                time: 'Hoje • 23:00',
+                home: 'LA Lakers',
+                away: 'Boston Celtics',
+                trendHome: 42,
+                trendDraw: 0,
+                trendAway: 58,
+                odds: { '1': 2.25, 'X': null, '2': 1.68 }
+            },
+            {
+                id: 'm-6',
+                league: 'Brasileirão Série A',
+                time: 'Domingo • 16:00',
+                home: 'Grêmio',
+                away: 'Internacional',
+                trendHome: 46,
+                trendDraw: 29,
+                trendAway: 25,
+                odds: { '1': 2.45, 'X': 3.10, '2': 2.95 }
+            }
+        ];
+
+        const RIVAL_TIPSTERS = [
+            { name: 'Lucas Craque', handle: '@lucascraque', balance: 2840.00, greens: 14 },
+            { name: 'Mestre do Green', handle: '@mestredogreen', balance: 2190.50, greens: 11 },
+            { name: 'Camisa 10 Tips', handle: '@camisa10', balance: 1650.00, greens: 9 },
+            { name: 'Biel Analista', handle: '@biel_fut', balance: 1280.00, greens: 7 },
+            { name: 'Rafa Resenha', handle: '@rafaresenha', balance: 890.00, greens: 5 }
+        ];
+
+        const INITIAL_CHAT = [
+            { user: '@lucascraque', text: 'Fui pesado no Flamengo seco @2.05 hoje! Maracanã lotado 🔥', time: '2m' },
+            { user: '@mestredogreen', text: 'Múltipla Real Madrid + Celtics pagando quase 4.00, bora!', time: '5m' },
+            { user: '@camisa10', text: 'Acabei de pegar +500 RC$ no botão do patrocinador pra salvar a rodada 😂', time: '9m' }
+        ];
+
+        let state = {
+            userName: 'Você (Tipster)',
+            userHandle: '@voce.resenha',
+            balance: 1000.00,
+            greensCount: 0,
+            selectedLeague: 'all',
+            betSlip: [], // [{ matchId, matchLabel, pick, pickLabel, odd }]
+            stake: 100,
+            tickets: [], // [{ id, createdAt, selections, totalOdd, stake, potentialReturn, status: 'pending'|'green'|'red', scoreSummary }]
+            chat: JSON.parse(JSON.stringify(INITIAL_CHAT))
+        };
+
+        let adInterval = null;
+
+        // =====================================================================
+        // PERSISTÊNCIA LOCALSTORAGE
+        // =====================================================================
+        function loadState() {
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    state = { ...state, ...parsed };
+                }
+            } catch (e) {
+                console.warn('Erro ao ler localStorage:', e);
+            }
+        }
+
+        function saveState() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+            } catch (e) {
+                console.warn('Erro ao salvar localStorage:', e);
+            }
+        }
+
+        function formatRC(value) {
+            return Number(value).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        // =====================================================================
+        // RENDERIZAÇÃO GERAL
+        // =====================================================================
+        function renderAll() {
+            document.getElementById('userBalanceDisplay').textContent = formatRC(state.balance);
+
+            const pendingCount = state.tickets.filter(t => t.status === 'pending').length;
+            document.getElementById('pendingTicketsBadge').textContent = pendingCount;
+            document.getElementById('mPendingTicketsBadge').textContent = pendingCount;
+
+            renderMatches();
+            renderBetSlip();
+            renderMyTickets();
+            renderRanking();
+            renderChat();
+        }
+
+        // =====================================================================
+        // GRADE DE JOGOS + BANNER INTERMEDIÁRIO DE PATROCÍNIO
+        // =====================================================================
+        function filterLeague(league) {
+            state.selectedLeague = league;
+            saveState();
+
+            document.querySelectorAll('.league-pill').forEach(btn => {
+                btn.classList.remove('bg-emerald-500', 'text-black', 'font-extrabold');
+                btn.classList.add('bg-pitch-900', 'text-zinc-300', 'font-bold');
+            });
+
+            const activeBtn = document.getElementById(`league-${league}`);
+            if (activeBtn) {
+                activeBtn.classList.remove('bg-pitch-900', 'text-zinc-300', 'font-bold');
+                activeBtn.classList.add('bg-emerald-500', 'text-black', 'font-extrabold');
+            }
+
+            renderMatches();
+        }
+
+        function renderMatches() {
+            const container = document.getElementById('matchesListContainer');
+            const filtered = INITIAL_MATCHES.filter(m => state.selectedLeague === 'all' || m.league === state.selectedLeague);
+
+            let html = '';
+
+            filtered.forEach((match, index) => {
+                const selectedItem = state.betSlip.find(s => s.matchId === match.id);
+
+                html += `
+                <div class="rounded-2xl bg-pitch-900 border border-white/[0.08] p-4 hover:border-white/15 transition">
+                    <!-- Topo do Card -->
+                    <div class="flex items-center justify-between gap-2 mb-3">
+                        <span class="text-[11px] font-extrabold text-emerald-400 flex items-center gap-1.5">
+                            <i class="fa-solid fa-trophy text-[10px]"></i> ${match.league}
+                        </span>
+                        <span class="font-mono text-[11px] text-zinc-400 bg-pitch-950 px-2.5 py-0.5 rounded-lg border border-white/[0.06]">
+                            ${match.time}
+                        </span>
+                    </div>
+
+                    <!-- Times -->
+                    <div class="flex items-center justify-between gap-3 mb-3">
+                        <div class="flex-1">
+                            <p class="text-sm sm:text-base font-black text-white">${match.home} <span class="text-zinc-500 font-normal mx-1">vs</span> ${match.away}</p>
+                            <!-- Barra de Tendência da Comunidade -->
+                            <div class="mt-2 space-y-1">
+                                <div class="flex items-center justify-between text-[10px] text-zinc-400">
+                                    <span>Tendência da Galera: <strong class="text-emerald-400">${match.trendHome}% ${match.home}</strong></span>
+                                    <span>${match.trendAway}% ${match.away}</span>
+                                </div>
+                                <div class="w-full h-1.5 rounded-full bg-pitch-950 overflow-hidden flex">
+                                    <div style="width: ${match.trendHome}%" class="bg-emerald-500 h-full"></div>
+                                    <div style="width: ${match.trendDraw}%" class="bg-zinc-600 h-full"></div>
+                                    <div style="width: ${match.trendAway}%" class="bg-gold-500 h-full"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Botões de Odds (1, X, 2) -->
+                    <div class="grid ${match.odds['X'] ? 'grid-cols-3' : 'grid-cols-2'} gap-2 pt-1">
+                        ${renderOddButton(match, '1', `Casa (${match.home})`, match.odds['1'], selectedItem?.pick === '1')}
+                        ${match.odds['X'] ? renderOddButton(match, 'X', 'Empate', match.odds['X'], selectedItem?.pick === 'X') : ''}
+                        ${renderOddButton(match, '2', `Fora (${match.away})`, match.odds['2'], selectedItem?.pick === '2')}
+                    </div>
+                </div>
+                `;
+
+                // Injeta Banner Comercial Intermediário após o 2º jogo
+                if (index === 1) {
+                    html += `
+                    <div class="rounded-2xl bg-gradient-to-r from-emerald-500/10 via-pitch-900 to-gold-500/10 border border-dashed border-emerald-500/40 p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center shrink-0">
+                                <i class="fa-solid fa-ad"></i>
+                            </div>
+                            <div>
+                                <span class="text-[9px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded bg-white/10 text-zinc-300">Publicidade • Banner Intermediário</span>
+                                <p class="text-xs font-extrabold text-white mt-0.5">Espaço de Alta Conversão no Meio da Rodada</p>
+                                <p class="text-[11px] text-zinc-400">Ideal para lojas esportivas, barbearias, canais VIP ou marcas parceiras.</p>
+                            </div>
+                        </div>
+                        <button onclick="openMediaKitModal()" class="shrink-0 px-3.5 py-2 rounded-xl bg-emerald-500/15 hover:bg-emerald-500 hover:text-black border border-emerald-500/40 text-emerald-400 text-xs font-extrabold transition">
+                            Anunciar Aqui
+                        </button>
+                    </div>
+                    `;
+                }
+            });
+
+            container.innerHTML = html;
+        }
+
+        function renderOddButton(match, pick, label, odd, isSelected) {
+            return `
+            <button onclick="toggleSelection('${match.id}', '${pick}')" class="py-2.5 px-3 rounded-xl border text-left flex items-center justify-between transition transform active:scale-95 ${
+                isSelected
+                    ? 'bg-emerald-500 border-emerald-400 text-black shadow-lg shadow-emerald-500/20'
+                    : 'bg-pitch-950 hover:bg-pitch-800 border-white/[0.08] text-zinc-200'
+            }">
+                <span class="text-[11px] font-bold truncate pr-1">${pick === 'X' ? 'Empate' : pick === '1' ? '1 • Casa' : '2 • Fora'}</span>
+                <span class="font-mono text-xs sm:text-sm font-black ${isSelected ? 'text-black' : 'text-emerald-400'}">
+                    ${odd.toFixed(2)}
+                </span>
+            </button>
+            `;
+        }
+
+        // =====================================================================
+        // BOLETIM DE APOSTAS (BETSLIP SIMPLES & MÚLTIPLA)
+        // =====================================================================
+        function toggleSelection(matchId, pick) {
+            const match = INITIAL_MATCHES.find(m => m.id === matchId);
+            if (!match) return;
+
+            const odd = match.odds[pick];
+            const pickLabel = pick === '1' ? `Vitória ${match.home}` : pick === '2' ? `Vitória ${match.away}` : 'Empate';
+
+            const existingIndex = state.betSlip.findIndex(s => s.matchId === matchId);
+
+            if (existingIndex > -1) {
+                if (state.betSlip[existingIndex].pick === pick) {
+                    // Remove se clicar na mesma odd
+                    state.betSlip.splice(existingIndex, 1);
+                } else {
+                    // Troca o mercado no mesmo jogo
+                    state.betSlip[existingIndex] = {
+                        matchId,
+                        matchLabel: `${match.home} x ${match.away}`,
+                        pick,
+                        pickLabel,
+                        odd
+                    };
+                }
+            } else {
+                state.betSlip.push({
+                    matchId,
+                    matchLabel: `${match.home} x ${match.away}`,
+                    pick,
+                    pickLabel,
+                    odd
+                });
+            }
+
+            saveState();
+            renderMatches();
+            renderBetSlip();
+        }
+
+        function clearBetSlip() {
+            state.betSlip = [];
+            saveState();
+            renderMatches();
+            renderBetSlip();
+        }
+
+        function setStakeAmount(amount) {
+            state.stake = amount === 'all' ? Math.floor(state.balance) : amount;
+            saveState();
+            renderBetSlip();
+        }
+
+        function updateStakeFromInput(val) {
+            const num = parseFloat(val);
+            state.stake = isNaN(num) || num < 0 ? 0 : num;
+            saveState();
+            renderBetSlip(true);
+        }
+
+        function getTotalOdd() {
+            if (state.betSlip.length === 0) return 0;
+            return state.betSlip.reduce((acc, item) => acc * item.odd, 1);
+        }
+
+        function renderBetSlip(skipInputOverwrite = false) {
+            const count = state.betSlip.length;
+            const totalOdd = getTotalOdd();
+            const potentialReturn = state.stake * totalOdd;
+
+            document.getElementById('slipCountBadge').textContent = count;
+
+            // Atualiza barra flutuante mobile
+            const mobileBar = document.getElementById('mobileSlipBar');
+            if (count > 0) {
+                mobileBar.classList.remove('hidden');
+                document.getElementById('mobileSlipCount').textContent = count;
+                document.getElementById('mobileSlipOdd').textContent = `${count > 1 ? 'Múltipla' : 'Simples'} • Odd ${totalOdd.toFixed(2)}`;
+            } else {
+                mobileBar.classList.add('hidden');
+                closeMobileSlipDrawer();
+            }
+
+            let html = '';
+
+            if (count === 0) {
+                html = `
+                <div class="py-8 text-center space-y-2">
+                    <div class="w-12 h-12 rounded-2xl bg-pitch-950 border border-white/[0.07] text-zinc-500 flex items-center justify-center text-lg mx-auto">
+                        <i class="fa-solid fa-hand-pointer"></i>
+                    </div>
+                    <p class="text-xs font-bold text-zinc-300">Seu boletim está vazio</p>
+                    <p class="text-[11px] text-zinc-500 max-w-xs mx-auto">Clique nas odds dos jogos ao lado para montar seu palpite simples ou múltiplo grátis.</p>
+                </div>
+                `;
+            } else {
+                html = `
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between text-[11px]">
+                        <span class="font-extrabold uppercase tracking-wider ${count > 1 ? 'text-gold-400' : 'text-emerald-400'}">
+                            ${count > 1 ? `🔥 Aposta Múltipla (${count} jogos)` : '⚡ Aposta Simples'}
+                        </span>
+                        <span class="font-mono font-bold text-zinc-400">Odd Total: <strong class="text-white">${totalOdd.toFixed(2)}</strong></span>
+                    </div>
+
+                    <!-- Lista de Seleções -->
+                    <div class="space-y-2 max-h-56 overflow-y-auto pr-1">
+                        ${state.betSlip.map(item => `
+                            <div class="p-2.5 rounded-xl bg-pitch-950 border border-white/[0.08] flex items-center justify-between gap-2">
+                                <div class="min-w-0">
+                                    <p class="text-[11px] text-zinc-400 truncate">${item.matchLabel}</p>
+                                    <p class="text-xs font-extrabold text-white truncate">${item.pickLabel}</p>
+                                </div>
+                                <div class="flex items-center gap-2 shrink-0">
+                                    <span class="font-mono text-xs font-black text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded">
+                                        @${item.odd.toFixed(2)}
+                                    </span>
+                                    <button onclick="toggleSelection('${item.matchId}', '${item.pick}')" class="text-zinc-500 hover:text-red-400 text-xs">
+                                        <i class="fa-solid fa-xmark"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    <!-- Valor da Aposta (Stake em RC$) -->
+                    <div class="pt-2 border-t border-white/[0.08] space-y-2">
+                        <div class="flex items-center justify-between">
+                            <label class="text-[11px] font-bold text-zinc-400">Valor do Palpite (RC$)</label>
+                            <div class="flex items-center gap-1">
+                                <button onclick="setStakeAmount(50)" class="px-2 py-0.5 rounded bg-pitch-950 hover:bg-pitch-800 border border-white/10 font-mono text-[10px] text-zinc-300">50</button>
+                                <button onclick="setStakeAmount(100)" class="px-2 py-0.5 rounded bg-pitch-950 hover:bg-pitch-800 border border-white/10 font-mono text-[10px] text-zinc-300">100</button>
+                                <button onclick="setStakeAmount(250)" class="px-2 py-0.5 rounded bg-pitch-950 hover:bg-pitch-800 border border-white/10 font-mono text-[10px] text-zinc-300">250</button>
+                                <button onclick="setStakeAmount('all')" class="px-2 py-0.5 rounded bg-gold-500/20 border border-gold-500/40 font-mono text-[10px] font-bold text-gold-400">All-In</button>
+                            </div>
+                        </div>
+
+                        <input
+                            type="number"
+                            min="1"
+                            step="10"
+                            value="${state.stake}"
+                            oninput="updateStakeFromInput(this.value)"
+                            class="w-full font-mono bg-pitch-950 border border-white/15 rounded-xl px-3 py-2.5 text-sm font-extrabold text-white focus:outline-none focus:border-emerald-500"
+                        >
+
+                        <div class="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/25 flex items-center justify-between">
+                            <span class="text-xs font-bold text-zinc-300">Retorno Potencial</span>
+                            <span id="potentialReturnDisplay" class="font-mono text-base font-black text-emerald-400">
+                                RC$ ${formatRC(potentialReturn)}
+                            </span>
+                        </div>
+
+                        <button onclick="confirmBetSlip()" class="w-full py-3.5 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-black text-xs sm:text-sm shadow-lg shadow-emerald-500/25 flex items-center justify-center gap-2 transition transform active:scale-[0.98]">
+                            <i class="fa-solid fa-check-circle"></i>
+                            <span>Confirmar Palpite Grátis</span>
+                        </button>
+                    </div>
+                </div>
+                `;
+            }
+
+            if (!skipInputOverwrite) {
+                document.getElementById('betSlipContent').innerHTML = html;
+                document.getElementById('mobileBetSlipContent').innerHTML = html;
+            } else {
+                const retEl = document.getElementById('potentialReturnDisplay');
+                if (retEl) retEl.textContent = `RC$ ${formatRC(potentialReturn)}`;
+            }
+        }
+
+        function confirmBetSlip() {
+            if (state.betSlip.length === 0) return;
+
+            if (state.stake <= 0) {
+                showToast('⚠️ Defina um valor maior que RC$ 0.');
+                return;
+            }
+
+            if (state.stake > state.balance) {
+                showToast('⚠️ Saldo insuficiente! Use o botão +RC$ 500 no topo.');
+                return;
+            }
+
+            const totalOdd = getTotalOdd();
+            const potentialReturn = state.stake * totalOdd;
+
+            state.balance -= state.stake;
+
+            const newTicket = {
+                id: 'RB-' + Math.floor(100000 + Math.random() * 900000),
+                createdAt: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+                selections: [...state.betSlip],
+                totalOdd,
+                stake: state.stake,
+                potentialReturn,
+                status: 'pending',
+                scoreSummary: null
+            };
+
+            state.tickets.unshift(newTicket);
+            state.betSlip = [];
+            saveState();
+            closeMobileSlipDrawer();
+            renderAll();
+
+            showToast(`✅ Bilhete ${newTicket.id} registrado! Clique em "Simular Rodada" para ver o resultado.`);
+        }
+
+        // =====================================================================
+        // MEUS BILHETES & SIMULADOR DE RODADA (LIQUIDAÇÃO AUTOMÁTICA)
+        // =====================================================================
+        function renderMyTickets() {
+            const container = document.getElementById('myTicketsContainer');
+
+            if (state.tickets.length === 0) {
+                container.innerHTML = `
+                <div class="rounded-2xl bg-pitch-900 border border-white/[0.08] p-8 text-center space-y-2">
+                    <i class="fa-solid fa-ticket text-2xl text-zinc-600"></i>
+                    <p class="text-sm font-bold text-zinc-300">Nenhum bilhete registrado ainda</p>
+                    <p class="text-xs text-zinc-500">Escolha seus palpites na aba Jogos & Odds para começar a pontuar.</p>
+                </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = state.tickets.map(tk => {
+                const statusBadge = tk.status === 'green'
+                    ? `<span class="px-2.5 py-0.5 rounded-lg bg-emerald-500 text-black font-mono font-black text-[10px]">✅ GREEN (+RC$ ${formatRC(tk.potentialReturn)})</span>`
+                    : tk.status === 'red'
+                        ? `<span class="px-2.5 py-0.5 rounded-lg bg-red-500/20 border border-red-500/40 text-red-400 font-mono font-bold text-[10px]">❌ RED</span>`
+                        : `<span class="px-2.5 py-0.5 rounded-lg bg-gold-500/20 border border-gold-500/40 text-gold-400 font-mono font-bold text-[10px]">⏳ AGUARDANDO RODADA</span>`;
+
+                return `
+                <div class="rounded-2xl bg-pitch-900 border ${tk.status === 'green' ? 'border-emerald-500/45' : 'border-white/[0.08]'} p-4 space-y-3">
+                    <div class="flex items-center justify-between gap-2 flex-wrap">
+                        <div class="flex items-center gap-2">
+                            <span class="font-mono text-xs font-black text-white">${tk.id}</span>
+                            <span class="text-[11px] text-zinc-500">• ${tk.createdAt}</span>
+                        </div>
+                        ${statusBadge}
+                    </div>
+
+                    <div class="space-y-1.5">
+                        ${tk.selections.map(sel => `
+                            <div class="p-2.5 rounded-xl bg-pitch-950 border border-white/[0.06] flex items-center justify-between text-xs">
+                                <div>
+                                    <span class="text-zinc-400 block text-[11px]">${sel.matchLabel}</span>
+                                    <strong class="text-white">${sel.pickLabel}</strong>
+                                </div>
+                                <span class="font-mono font-bold text-emerald-400">@${sel.odd.toFixed(2)}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    ${tk.scoreSummary ? `
+                        <p class="text-[11px] font-mono text-zinc-400 bg-pitch-950 px-3 py-2 rounded-lg border border-white/[0.05]">
+                            Placares simulados: ${tk.scoreSummary}
+                        </p>
+                    ` : ''}
+
+                    <div class="flex items-center justify-between pt-2 border-t border-white/[0.07] text-xs">
+                        <span class="text-zinc-400">Apostado: <strong class="font-mono text-white">RC$ ${formatRC(tk.stake)}</strong> • Odd <strong class="font-mono text-white">${tk.totalOdd.toFixed(2)}</strong></span>
+                        <span class="font-mono font-black ${tk.status === 'green' ? 'text-emerald-400' : 'text-zinc-300'}">
+                            Retorno: RC$ ${formatRC(tk.potentialReturn)}
+                        </span>
+                    </div>
+                </div>
+                `;
+            }).join('');
+        }
+
+        function simulateRoundResults() {
+            const pendingTickets = state.tickets.filter(t => t.status === 'pending');
+
+            if (pendingTickets.length === 0) {
+                showToast('ℹ️ Faça pelo menos 1 palpite antes de simular a rodada!');
+                return;
+            }
+
+            // Sorteia resultados aleatórios para cada partida
+            const matchOutcomes = {};
+            INITIAL_MATCHES.forEach(m => {
+                const outcomes = m.odds['X'] ? ['1', 'X', '2'] : ['1', '2'];
+                // Favorece levemente o lado com maior tendência da galera
+                const roll = Math.random() * 100;
+                let winner = outcomes[0];
+                if (roll < m.trendHome) winner = '1';
+                else if (m.odds['X'] && roll < m.trendHome + m.trendDraw) winner = 'X';
+                else winner = '2';
+
+                const hGoals = winner === '1' ? Math.floor(Math.random() * 3) + 1 : winner === 'X' ? 1 : Math.floor(Math.random() * 2);
+                const aGoals = winner === '2' ? Math.floor(Math.random() * 3) + 1 : winner === 'X' ? 1 : Math.floor(Math.random() * 2);
+
+                matchOutcomes[m.id] = {
+                    winner,
+                    scoreText: `${m.home} ${hGoals}x${aGoals} ${m.away}`
+                };
+            });
+
+            let totalWon = 0;
+            let greenTicketsCount = 0;
+
+            pendingTickets.forEach(tk => {
+                const allHit = tk.selections.every(sel => matchOutcomes[sel.matchId]?.winner === sel.pick);
+                tk.scoreSummary = tk.selections.map(sel => matchOutcomes[sel.matchId]?.scoreText).join(' | ');
+
+                if (allHit) {
+                    tk.status = 'green';
+                    state.balance += tk.potentialReturn;
+                    state.greensCount += 1;
+                    totalWon += tk.potentialReturn;
+                    greenTicketsCount += 1;
+                } else {
+                    tk.status = 'red';
+                }
+            });
+
+            saveState();
+            renderAll();
+            switchMainView('tickets');
+
+            if (greenTicketsCount > 0) {
+                showToast(`🎉 GREEN! Você acertou ${greenTicketsCount} bilhete(s) e ganhou +RC$ ${formatRC(totalWon)}!`);
+            } else {
+                showToast('⚽ Rodada encerrada! Desta vez bateu na trave. Tente na próxima!');
+            }
+        }
+
+        function resetSeason() {
+            localStorage.removeItem(STORAGE_KEY);
+            state = {
+                userName: 'Você (Tipster)',
+                userHandle: '@voce.resenha',
+                balance: 1000.00,
+                greensCount: 0,
+                selectedLeague: 'all',
+                betSlip: [],
+                stake: 100,
+                tickets: [],
+                chat: JSON.parse(JSON.stringify(INITIAL_CHAT))
+            };
+            saveState();
+            switchMainView('games');
+            renderAll();
+            showToast('🔄 Nova temporada iniciada! Banca resetada para RC$ 1.000,00.');
+        }
+
+        // =====================================================================
+        // RANKING TOP TIPSTERS + RESENHA AO VIVO
+        // =====================================================================
+        function renderRanking() {
+            const container = document.getElementById('rankingContainer');
+
+            const allPlayers = [
+                ...RIVAL_TIPSTERS,
+                {
+                    name: state.userName,
+                    handle: state.userHandle,
+                    balance: state.balance,
+                    greens: state.greensCount,
+                    isCurrentUser: true
+                }
+            ].sort((a, b) => b.balance - a.balance);
+
+            container.innerHTML = allPlayers.map((player, idx) => {
+                const pos = idx + 1;
+                const medal = pos === 1 ? '🥇' : pos === 2 ? '🥈' : pos === 3 ? '🥉' : `#${pos}`;
+
+                return `
+                <div class="px-4 py-3 flex items-center justify-between gap-2 ${player.isCurrentUser ? 'bg-emerald-500/10' : ''}">
+                    <div class="flex items-center gap-3 min-w-0">
+                        <span class="font-mono text-xs font-black w-6 text-center ${pos <= 3 ? 'text-gold-400 text-sm' : 'text-zinc-500'}">
+                            ${medal}
+                        </span>
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-1.5">
+                                <p class="text-xs font-extrabold text-white truncate">${player.name}</p>
+                                ${player.isCurrentUser ? `<span class="px-1.5 py-0.2 rounded bg-emerald-500 text-black text-[9px] font-black">VOCÊ</span>` : ''}
+                            </div>
+                            <span class="font-mono text-[10px] text-zinc-400 block truncate">${player.handle} • ${player.greens} greens</span>
+                        </div>
+                    </div>
+
+                    <div class="text-right shrink-0">
+                        <span class="font-mono text-xs font-black ${player.isCurrentUser ? 'text-emerald-400' : 'text-zinc-200'}">
+                            RC$ ${formatRC(player.balance)}
+                        </span>
+                    </div>
+                </div>
+                `;
+            }).join('');
+        }
+
+        function renderChat() {
+            const container = document.getElementById('chatMessagesContainer');
+            container.innerHTML = state.chat.map(msg => `
+                <div class="p-2.5 rounded-xl bg-pitch-950 border border-white/[0.06] text-xs space-y-0.5">
+                    <div class="flex items-center justify-between">
+                        <span class="font-mono text-[10px] font-bold text-emerald-400">${msg.user}</span>
+                        <span class="text-[10px] text-zinc-500">${msg.time}</span>
+                    </div>
+                    <p class="text-zinc-300 leading-snug">${msg.text}</p>
+                </div>
+            `).join('');
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function sendChatMessage(e) {
+            e.preventDefault();
+            const input = document.getElementById('chatInput');
+            const text = input.value.trim();
+            if (!text) return;
+
+            state.chat.push({
+                user: state.userHandle,
+                text,
+                time: 'agora'
+            });
+            input.value = '';
+            saveState();
+            renderChat();
+        }
+
+        // =====================================================================
+        // RECARGA PATROCINADA (+RC$ 500 COM CONTAGEM DE 5 SEGUNDOS)
+        // =====================================================================
+        function openSponsoredRechargeModal() {
+            const modal = document.getElementById('sponsoredRechargeModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+
+            const btn = document.getElementById('claimCoinsBtn');
+            const bar = document.getElementById('adProgressBar');
+            const secEl = document.getElementById('adTimerSeconds');
+            const labelEl = document.getElementById('adTimerLabel');
+
+            let secondsLeft = 5;
+            btn.disabled = true;
+            btn.className = 'w-full py-3.5 px-4 rounded-xl bg-zinc-800 text-zinc-500 font-black text-sm flex items-center justify-center gap-2 cursor-not-allowed';
+            btn.innerHTML = `<i class="fa-solid fa-hourglass-half"></i> <span>Aguardando Anúncio (${secondsLeft}s)...</span>`;
+            bar.style.width = '0%';
+            secEl.textContent = `${secondsLeft}s`;
+            labelEl.textContent = 'Aguarde 5s para liberar suas moedas...';
+
+            clearInterval(adInterval);
+            adInterval = setInterval(() => {
+                secondsLeft -= 1;
+                const pct = ((5 - secondsLeft) / 5) * 100;
+                bar.style.width = `${pct}%`;
+                secEl.textContent = `${Math.max(0, secondsLeft)}s`;
+
+                if (secondsLeft > 0) {
+                    btn.innerHTML = `<i class="fa-solid fa-hourglass-half"></i> <span>Aguardando Anúncio (${secondsLeft}s)...</span>`;
+                } else {
+                    clearInterval(adInterval);
+                    labelEl.textContent = 'Anúncio concluído! Resgate suas moedas:';
+                    btn.disabled = false;
+                    btn.className = 'w-full py-3.5 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-black text-sm shadow-lg shadow-emerald-500/25 flex items-center justify-center gap-2 transition cursor-pointer';
+                    btn.innerHTML = `<i class="fa-solid fa-coins"></i> <span>Resgatar +RC$ 500,00 Agora</span>`;
+                }
+            }, 1000);
+        }
+
+        function closeSponsoredRechargeModal() {
+            clearInterval(adInterval);
+            const modal = document.getElementById('sponsoredRechargeModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function claimSponsoredCoins() {
+            state.balance += 500;
+            saveState();
+            renderAll();
+            closeSponsoredRechargeModal();
+            showToast('💰 +RC$ 500,00 adicionados à sua banca grátis!');
+        }
+
+        // =====================================================================
+        // MODAIS AUXILIARES & NAVEGAÇÃO
+        // =====================================================================
+        function switchMainView(view) {
+            const viewGames = document.getElementById('viewGames');
+            const viewTickets = document.getElementById('viewTickets');
+
+            if (view === 'games') {
+                viewGames.classList.remove('hidden');
+                viewTickets.classList.add('hidden');
+
+                document.getElementById('nav-games').className = 'main-nav-btn px-3.5 py-1.5 rounded-lg text-xs font-extrabold bg-emerald-500 text-black transition';
+                document.getElementById('nav-tickets').className = 'main-nav-btn px-3.5 py-1.5 rounded-lg text-xs font-bold text-zinc-400 hover:text-white transition flex items-center gap-1.5';
+
+                document.getElementById('m-nav-games').className = 'px-2.5 py-1 rounded-lg text-[11px] font-extrabold bg-emerald-500 text-black';
+                document.getElementById('m-nav-tickets').className = 'px-2.5 py-1 rounded-lg text-[11px] font-bold text-zinc-400 flex items-center gap-1';
+            } else {
+                viewGames.classList.add('hidden');
+                viewTickets.classList.remove('hidden');
+
+                document.getElementById('nav-tickets').className = 'main-nav-btn px-3.5 py-1.5 rounded-lg text-xs font-extrabold bg-emerald-500 text-black transition flex items-center gap-1.5';
+                document.getElementById('nav-games').className = 'main-nav-btn px-3.5 py-1.5 rounded-lg text-xs font-bold text-zinc-400 hover:text-white transition';
+
+                document.getElementById('m-nav-tickets').className = 'px-2.5 py-1 rounded-lg text-[11px] font-extrabold bg-emerald-500 text-black flex items-center gap-1';
+                document.getElementById('m-nav-games').className = 'px-2.5 py-1 rounded-lg text-[11px] font-bold text-zinc-400';
+            }
+        }
+
+        function openMobileSlipDrawer() {
+            const modal = document.getElementById('mobileSlipModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeMobileSlipDrawer() {
+            const modal = document.getElementById('mobileSlipModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function openMediaKitModal() {
+            const modal = document.getElementById('mediaKitModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeMediaKitModal() {
+            const modal = document.getElementById('mediaKitModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function copyCommercialEmail() {
+            const temp = document.createElement('input');
+            temp.value = 'comercial@resenhabet.com.br';
+            document.body.appendChild(temp);
+            temp.select();
+            try {
+                document.execCommand('copy');
+                showToast('📧 E-mail comercial@resenhabet.com.br copiado!');
+            } catch (e) {
+                showToast('Contato: comercial@resenhabet.com.br');
+            }
+            document.body.removeChild(temp);
+        }
+
+        function openProfileEditModal() {
+            document.getElementById('inpUserName').value = state.userName;
+            document.getElementById('inpUserHandle').value = state.userHandle;
+            const modal = document.getElementById('profileEditModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeProfileEditModal() {
+            const modal = document.getElementById('profileEditModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function saveUserProfile(e) {
+            e.preventDefault();
+            const name = document.getElementById('inpUserName').value.trim();
+            let handle = document.getElementById('inpUserHandle').value.trim();
+            if (!handle.startsWith('@')) handle = '@' + handle;
+
+            state.userName = name || 'Você (Tipster)';
+            state.userHandle = handle || '@voce.resenha';
+            saveState();
+            renderRanking();
+            closeProfileEditModal();
+            showToast('✅ Perfil atualizado no Ranking!');
+        }
+
+        function showToast(message) {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = 'px-4 py-3 rounded-2xl bg-pitch-850 border border-emerald-500/40 text-white text-xs font-bold shadow-2xl flex items-center gap-2.5 animate-slide-up';
+            toast.innerHTML = `
+                <span class="w-2 h-2 rounded-full bg-emerald-500 shrink-0"></span>
+                <span>${message}</span>
+            `;
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(8px)';
+                toast.style.transition = 'all 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 3200);
+        }
+
+        // =====================================================================
+        // INICIALIZAÇÃO + SPLASH SCREEN DE 2 SEGUNDOS
+        // =====================================================================
+        window.addEventListener('DOMContentLoaded', () => {
+            loadState();
+            renderAll();
+
+            // Anima barra de progresso do splash e oculta após 2 segundos
+            setTimeout(() => {
+                const bar = document.getElementById('splashProgressBar');
+                if (bar) bar.style.width = '100%';
+            }, 50);
+
+            setTimeout(() => {
+                const splash = document.getElementById('splashScreen');
+                if (splash) splash.classList.add('splash-hidden');
+            }, 2000);
+        });
+    </script>
+</body>
+</html>
