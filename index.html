@@ -54,7 +54,7 @@
       </div>
       <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-emerald-400">
         <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-        Carregando jogos reais...
+        Carregando partidas reais...
       </div>
     </div>
   </div>
@@ -85,7 +85,7 @@
             <h1 class="font-black text-lg sm:text-xl tracking-tight text-white leading-none">RESENHA <span class="text-amber-400">BET</span></h1>
             <span class="hidden sm:inline-block text-[10px] font-bold uppercase px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">Free-to-Play</span>
           </div>
-          <p class="text-[11px] text-gray-400 mt-0.5">Palpites grátis • Jogos & placares reais</p>
+          <p class="text-[11px] text-gray-400 mt-0.5">Palpites grátis • Jogos & resultados reais</p>
         </div>
       </div>
 
@@ -132,15 +132,18 @@
           <div class="space-y-1">
             <div class="flex items-center gap-2">
               <span class="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded bg-white/10 text-gray-300">Publicidade • Cota Ouro</span>
-              <span id="espn-sync-status" class="text-[11px] text-emerald-400 font-semibold">● Conectando Proxy Vercel...</span>
+              <span id="api-sync-status" class="text-[11px] text-emerald-400 font-semibold">● Conectando TheSportsDB...</span>
             </div>
             <h2 class="text-base sm:text-lg font-extrabold text-white">Palpite sem arriscar seu bolso e concorra a prêmios reais toda semana!</h2>
-            <p class="text-xs text-gray-300">Placares oficiais atualizados via servidor Vercel. Acumule Resenha Coins (RC$) e suba no ranking.</p>
+            <p class="text-xs text-gray-300">Calendário oficial e resultados reais sincronizados automaticamente. Acumule RC$ e lidere a liga.</p>
           </div>
           <div class="flex items-center gap-2 shrink-0">
-            <button onclick="fetchMatchesFromProxy(true)" id="btn-sync-espn" class="bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold text-xs px-4 py-2.5 rounded-xl transition flex items-center gap-1.5 shadow-lg shadow-emerald-500/20">
+            <button onclick="openApiConfigModal()" class="bg-gray-800 hover:bg-gray-700 text-gray-200 font-bold text-xs px-3 py-2.5 rounded-xl border border-gray-700 transition" title="Configurar chave Football-Data.org (opcional)">
+              API Key
+            </button>
+            <button onclick="loadRealMatches(true)" id="btn-sync-api" class="bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold text-xs px-4 py-2.5 rounded-xl transition flex items-center gap-1.5 shadow-lg shadow-emerald-500/20">
               <svg id="sync-icon" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-              <span>Atualizar Jogos</span>
+              <span>Atualizar</span>
             </button>
           </div>
         </div>
@@ -150,12 +153,11 @@
           <div class="flex flex-wrap items-center justify-between gap-3">
             <div id="league-filters" class="flex items-center gap-2 overflow-x-auto pb-1">
               <button onclick="setLeagueFilter('ALL')" data-league="ALL" class="league-pill px-3.5 py-1.5 rounded-full text-xs font-bold bg-emerald-500 text-black whitespace-nowrap">Todos os Jogos</button>
-              <button onclick="setLeagueFilter('bra.1')" data-league="bra.1" class="league-pill px-3.5 py-1.5 rounded-full text-xs font-semibold bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700 whitespace-nowrap">Brasileirão A</button>
-              <button onclick="setLeagueFilter('bra.2')" data-league="bra.2" class="league-pill px-3.5 py-1.5 rounded-full text-xs font-semibold bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700 whitespace-nowrap">Brasileirão B</button>
-              <button onclick="setLeagueFilter('conmebol.libertadores')" data-league="conmebol.libertadores" class="league-pill px-3.5 py-1.5 rounded-full text-xs font-semibold bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700 whitespace-nowrap">Libertadores</button>
-              <button onclick="setLeagueFilter('uefa.champions')" data-league="uefa.champions" class="league-pill px-3.5 py-1.5 rounded-full text-xs font-semibold bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700 whitespace-nowrap">Champions</button>
-              <button onclick="setLeagueFilter('eng.1')" data-league="eng.1" class="league-pill px-3.5 py-1.5 rounded-full text-xs font-semibold bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700 whitespace-nowrap">Premier League</button>
-              <button onclick="setLeagueFilter('esp.1')" data-league="esp.1" class="league-pill px-3.5 py-1.5 rounded-full text-xs font-semibold bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700 whitespace-nowrap">La Liga</button>
+              <button onclick="setLeagueFilter('4351')" data-league="4351" class="league-pill px-3.5 py-1.5 rounded-full text-xs font-semibold bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700 whitespace-nowrap">Brasileirão Série A</button>
+              <button onclick="setLeagueFilter('4328')" data-league="4328" class="league-pill px-3.5 py-1.5 rounded-full text-xs font-semibold bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700 whitespace-nowrap">Premier League</button>
+              <button onclick="setLeagueFilter('4335')" data-league="4335" class="league-pill px-3.5 py-1.5 rounded-full text-xs font-semibold bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700 whitespace-nowrap">La Liga</button>
+              <button onclick="setLeagueFilter('4332')" data-league="4332" class="league-pill px-3.5 py-1.5 rounded-full text-xs font-semibold bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700 whitespace-nowrap">Serie A Italiana</button>
+              <button onclick="setLeagueFilter('4480')" data-league="4480" class="league-pill px-3.5 py-1.5 rounded-full text-xs font-semibold bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700 whitespace-nowrap">Champions League</button>
             </div>
           </div>
 
@@ -166,7 +168,7 @@
         <section id="tab-bilhetes" class="hidden space-y-4">
           <div class="flex items-center justify-between">
             <h2 class="text-lg font-extrabold text-white">Histórico de Bilhetes</h2>
-            <span class="text-xs text-gray-400">Liquidação automática pelo placar real</span>
+            <span class="text-xs text-gray-400">Liquidação automática pelo placar oficial</span>
           </div>
           <div id="tickets-container" class="space-y-3"></div>
         </section>
@@ -261,6 +263,25 @@
     </div>
   </main>
 
+  <!-- MODAL: CONFIGURAR API KEY (FOOTBALL-DATA.ORG OPCIONAL) -->
+  <div id="apiconfig-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-gray-900 border border-gray-800 rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
+      <div class="flex items-center justify-between">
+        <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded bg-emerald-500/15 text-emerald-400">Fonte de Dados Reais</span>
+        <button onclick="closeApiConfigModal()" class="text-gray-400 hover:text-white text-lg font-bold">✕</button>
+      </div>
+      <h3 class="text-lg font-black text-white">Chave Football-Data.org (Opcional)</h3>
+      <p class="text-xs text-gray-300 leading-relaxed">
+        Por padrão, o portal já busca os jogos e placares gratuitamente via <strong>TheSportsDB</strong>. Se quiser dados em tempo real minuto a minuto, cole abaixo sua chave gratuita de <a href="https://www.football-data.org/client/register" target="_blank" rel="noopener noreferrer" class="text-emerald-400 underline">football-data.org</a>:
+      </p>
+      <input id="fd-api-key-input" type="text" placeholder="Ex: 8f9a2b3c4d5e6f7a8b9c0d1e2f3a4b5c" class="w-full bg-gray-950 border border-gray-700 focus:border-emerald-500 rounded-xl px-3 py-2.5 text-xs text-white outline-none" />
+      <div class="flex gap-2">
+        <button onclick="saveFootballDataKey()" class="flex-1 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-black text-xs transition">Salvar e Sincronizar</button>
+        <button onclick="clearFootballDataKey()" class="px-3 py-2.5 rounded-xl bg-gray-800 hover:bg-gray-700 text-xs font-bold text-gray-300">Usar Padrão</button>
+      </div>
+    </div>
+  </div>
+
   <!-- MODAL: RECARGA PATROCINADA -->
   <div id="recharge-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-gray-900 border border-gray-800 rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
@@ -292,7 +313,7 @@
       </div>
       <h3 class="text-xl font-black text-white">Anuncie na Resenha Bet</h3>
       <p class="text-xs text-gray-300 leading-relaxed">
-        Somos uma plataforma 100% gratuita de entretenimento e palpites esportivos com dados ao vivo. Sem bloqueios de anúncios e com alta retenção diária.
+        Somos uma plataforma 100% gratuita de entretenimento e palpites esportivos com dados reais. Sem bloqueios de anúncios e com alta retenção diária.
       </p>
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-left">
         <div class="p-3 rounded-xl bg-gray-950 border border-gray-800">
@@ -339,9 +360,19 @@
   </footer>
 
   <script>
+    // Ligas oficiais no TheSportsDB (CORS liberado no navegador!)
+    const TSDB_LEAGUES = [
+      { id: '4351', fdCode: 'BSA', name: 'Brasileirão Série A' },
+      { id: '4328', fdCode: 'PL',  name: 'Premier League' },
+      { id: '4335', fdCode: 'PD',  name: 'La Liga' },
+      { id: '4332', fdCode: 'SA',  name: 'Serie A Italiana' },
+      { id: '4480', fdCode: 'CL',  name: 'Champions League' }
+    ];
+
     let state = {
       balance: parseFloat(localStorage.getItem('rb_balance')) || 1000.00,
       tickets: JSON.parse(localStorage.getItem('rb_tickets')) || [],
+      fdApiKey: localStorage.getItem('rb_fd_apikey') || '',
       slip: [],
       matches: [],
       activeLeague: 'ALL'
@@ -350,12 +381,13 @@
     window.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => {
         document.getElementById('splash-screen').classList.add('splash-hidden');
-      }, 1800);
+      }, 1600);
 
+      document.getElementById('fd-api-key-input').value = state.fdApiKey;
       updateBalanceUI();
       renderTickets();
       renderRanking();
-      fetchMatchesFromProxy(false);
+      loadRealMatches(false);
     });
 
     function saveState() {
@@ -381,62 +413,169 @@
       document.getElementById('mbadge-bilhetes').textContent = state.tickets.length;
     }
 
+    function computeDeterministicOdds(eventId, homeName, awayName) {
+      const str = `${eventId}-${homeName}-${awayName}`;
+      let hash = 0;
+      for (let i = 0; i < str.length; i++) {
+        hash = ((hash << 5) - hash) + str.charCodeAt(i);
+        hash |= 0;
+      }
+      const abs = Math.abs(hash);
+      const odd1 = Number((1.55 + (abs % 210) / 100).toFixed(2));
+      const oddX = Number((2.95 + ((abs >> 3) % 95) / 100).toFixed(2));
+      const odd2 = Number((1.75 + ((abs >> 5) % 260) / 100).toFixed(2));
+      return { home: odd1, draw: oddX, away: odd2 };
+    }
+
     // =========================================================
-    // CONEXÃO VIA VERCEL SERVERLESS PROXY (/api/jogos)
+    // BUSCA DE JOGOS REAIS (THESPORTSDB DIRETO NO BROWSER + OPTIONAL FOOTBALL-DATA)
     // =========================================================
-    async function fetchMatchesFromProxy(manual = false) {
+    async function loadRealMatches(manual = false) {
       const container = document.getElementById('matches-container');
-      const statusEl = document.getElementById('espn-sync-status');
+      const statusEl = document.getElementById('api-sync-status');
       const icon = document.getElementById('sync-icon');
 
       if (manual) icon.classList.add('animate-spin');
-      statusEl.textContent = '● Sincronizando jogos via Vercel...';
+      statusEl.textContent = '● Sincronizando jogos reais...';
 
       if (state.matches.length === 0) {
         container.innerHTML = `
           <div class="bg-gray-900 border border-gray-800 rounded-2xl p-8 text-center space-y-2">
             <div class="w-8 h-8 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
-            <p class="text-sm font-bold text-white">Buscando jogos e placares reais...</p>
-            <p class="text-xs text-gray-400">Conectando ao servidor Vercel (/api/jogos)</p>
+            <p class="text-sm font-bold text-white">Buscando jogos reais...</p>
+            <p class="text-xs text-gray-400">Brasileirão, Premier League, La Liga, Serie A e Champions</p>
           </div>`;
       }
 
-      try {
-        const res = await fetch('/api/jogos');
-        if (!res.ok) throw new Error('Rota /api/jogos indisponível neste ambiente');
+      let loaded = [];
 
-        const data = await res.json();
-        if (!data.ok || !Array.isArray(data.matches)) {
-          throw new Error(data.error || 'Resposta inválida do servidor');
+      // 1) Se o usuário cadastrou uma chave Football-Data.org, usa ela primeiro
+      if (state.fdApiKey.trim()) {
+        loaded = await fetchFromFootballData(state.fdApiKey.trim());
+      }
+
+      // 2) Fallback ou padrão principal: TheSportsDB (funciona direto no navegador sem CORS!)
+      if (loaded.length === 0) {
+        loaded = await fetchFromTheSportsDB();
+      }
+
+      state.matches = loaded;
+      settleTicketsWithRealScores();
+      renderMatches();
+
+      const nowStr = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+      const sourceLabel = state.fdApiKey.trim() && loaded.length > 0 ? 'Football-Data' : 'TheSportsDB';
+      statusEl.textContent = `● ${sourceLabel} (${state.matches.length} jogos • ${nowStr})`;
+
+      if (manual) {
+        icon.classList.remove('animate-spin');
+        showToast(`${state.matches.length} jogos reais sincronizados!`);
+      }
+    }
+
+    async function fetchFromTheSportsDB() {
+      const all = [];
+      const seenIds = new Set();
+
+      await Promise.all(TSDB_LEAGUES.map(async (lg) => {
+        try {
+          // Busca próximos jogos e últimos resultados reais da liga
+          const [nextRes, pastRes] = await Promise.all([
+            fetch(`https://www.thesportsdb.com/api/v1/json/3/eventsnextleague.php?id=${lg.id}`),
+            fetch(`https://www.thesportsdb.com/api/v1/json/3/eventspastleague.php?id=${lg.id}`)
+          ]);
+
+          const nextData = nextRes.ok ? await nextRes.json() : { events: [] };
+          const pastData = pastRes.ok ? await pastRes.json() : { events: [] };
+
+          const nextEvents = (nextData.events || []).slice(0, 10);
+          const pastEvents = (pastData.events || []).slice(0, 5);
+
+          [...nextEvents, ...pastEvents].forEach(ev => {
+            if (!ev || !ev.idEvent || seenIds.has(ev.idEvent)) return;
+            seenIds.add(ev.idEvent);
+
+            const hasScore = ev.intHomeScore !== null && ev.intAwayScore !== null && ev.intHomeScore !== '' && ev.intAwayScore !== '';
+            const statusStr = (ev.strStatus || '').toUpperCase();
+            let status = 'pre';
+            if (statusStr.includes('LIVE') || statusStr.includes('1H') || statusStr.includes('2H') || statusStr === 'HT') {
+              status = 'in';
+            } else if (hasScore || statusStr === 'FT' || statusStr === 'MATCH FINISHED' || statusStr === 'AET') {
+              status = 'post';
+            }
+
+            const isoDate = ev.strTimestamp
+              ? (ev.strTimestamp.endsWith('Z') ? ev.strTimestamp : ev.strTimestamp + 'Z')
+              : `${ev.dateEvent}T${ev.strTime || '19:00:00'}Z`;
+
+            all.push({
+              id: String(ev.idEvent),
+              leagueCode: lg.id,
+              leagueName: lg.name,
+              date: isoDate,
+              status,
+              statusDetail: ev.strStatus || '',
+              homeName: ev.strHomeTeam || 'Casa',
+              homeLogo: ev.strHomeTeamBadge ? `${ev.strHomeTeamBadge}/tiny` : '',
+              homeScore: hasScore ? parseInt(ev.intHomeScore, 10) : 0,
+              awayName: ev.strAwayTeam || 'Fora',
+              awayLogo: ev.strAwayTeamBadge ? `${ev.strAwayTeamBadge}/tiny` : '',
+              awayScore: hasScore ? parseInt(ev.intAwayScore, 10) : 0,
+              odds: computeDeterministicOdds(ev.idEvent, ev.strHomeTeam, ev.strAwayTeam)
+            });
+          });
+        } catch (e) {
+          console.warn('Erro TheSportsDB liga', lg.id, e);
         }
+      }));
 
-        state.matches = data.matches;
-        settleTicketsWithRealScores();
-        renderMatches();
+      const weight = { in: 0, pre: 1, post: 2 };
+      all.sort((a, b) => {
+        if (weight[a.status] !== weight[b.status]) return weight[a.status] - weight[b.status];
+        if (a.status === 'post') return new Date(b.date) - new Date(a.date);
+        return new Date(a.date) - new Date(b.date);
+      });
 
-        const nowStr = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-        statusEl.textContent = `● Ao Vivo Vercel (${state.matches.length} jogos • ${nowStr})`;
-        if (manual) showToast(`${state.matches.length} jogos reais atualizados!`);
-      } catch (err) {
-        console.warn('Aviso Proxy Vercel:', err.message);
-        statusEl.textContent = '● Aguardando deploy na Vercel (/api/jogos)';
-        container.innerHTML = `
-          <div class="bg-gray-900 border border-amber-500/30 rounded-2xl p-6 text-center space-y-3">
-            <div class="inline-block px-3 py-1 rounded-full bg-amber-400/15 text-amber-300 text-xs font-bold">
-              Rota /api/jogos não encontrada localmente
-            </div>
-            <h3 class="text-base font-extrabold text-white">Publique na Vercel para ativar os jogos reais</h3>
-            <p class="text-xs text-gray-400 max-w-md mx-auto leading-relaxed">
-              Para evitar o bloqueio de CORS do navegador, a busca da ESPN roda dentro da função serverless <code class="text-emerald-400">api/jogos.js</code> na Vercel. Assim que fizer o deploy no GitHub + Vercel, os jogos reais aparecem aqui automaticamente.
-            </p>
-          </div>`;
-      } finally {
-        if (manual) icon.classList.remove('animate-spin');
+      return all;
+    }
+
+    async function fetchFromFootballData(apiKey) {
+      try {
+        const res = await fetch('https://api.football-data.org/v4/matches', {
+          headers: { 'X-Auth-Token': apiKey }
+        });
+        if (!res.ok) return [];
+        const data = await res.json();
+        const codeMap = { BSA: '4351', PL: '4328', PD: '4335', SA: '4332', CL: '4480' };
+
+        return (data.matches || []).map(m => {
+          let status = 'pre';
+          if (m.status === 'IN_PLAY' || m.status === 'PAUSED') status = 'in';
+          else if (m.status === 'FINISHED') status = 'post';
+
+          return {
+            id: String(m.id),
+            leagueCode: codeMap[m.competition?.code] || 'ALL',
+            leagueName: m.competition?.name || 'Futebol',
+            date: m.utcDate,
+            status,
+            statusDetail: m.status,
+            homeName: m.homeTeam?.shortName || m.homeTeam?.name || 'Casa',
+            homeLogo: m.homeTeam?.crest || '',
+            homeScore: m.score?.fullTime?.home ?? 0,
+            awayName: m.awayTeam?.shortName || m.awayTeam?.name || 'Fora',
+            awayLogo: m.awayTeam?.crest || '',
+            awayScore: m.score?.fullTime?.away ?? 0,
+            odds: computeDeterministicOdds(m.id, m.homeTeam?.name, m.awayTeam?.name)
+          };
+        });
+      } catch {
+        return [];
       }
     }
 
     // =========================================================
-    // LIQUIDAÇÃO AUTOMÁTICA PELO PLACAR REAL
+    // LIQUIDAÇÃO AUTOMÁTICA BASEADA NO PLACAR REAL
     // =========================================================
     function settleTicketsWithRealScores() {
       if (!state.tickets.length || !state.matches.length) return;
@@ -504,6 +643,7 @@
 
     function formatMatchDate(isoDate) {
       const d = new Date(isoDate);
+      if (isNaN(d.getTime())) return 'Em breve';
       const today = new Date();
       const isToday = d.toDateString() === today.toDateString();
       const time = d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
@@ -521,7 +661,7 @@
       if (filtered.length === 0) {
         container.innerHTML = `
           <div class="bg-gray-900 border border-gray-800 rounded-2xl p-8 text-center space-y-2">
-            <p class="text-sm font-bold text-gray-300">Nenhuma partida agendada neste campeonato para esta janela.</p>
+            <p class="text-sm font-bold text-gray-300">Nenhuma partida carregada neste filtro no momento.</p>
             <button onclick="setLeagueFilter('ALL')" class="text-xs font-bold text-emerald-400 underline">Ver todos os campeonatos</button>
           </div>`;
         return;
@@ -538,7 +678,7 @@
 
         let statusBadge = `<span class="text-[11px] font-semibold text-gray-400">${formatMatchDate(m.date)}</span>`;
         if (isLive) {
-          statusBadge = `<span class="inline-flex items-center gap-1.5 text-[11px] font-black text-red-400 bg-red-500/10 border border-red-500/30 px-2 py-0.5 rounded-full"><span class="w-1.5 h-1.5 rounded-full bg-red-500 live-dot"></span>AO VIVO ${m.statusDetail}</span>`;
+          statusBadge = `<span class="inline-flex items-center gap-1.5 text-[11px] font-black text-red-400 bg-red-500/10 border border-red-500/30 px-2 py-0.5 rounded-full"><span class="w-1.5 h-1.5 rounded-full bg-red-500 live-dot"></span>AO VIVO</span>`;
         } else if (isPost) {
           statusBadge = `<span class="text-[11px] font-bold text-gray-400 bg-gray-800 px-2 py-0.5 rounded">ENCERRADO</span>`;
         }
@@ -554,14 +694,14 @@
               <div class="md:col-span-6 space-y-2">
                 <div class="flex items-center justify-between">
                   <div class="flex items-center gap-2.5 min-w-0">
-                    <img src="${m.homeLogo}" alt="" class="w-6 h-6 object-contain shrink-0" onerror="this.style.display='none'" />
+                    ${m.homeLogo ? `<img src="${m.homeLogo}" alt="" class="w-6 h-6 object-contain shrink-0" onerror="this.style.display='none'" />` : ''}
                     <span class="font-bold text-sm text-white truncate">${m.homeName}</span>
                   </div>
                   ${(isLive || isPost) ? `<span class="font-black text-base ${isLive ? 'text-amber-400' : 'text-white'} tabular-nums">${m.homeScore}</span>` : ''}
                 </div>
                 <div class="flex items-center justify-between">
                   <div class="flex items-center gap-2.5 min-w-0">
-                    <img src="${m.awayLogo}" alt="" class="w-6 h-6 object-contain shrink-0" onerror="this.style.display='none'" />
+                    ${m.awayLogo ? `<img src="${m.awayLogo}" alt="" class="w-6 h-6 object-contain shrink-0" onerror="this.style.display='none'" />` : ''}
                     <span class="font-bold text-sm text-white truncate">${m.awayName}</span>
                   </div>
                   ${(isLive || isPost) ? `<span class="font-black text-base ${isLive ? 'text-amber-400' : 'text-white'} tabular-nums">${m.awayScore}</span>` : ''}
@@ -817,6 +957,27 @@
         }
       });
       if (tab === 'ranking') renderRanking();
+    }
+
+    function openApiConfigModal() {
+      document.getElementById('apiconfig-modal').classList.remove('hidden');
+    }
+    function closeApiConfigModal() {
+      document.getElementById('apiconfig-modal').classList.add('hidden');
+    }
+    function saveFootballDataKey() {
+      const val = document.getElementById('fd-api-key-input').value.trim();
+      state.fdApiKey = val;
+      localStorage.setItem('rb_fd_apikey', val);
+      closeApiConfigModal();
+      loadRealMatches(true);
+    }
+    function clearFootballDataKey() {
+      state.fdApiKey = '';
+      document.getElementById('fd-api-key-input').value = '';
+      localStorage.removeItem('rb_fd_apikey');
+      closeApiConfigModal();
+      loadRealMatches(true);
     }
 
     let rechargeTimer = null;
