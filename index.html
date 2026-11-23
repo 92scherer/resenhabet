@@ -39,17 +39,17 @@
 </head>
 <body class="min-h-screen flex flex-col justify-between antialiased selection:bg-emerald-500 selection:text-black">
 
-  <!-- SPLASH SCREEN -->
+  <!-- SPLASH SCREEN (LOGO AMPLIADO) -->
   <div id="splash-screen" class="fixed inset-0 z-50 bg-[#05080f] flex flex-col items-center justify-center p-6">
     <div class="relative flex flex-col items-center">
-      <div class="w-36 h-36 sm:w-44 sm:h-44 rounded-3xl bg-gradient-to-br from-emerald-500/20 to-amber-400/10 border border-emerald-500/30 flex items-center justify-center shadow-2xl shadow-emerald-500/20 mb-5 overflow-hidden p-3">
+      <div class="w-56 h-56 sm:w-72 sm:h-72 rounded-3xl bg-gradient-to-br from-emerald-500/20 to-amber-400/10 border border-emerald-500/30 flex items-center justify-center shadow-2xl shadow-emerald-500/20 mb-6 overflow-hidden p-1.5">
         <img src="logo.png" alt="Resenha Bet" class="w-full h-full object-contain" onerror="this.style.display='none'; document.getElementById('splash-fallback-svg').classList.remove('hidden');" />
         <div id="splash-fallback-svg" class="hidden flex flex-col items-center justify-center text-center">
-          <svg class="w-16 h-16 text-emerald-400 mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg class="w-24 h-24 text-emerald-400 mb-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <circle cx="12" cy="12" r="10"/>
             <path d="M12 6l3 4.5-1.5 4.5h-3L9 10.5 12 6z"/>
           </svg>
-          <span class="font-black text-lg tracking-tight text-white">RESENHA <span class="text-amber-400">BET</span></span>
+          <span class="font-black text-2xl tracking-tight text-white">RESENHA <span class="text-amber-400">BET</span></span>
         </div>
       </div>
       <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-emerald-400">
@@ -72,20 +72,20 @@
     </div>
   </div>
 
-  <!-- HEADER PRINCIPAL -->
+  <!-- HEADER PRINCIPAL (LOGO AMPLIADO) -->
   <header class="sticky top-0 z-30 bg-[#090d16]/95 backdrop-blur-md border-b border-gray-800">
-    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
-      <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('jogos')">
-        <div class="w-11 h-11 rounded-xl bg-gray-900 border border-emerald-500/40 flex items-center justify-center overflow-hidden p-1 shrink-0">
+    <div class="max-w-7xl mx-auto px-4 py-2.5 flex items-center justify-between gap-3">
+      <div class="flex items-center gap-3.5 cursor-pointer" onclick="switchTab('jogos')">
+        <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gray-900 border border-emerald-500/40 flex items-center justify-center overflow-hidden p-0.5 shrink-0 shadow-lg shadow-emerald-500/10">
           <img src="logo.png" alt="Logo" class="w-full h-full object-contain" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');" />
-          <span class="hidden font-black text-emerald-400 text-sm">RB</span>
+          <span class="hidden font-black text-emerald-400 text-lg">RB</span>
         </div>
         <div>
           <div class="flex items-center gap-1.5">
-            <h1 class="font-black text-lg sm:text-xl tracking-tight text-white leading-none">RESENHA <span class="text-amber-400">BET</span></h1>
+            <h1 class="font-black text-xl sm:text-2xl tracking-tight text-white leading-none">RESENHA <span class="text-amber-400">BET</span></h1>
             <span class="hidden sm:inline-block text-[10px] font-bold uppercase px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">Free-to-Play</span>
           </div>
-          <p class="text-[11px] text-gray-400 mt-0.5">Palpites grátis • Jogos & resultados reais</p>
+          <p class="text-[11px] sm:text-xs text-gray-400 mt-1">Palpites grátis • Jogos & resultados reais</p>
         </div>
       </div>
 
@@ -193,7 +193,7 @@
       </div>
 
       <!-- COLUNA DIREITA: BOLETIM DE PALPITES + ESPAÇO PATROCINADOR -->
-      <aside class="lg:col-span-4 space-y-5 lg:sticky lg:top-24">
+      <aside class="lg:col-span-4 space-y-5 lg:sticky lg:top-28">
 
         <div class="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-xl">
           <div class="bg-gray-950 px-4 py-3.5 border-b border-gray-800 flex items-center justify-between">
@@ -380,7 +380,7 @@
     window.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => {
         document.getElementById('splash-screen').classList.add('splash-hidden');
-      }, 1400);
+      }, 1600);
 
       const keyInput = document.getElementById('fd-api-key-input');
       if (keyInput) keyInput.value = state.fdApiKey;
