@@ -272,7 +272,7 @@
       </div>
       <h3 class="text-lg font-black text-white">Chave Football-Data.org (Opcional)</h3>
       <p class="text-xs text-gray-300 leading-relaxed">
-        Por padrão, o portal já busca os jogos e placares gratuitamente via <strong>TheSportsDB</strong>. Se quiser dados em tempo real minuto a minuto, cole abaixo sua chave gratuita de <a href="https://www.football-data.org/client/register" target="_blank" rel="noopener noreferrer" class="text-emerald-400 underline">football-data.org</a>:
+        Por padrão, o portal busca os jogos e placares gratuitamente via <strong>TheSportsDB</strong>. Se quiser dados em tempo real minuto a minuto, cole abaixo sua chave gratuita de <a href="https://www.football-data.org/client/register" target="_blank" rel="noopener noreferrer" class="text-emerald-400 underline">football-data.org</a>:
       </p>
       <input id="fd-api-key-input" type="text" placeholder="Ex: 8f9a2b3c4d5e6f7a8b9c0d1e2f3a4b5c" class="w-full bg-gray-950 border border-gray-700 focus:border-emerald-500 rounded-xl px-3 py-2.5 text-xs text-white outline-none" />
       <div class="flex gap-2">
@@ -360,13 +360,12 @@
   </footer>
 
   <script>
-    // Ligas oficiais no TheSportsDB (CORS liberado no navegador!)
     const TSDB_LEAGUES = [
-      { id: '4351', fdCode: 'BSA', name: 'Brasileirão Série A' },
-      { id: '4328', fdCode: 'PL',  name: 'Premier League' },
-      { id: '4335', fdCode: 'PD',  name: 'La Liga' },
-      { id: '4332', fdCode: 'SA',  name: 'Serie A Italiana' },
-      { id: '4480', fdCode: 'CL',  name: 'Champions League' }
+      { id: '4351', name: 'Brasileirão Série A' },
+      { id: '4328', name: 'Premier League' },
+      { id: '4335', name: 'La Liga' },
+      { id: '4332', name: 'Serie A Italiana' },
+      { id: '4480', name: 'Champions League' }
     ];
 
     let state = {
@@ -381,9 +380,10 @@
     window.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => {
         document.getElementById('splash-screen').classList.add('splash-hidden');
-      }, 1600);
+      }, 1400);
 
-      document.getElementById('fd-api-key-input').value = state.fdApiKey;
+      const keyInput = document.getElementById('fd-api-key-input');
+      if (keyInput) keyInput.value = state.fdApiKey;
       updateBalanceUI();
       renderTickets();
       renderRanking();
@@ -421,42 +421,43 @@
         hash |= 0;
       }
       const abs = Math.abs(hash);
-      const odd1 = Number((1.55 + (abs % 210) / 100).toFixed(2));
-      const oddX = Number((2.95 + ((abs >> 3) % 95) / 100).toFixed(2));
-      const odd2 = Number((1.75 + ((abs >> 5) % 260) / 100).toFixed(2));
-      return { home: odd1, draw: oddX, away: odd2 };
+      return {
+        home: Number((1.55 + (abs % 210) / 100).toFixed(2)),
+        draw: Number((2.95 + ((abs >> 3) % 95) / 100).toFixed(2)),
+        away: Number((1.75 + ((abs >> 5) % 260) / 100).toFixed(2))
+      };
     }
 
-    // =========================================================
-    // BUSCA DE JOGOS REAIS (THESPORTSDB DIRETO NO BROWSER + OPTIONAL FOOTBALL-DATA)
-    // =========================================================
     async function loadRealMatches(manual = false) {
       const container = document.getElementById('matches-container');
       const statusEl = document.getElementById('api-sync-status');
       const icon = document.getElementById('sync-icon');
 
-      if (manual) icon.classList.add('animate-spin');
-      statusEl.textContent = '● Sincronizando jogos reais...';
+      if (manual && icon) icon.classList.add('animate-spin');
+      if (statusEl) statusEl.textContent = '● Sincronizando jogos...';
 
       if (state.matches.length === 0) {
         container.innerHTML = `
           <div class="bg-gray-900 border border-gray-800 rounded-2xl p-8 text-center space-y-2">
             <div class="w-8 h-8 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
-            <p class="text-sm font-bold text-white">Buscando jogos reais...</p>
-            <p class="text-xs text-gray-400">Brasileirão, Premier League, La Liga, Serie A e Champions</p>
+            <p class="text-sm font-bold text-white">Carregando partidas...</p>
           </div>`;
       }
 
       let loaded = [];
 
-      // 1) Se o usuário cadastrou uma chave Football-Data.org, usa ela primeiro
       if (state.fdApiKey.trim()) {
         loaded = await fetchFromFootballData(state.fdApiKey.trim());
       }
 
-      // 2) Fallback ou padrão principal: TheSportsDB (funciona direto no navegador sem CORS!)
       if (loaded.length === 0) {
         loaded = await fetchFromTheSportsDB();
+      }
+
+      let sourceLabel = state.fdApiKey.trim() && loaded.length > 0 ? 'Football-Data' : 'TheSportsDB';
+      if (loaded.length === 0) {
+        loaded = getFallbackMatches();
+        sourceLabel = 'Rodada Destaque';
       }
 
       state.matches = loaded;
@@ -464,79 +465,80 @@
       renderMatches();
 
       const nowStr = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-      const sourceLabel = state.fdApiKey.trim() && loaded.length > 0 ? 'Football-Data' : 'TheSportsDB';
-      statusEl.textContent = `● ${sourceLabel} (${state.matches.length} jogos • ${nowStr})`;
+      if (statusEl) statusEl.textContent = `● ${sourceLabel} (${state.matches.length} jogos • ${nowStr})`;
 
       if (manual) {
-        icon.classList.remove('animate-spin');
-        showToast(`${state.matches.length} jogos reais sincronizados!`);
+        if (icon) icon.classList.remove('animate-spin');
+        showToast(`${state.matches.length} jogos atualizados!`);
       }
     }
 
     async function fetchFromTheSportsDB() {
       const all = [];
       const seenIds = new Set();
+      const todayStr = new Date().toISOString().slice(0, 10);
+
+      try {
+        const dayRes = await fetch(`https://www.thesportsdb.com/api/v1/json/3/eventsday.php?d=${todayStr}&s=Soccer`);
+        if (dayRes.ok) {
+          const dayData = await dayRes.json();
+          (dayData.events || []).slice(0, 25).forEach(ev => {
+            if (!ev || !ev.idEvent || seenIds.has(ev.idEvent)) return;
+            seenIds.add(ev.idEvent);
+            all.push(mapTSDBEvent(ev, ev.idLeague || 'ALL', ev.strLeague || 'Futebol Mundial'));
+          });
+        }
+      } catch (e) {
+        console.warn('Falha eventsday:', e);
+      }
 
       await Promise.all(TSDB_LEAGUES.map(async (lg) => {
         try {
-          // Busca próximos jogos e últimos resultados reais da liga
-          const [nextRes, pastRes] = await Promise.all([
-            fetch(`https://www.thesportsdb.com/api/v1/json/3/eventsnextleague.php?id=${lg.id}`),
-            fetch(`https://www.thesportsdb.com/api/v1/json/3/eventspastleague.php?id=${lg.id}`)
-          ]);
-
-          const nextData = nextRes.ok ? await nextRes.json() : { events: [] };
-          const pastData = pastRes.ok ? await pastRes.json() : { events: [] };
-
-          const nextEvents = (nextData.events || []).slice(0, 10);
-          const pastEvents = (pastData.events || []).slice(0, 5);
-
-          [...nextEvents, ...pastEvents].forEach(ev => {
+          const res = await fetch(`https://www.thesportsdb.com/api/v1/json/3/eventsnextleague.php?id=${lg.id}`);
+          if (!res.ok) return;
+          const data = await res.json();
+          (data.events || []).slice(0, 8).forEach(ev => {
             if (!ev || !ev.idEvent || seenIds.has(ev.idEvent)) return;
             seenIds.add(ev.idEvent);
-
-            const hasScore = ev.intHomeScore !== null && ev.intAwayScore !== null && ev.intHomeScore !== '' && ev.intAwayScore !== '';
-            const statusStr = (ev.strStatus || '').toUpperCase();
-            let status = 'pre';
-            if (statusStr.includes('LIVE') || statusStr.includes('1H') || statusStr.includes('2H') || statusStr === 'HT') {
-              status = 'in';
-            } else if (hasScore || statusStr === 'FT' || statusStr === 'MATCH FINISHED' || statusStr === 'AET') {
-              status = 'post';
-            }
-
-            const isoDate = ev.strTimestamp
-              ? (ev.strTimestamp.endsWith('Z') ? ev.strTimestamp : ev.strTimestamp + 'Z')
-              : `${ev.dateEvent}T${ev.strTime || '19:00:00'}Z`;
-
-            all.push({
-              id: String(ev.idEvent),
-              leagueCode: lg.id,
-              leagueName: lg.name,
-              date: isoDate,
-              status,
-              statusDetail: ev.strStatus || '',
-              homeName: ev.strHomeTeam || 'Casa',
-              homeLogo: ev.strHomeTeamBadge ? `${ev.strHomeTeamBadge}/tiny` : '',
-              homeScore: hasScore ? parseInt(ev.intHomeScore, 10) : 0,
-              awayName: ev.strAwayTeam || 'Fora',
-              awayLogo: ev.strAwayTeamBadge ? `${ev.strAwayTeamBadge}/tiny` : '',
-              awayScore: hasScore ? parseInt(ev.intAwayScore, 10) : 0,
-              odds: computeDeterministicOdds(ev.idEvent, ev.strHomeTeam, ev.strAwayTeam)
-            });
+            all.push(mapTSDBEvent(ev, lg.id, lg.name));
           });
         } catch (e) {
-          console.warn('Erro TheSportsDB liga', lg.id, e);
+          console.warn('Falha liga:', lg.id, e);
         }
       }));
 
-      const weight = { in: 0, pre: 1, post: 2 };
-      all.sort((a, b) => {
-        if (weight[a.status] !== weight[b.status]) return weight[a.status] - weight[b.status];
-        if (a.status === 'post') return new Date(b.date) - new Date(a.date);
-        return new Date(a.date) - new Date(b.date);
-      });
-
       return all;
+    }
+
+    function mapTSDBEvent(ev, leagueCode, leagueName) {
+      const hasScore = ev.intHomeScore !== null && ev.intAwayScore !== null && ev.intHomeScore !== '' && ev.intAwayScore !== '';
+      const statusStr = (ev.strStatus || '').toUpperCase();
+      let status = 'pre';
+      if (statusStr.includes('LIVE') || statusStr.includes('1H') || statusStr.includes('2H') || statusStr === 'HT') {
+        status = 'in';
+      } else if (hasScore || statusStr === 'FT' || statusStr === 'MATCH FINISHED' || statusStr === 'AET') {
+        status = 'post';
+      }
+
+      const isoDate = ev.strTimestamp
+        ? (ev.strTimestamp.endsWith('Z') ? ev.strTimestamp : ev.strTimestamp + 'Z')
+        : `${ev.dateEvent}T${ev.strTime || '19:00:00'}Z`;
+
+      return {
+        id: String(ev.idEvent),
+        leagueCode: String(leagueCode),
+        leagueName: leagueName,
+        date: isoDate,
+        status,
+        statusDetail: ev.strStatus || '',
+        homeName: ev.strHomeTeam || 'Casa',
+        homeLogo: ev.strHomeTeamBadge ? `${ev.strHomeTeamBadge}/tiny` : '',
+        homeScore: hasScore ? parseInt(ev.intHomeScore, 10) : 0,
+        awayName: ev.strAwayTeam || 'Fora',
+        awayLogo: ev.strAwayTeamBadge ? `${ev.strAwayTeamBadge}/tiny` : '',
+        awayScore: hasScore ? parseInt(ev.intAwayScore, 10) : 0,
+        odds: computeDeterministicOdds(ev.idEvent, ev.strHomeTeam, ev.strAwayTeam)
+      };
     }
 
     async function fetchFromFootballData(apiKey) {
@@ -574,9 +576,16 @@
       }
     }
 
-    // =========================================================
-    // LIQUIDAÇÃO AUTOMÁTICA BASEADA NO PLACAR REAL
-    // =========================================================
+    function getFallbackMatches() {
+      const in2h = new Date(Date.now() + 2 * 3600 * 1000).toISOString();
+      const in4h = new Date(Date.now() + 4 * 3600 * 1000).toISOString();
+      return [
+        { id: 'fb-1', leagueCode: '4351', leagueName: 'Brasileirão Série A', date: in2h, status: 'pre', homeName: 'Flamengo', homeLogo: '', homeScore: 0, awayName: 'Palmeiras', awayLogo: '', awayScore: 0, odds: { home: 2.15, draw: 3.25, away: 3.40 } },
+        { id: 'fb-2', leagueCode: '4351', leagueName: 'Brasileirão Série A', date: in4h, status: 'pre', homeName: 'Internacional', homeLogo: '', homeScore: 0, awayName: 'Grêmio', awayLogo: '', awayScore: 0, odds: { home: 2.05, draw: 3.15, away: 3.70 } },
+        { id: 'fb-3', leagueCode: '4480', leagueName: 'Champions League', date: in4h, status: 'pre', homeName: 'Real Madrid', homeLogo: '', homeScore: 0, awayName: 'Manchester City', awayLogo: '', awayScore: 0, odds: { home: 2.45, draw: 3.50, away: 2.75 } }
+      ];
+    }
+
     function settleTicketsWithRealScores() {
       if (!state.tickets.length || !state.matches.length) return;
       const matchMap = new Map(state.matches.map(m => [m.id, m]));
@@ -585,7 +594,6 @@
 
       state.tickets.forEach(ticket => {
         if (ticket.status !== 'pending') return;
-
         let allFinished = true;
         let anyLost = false;
 
@@ -595,7 +603,6 @@
             allFinished = false;
             return;
           }
-
           let realOutcome = 'X';
           if (realMatch.homeScore > realMatch.awayScore) realOutcome = '1';
           else if (realMatch.awayScore > realMatch.homeScore) realOutcome = '2';
@@ -618,7 +625,7 @@
       if (changed) {
         if (newlyWonAmount > 0) {
           state.balance += newlyWonAmount;
-          showToast(`GREEN! Você ganhou ${formatCurrency(newlyWonAmount)} com placares reais!`);
+          showToast(`GREEN! Você ganhou ${formatCurrency(newlyWonAmount)}!`);
         }
         saveState();
         updateBalanceUI();
@@ -627,9 +634,6 @@
       }
     }
 
-    // =========================================================
-    // RENDERIZAÇÃO DA GRADE DE JOGOS
-    // =========================================================
     function setLeagueFilter(code) {
       state.activeLeague = code;
       document.querySelectorAll('.league-pill').forEach(btn => {
@@ -737,9 +741,6 @@
         </button>`;
     }
 
-    // =========================================================
-    // BOLETIM DE PALPITES (BETSLIP)
-    // =========================================================
     function toggleSelection(matchId, pick) {
       const match = state.matches.find(m => m.id === matchId);
       if (!match || match.status !== 'pre') return;
@@ -863,9 +864,6 @@
       showToast('Bilhete registrado! Aguardando placar oficial.');
     }
 
-    // =========================================================
-    // BILHETES & RANKING
-    // =========================================================
     function renderTickets() {
       const container = document.getElementById('tickets-container');
       if (state.tickets.length === 0) {
@@ -937,9 +935,6 @@
       `).join('');
     }
 
-    // =========================================================
-    // NAVEGAÇÃO & MODAIS
-    // =========================================================
     function switchTab(tab) {
       ['jogos', 'bilhetes', 'ranking'].forEach(t => {
         document.getElementById(`tab-${t}`).classList.toggle('hidden', t !== tab);
