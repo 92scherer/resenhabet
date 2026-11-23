@@ -43,9 +43,9 @@
   <div id="splash-screen" class="fixed inset-0 z-50 bg-[#05080f] flex flex-col items-center justify-center p-6">
     <div class="relative flex flex-col items-center">
       <div class="flex items-center justify-center mb-6">
-        <img src="./logo.PNG" alt="Resenha Bet" class="w-96 h-96 sm:w-[28rem] sm:h-[28rem] object-contain drop-shadow-[0_14px_36px_rgba(16,185,129,0.28)]" onerror="this.style.display='none'; document.getElementById('splash-fallback-svg').classList.remove('hidden');" />
+        <img src="./logo.PNG" alt="Resenha Bet" class="w-80 h-80 sm:w-[28rem] sm:h-[28rem] object-contain drop-shadow-[0_14px_36px_rgba(16,185,129,0.28)]" onerror="this.style.display='none'; document.getElementById('splash-fallback-svg').classList.remove('hidden');" />
         <div id="splash-fallback-svg" class="hidden flex flex-col items-center justify-center text-center">
-          <svg class="w-24 h-24 text-emerald-400 mb-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg class="w-24 h-24 text-emerald-400 mb-2 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <circle cx="12" cy="12" r="10"/>
             <path d="M12 6l3 4.5-1.5 4.5h-3L9 10.5 12 6z"/>
           </svg>
@@ -53,18 +53,18 @@
         </div>
       </div>
       <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-emerald-400">
-        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-        Carregando grade oficial...
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping shrink-0"></span>
+        <span>Carregando grade oficial...</span>
       </div>
     </div>
   </div>
 
   <!-- TELA DE CADASTRO OBRIGATÓRIO (NOME + WHATSAPP + CIDADE + ESTADO) -->
   <div id="register-gate" class="fixed inset-0 z-40 hidden bg-[#05080f]/95 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
-    <div class="bg-gray-900 border border-emerald-500/30 rounded-3xl max-w-md w-full p-6 sm:p-7 shadow-2xl shadow-emerald-500/10 space-y-4 my-auto">
+    <div class="bg-gray-900 border border-emerald-500/30 rounded-3xl max-w-md w-full p-5 sm:p-7 shadow-2xl shadow-emerald-500/10 space-y-4 my-auto">
       <div class="flex flex-col items-center text-center">
         <div class="flex items-center justify-center mb-2">
-          <img src="./logo.PNG" alt="Resenha Bet" class="h-56 sm:h-64 w-auto object-contain drop-shadow-[0_8px_24px_rgba(16,185,129,0.28)]" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');" />
+          <img src="./logo.PNG" alt="Resenha Bet" class="h-44 sm:h-64 w-auto object-contain drop-shadow-[0_8px_24px_rgba(16,185,129,0.28)]" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');" />
           <span class="hidden font-black text-emerald-400 text-3xl">RESENHA BET</span>
         </div>
         <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
@@ -87,7 +87,7 @@
             maxlength="32"
             oninput="forceUppercaseInput(this)"
             placeholder="EX: JOÃO SILVA"
-            class="w-full bg-gray-950 border border-gray-700 focus:border-emerald-500 rounded-xl px-3.5 py-2.5 text-sm font-semibold text-white placeholder-gray-500 uppercase outline-none transition"
+            class="w-full min-w-0 bg-gray-950 border border-gray-700 focus:border-emerald-500 rounded-xl px-3.5 py-2.5 text-sm font-semibold text-white placeholder-gray-500 uppercase outline-none transition"
           />
         </div>
 
@@ -100,12 +100,12 @@
             maxlength="15"
             oninput="maskWhatsApp(this)"
             placeholder="(51) 99999-9999"
-            class="w-full bg-gray-950 border border-gray-700 focus:border-emerald-500 rounded-xl px-3.5 py-2.5 text-sm font-semibold text-white placeholder-gray-500 outline-none transition"
+            class="w-full min-w-0 bg-gray-950 border border-gray-700 focus:border-emerald-500 rounded-xl px-3.5 py-2.5 text-sm font-semibold text-white placeholder-gray-500 outline-none transition"
           />
         </div>
 
         <div class="grid grid-cols-12 gap-2.5">
-          <div class="col-span-8">
+          <div class="col-span-7 sm:col-span-8 min-w-0">
             <label for="reg-city" class="block text-xs font-bold text-gray-300 mb-1">Cidade *</label>
             <input
               id="reg-city"
@@ -115,16 +115,16 @@
               maxlength="40"
               oninput="forceUppercaseInput(this)"
               placeholder="EX: SÃO LEOPOLDO"
-              class="w-full bg-gray-950 border border-gray-700 focus:border-emerald-500 rounded-xl px-3.5 py-2.5 text-sm font-semibold text-white placeholder-gray-500 uppercase outline-none transition"
+              class="w-full min-w-0 bg-gray-950 border border-gray-700 focus:border-emerald-500 rounded-xl px-3.5 py-2.5 text-sm font-semibold text-white placeholder-gray-500 uppercase outline-none transition"
             />
           </div>
 
-          <div class="col-span-4">
+          <div class="col-span-5 sm:col-span-4 min-w-0">
             <label for="reg-state" class="block text-xs font-bold text-gray-300 mb-1">Estado *</label>
             <select
               id="reg-state"
               required
-              class="w-full bg-gray-950 border border-gray-700 focus:border-emerald-500 rounded-xl px-2.5 py-2.5 text-sm font-bold text-white outline-none transition"
+              class="w-full min-w-0 bg-gray-950 border border-gray-700 focus:border-emerald-500 rounded-xl px-2.5 py-2.5 text-sm font-bold text-white outline-none transition"
             >
               <option value="">UF</option>
               <option value="AC">AC</option>
@@ -160,8 +160,9 @@
 
         <div id="reg-error" class="hidden text-xs font-bold text-red-400 bg-red-500/10 border border-red-500/30 rounded-xl px-3 py-2 text-center"></div>
 
-        <button type="submit" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-400 hover:from-emerald-400 hover:to-emerald-300 text-black font-black text-sm shadow-lg shadow-emerald-500/25 transition">
-          Liberar Minha Banca de RC$ 1.000,00 →
+        <button type="submit" class="w-full min-h-[46px] py-3.5 px-4 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-400 hover:from-emerald-400 hover:to-emerald-300 text-black font-black text-sm shadow-lg shadow-emerald-500/25 transition inline-flex items-center justify-center gap-2">
+          <span>Liberar Minha Banca de RC$ 1.000,00</span>
+          <span aria-hidden="true">→</span>
         </button>
       </form>
 
@@ -173,12 +174,12 @@
 
   <!-- BARRA DE PATROCÍNIO MASTER -->
   <div class="bg-gradient-to-r from-emerald-950 via-gray-900 to-amber-950/60 border-b border-emerald-500/20 text-xs py-2 px-4">
-    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
-      <div class="flex items-center gap-2">
-        <span class="px-2 py-0.5 rounded bg-amber-400/15 text-amber-300 border border-amber-400/30 font-bold uppercase text-[10px] tracking-wider">Patrocinador Master</span>
-        <span class="text-gray-300">Copa <strong class="text-white">Resenha Bet</strong> — Prêmio de <strong class="text-emerald-400">R$ 1.000 em Produtos</strong> para o Top 1 do mês!</span>
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+      <div class="flex flex-wrap items-center gap-2 min-w-0">
+        <span class="px-2 py-0.5 rounded bg-amber-400/15 text-amber-300 border border-amber-400/30 font-bold uppercase text-[10px] tracking-wider shrink-0">Patrocinador Master</span>
+        <span class="text-gray-300 leading-snug">Copa <strong class="text-white">Resenha Bet</strong> — Prêmio de <strong class="text-emerald-400">R$ 1.000 em Produtos</strong> para o Top 1 do mês!</span>
       </div>
-      <button onclick="openMediaKitModal()" class="text-amber-300 hover:text-amber-200 font-semibold underline underline-offset-2 transition">
+      <button onclick="openMediaKitModal()" class="text-amber-300 hover:text-amber-200 font-semibold underline underline-offset-2 transition shrink-0 py-0.5">
         Anuncie sua marca aqui →
       </button>
     </div>
@@ -186,33 +187,33 @@
 
   <!-- HEADER PRINCIPAL (SOMENTE LOGO BEM MAIOR NO CANTO ESQUERDO) -->
   <header class="sticky top-0 z-30 bg-[#090d16]/95 backdrop-blur-md border-b border-gray-800">
-    <div class="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between gap-3">
-      <div class="flex items-center gap-3.5 cursor-pointer" onclick="switchTab('jogos')">
-        <img src="./logo.PNG" alt="Resenha Bet" class="h-48 sm:h-56 w-auto object-contain shrink-0 drop-shadow-[0_8px_24px_rgba(16,185,129,0.28)] transition-transform hover:scale-105" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');" />
+    <div class="max-w-7xl mx-auto px-3 sm:px-4 py-2 flex items-center justify-between gap-2 sm:gap-4">
+      <button type="button" onclick="switchTab('jogos')" class="flex items-center gap-3 text-left min-w-0 group focus:outline-none">
+        <img src="./logo.PNG" alt="Resenha Bet" class="h-32 sm:h-48 md:h-56 w-auto object-contain shrink-0 drop-shadow-[0_8px_24px_rgba(16,185,129,0.28)] transition-transform group-hover:scale-105" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');" />
         <span class="hidden font-black text-emerald-400 text-2xl">RB</span>
 
-        <p id="header-user-greeting" class="hidden xl:block text-xs text-gray-400">Palpites grátis • Jogos & resultados reais</p>
-      </div>
+        <p id="header-user-greeting" class="hidden xl:block text-xs text-gray-400 truncate">Palpites grátis • Jogos & resultados reais</p>
+      </button>
 
-      <nav class="hidden md:flex items-center gap-1 bg-gray-900/90 p-1 rounded-xl border border-gray-800">
-        <button onclick="switchTab('jogos')" id="nav-jogos" class="tab-btn px-4 py-2 rounded-lg text-sm font-bold bg-emerald-500 text-black transition">
-          Jogos Reais
+      <nav class="hidden md:flex items-center gap-1 bg-gray-900/90 p-1 rounded-xl border border-gray-800 shrink-0">
+        <button type="button" onclick="switchTab('jogos')" id="nav-jogos" class="tab-btn min-h-[40px] px-4 py-2 rounded-lg text-sm font-bold bg-emerald-500 text-black transition inline-flex items-center justify-center gap-1.5 whitespace-nowrap">
+          <span>Jogos Reais</span>
         </button>
-        <button onclick="switchTab('bilhetes')" id="nav-bilhetes" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold text-gray-300 hover:text-white transition flex items-center gap-1.5">
-          Meus Bilhetes
-          <span id="badge-bilhetes" class="px-1.5 py-0.2 text-[11px] rounded-full bg-gray-800 text-emerald-400 font-bold">0</span>
+        <button type="button" onclick="switchTab('bilhetes')" id="nav-bilhetes" class="tab-btn min-h-[40px] px-4 py-2 rounded-lg text-sm font-semibold text-gray-300 hover:text-white transition inline-flex items-center justify-center gap-1.5 whitespace-nowrap">
+          <span>Meus Bilhetes</span>
+          <span id="badge-bilhetes" class="px-1.5 py-0.5 text-[11px] leading-none rounded-full bg-gray-800 text-emerald-400 font-bold shrink-0">0</span>
         </button>
-        <button onclick="switchTab('ranking')" id="nav-ranking" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold text-gray-300 hover:text-white transition">
-          Ranking & Prêmios
+        <button type="button" onclick="switchTab('ranking')" id="nav-ranking" class="tab-btn min-h-[40px] px-4 py-2 rounded-lg text-sm font-semibold text-gray-300 hover:text-white transition inline-flex items-center justify-center gap-1.5 whitespace-nowrap">
+          <span>Ranking & Prêmios</span>
         </button>
       </nav>
 
-      <div class="flex items-center gap-2 sm:gap-3">
-        <div class="bg-gray-900 border border-gray-800 rounded-xl px-3 py-1.5 text-right">
-          <div class="text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Banca Virtual</div>
-          <div id="user-balance" class="font-black text-sm sm:text-base text-emerald-400 tabular-nums">RC$ 1.000,00</div>
+      <div class="flex items-center gap-2 shrink-0">
+        <div class="bg-gray-900 border border-gray-800 rounded-xl px-2.5 sm:px-3 py-1.5 text-right">
+          <div class="text-[9px] sm:text-[10px] uppercase tracking-wider text-gray-400 font-semibold leading-tight">Banca Virtual</div>
+          <div id="user-balance" class="font-black text-xs sm:text-base text-emerald-400 tabular-nums leading-tight mt-0.5">RC$ 1.000,00</div>
         </div>
-        <button onclick="openRechargeModal()" class="bg-gradient-to-r from-amber-400 to-yellow-500 hover:from-amber-300 hover:to-yellow-400 text-black font-extrabold text-xs sm:text-sm px-3 py-2.5 rounded-xl shadow-lg shadow-amber-500/20 transition flex items-center gap-1.5 shrink-0">
+        <button type="button" onclick="openRechargeModal()" class="min-h-[42px] sm:min-h-[44px] bg-gradient-to-r from-amber-400 to-yellow-500 hover:from-amber-300 hover:to-yellow-400 text-black font-extrabold text-xs sm:text-sm px-3 sm:px-3.5 py-2 rounded-xl shadow-lg shadow-amber-500/20 transition inline-flex items-center justify-center gap-1.5 shrink-0">
           <span>+RC$ 500</span>
           <span class="hidden sm:inline text-[10px] bg-black/20 px-1.5 py-0.5 rounded font-bold">GRÁTIS</span>
         </button>
@@ -220,31 +221,38 @@
     </div>
 
     <div class="md:hidden grid grid-cols-3 border-t border-gray-800 bg-gray-950 text-xs font-bold">
-      <button onclick="switchTab('jogos')" id="mnav-jogos" class="py-2.5 text-emerald-400 border-b-2 border-emerald-400">Jogos Reais</button>
-      <button onclick="switchTab('bilhetes')" id="mnav-bilhetes" class="py-2.5 text-gray-400 border-b-2 border-transparent">Meus Bilhetes (<span id="mbadge-bilhetes">0</span>)</button>
-      <button onclick="switchTab('ranking')" id="mnav-ranking" class="py-2.5 text-gray-400 border-b-2 border-transparent">Ranking</button>
+      <button type="button" onclick="switchTab('jogos')" id="mnav-jogos" class="min-h-[44px] px-2 py-2.5 text-emerald-400 border-b-2 border-emerald-400 inline-flex items-center justify-center text-center leading-tight">
+        Jogos Reais
+      </button>
+      <button type="button" onclick="switchTab('bilhetes')" id="mnav-bilhetes" class="min-h-[44px] px-2 py-2.5 text-gray-400 border-b-2 border-transparent inline-flex items-center justify-center gap-1 text-center leading-tight">
+        <span>Bilhetes</span>
+        <span class="px-1.5 py-0.5 text-[10px] leading-none rounded-full bg-gray-800 text-emerald-400 font-bold" id="mbadge-bilhetes">0</span>
+      </button>
+      <button type="button" onclick="switchTab('ranking')" id="mnav-ranking" class="min-h-[44px] px-2 py-2.5 text-gray-400 border-b-2 border-transparent inline-flex items-center justify-center text-center leading-tight">
+        Ranking
+      </button>
     </div>
   </header>
 
   <!-- CONTEÚDO PRINCIPAL -->
-  <main class="max-w-7xl w-full mx-auto px-4 py-6 flex-1">
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+  <main class="max-w-7xl w-full mx-auto px-3 sm:px-4 py-5 sm:py-6 flex-1">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 items-start">
 
-      <div class="lg:col-span-8 space-y-5">
+      <div class="lg:col-span-8 space-y-5 min-w-0">
 
         <!-- BANNER PUBLICITÁRIO TOPO -->
-        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-gray-900 via-emerald-950/60 to-gray-900 border border-emerald-500/30 p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div class="space-y-1">
+        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-gray-900 via-emerald-950/60 to-gray-900 border border-emerald-500/30 p-4 sm:p-5 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
+          <div class="space-y-1 min-w-0">
             <div class="flex flex-wrap items-center gap-2">
-              <span class="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded bg-white/10 text-gray-300">Publicidade • Cota Ouro</span>
+              <span class="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded bg-white/10 text-gray-300 shrink-0">Publicidade • Cota Ouro</span>
               <span id="api-sync-status" class="text-[11px] text-emerald-400 font-semibold">● Conectando grade ao vivo...</span>
             </div>
-            <h2 class="text-base sm:text-lg font-extrabold text-white">Palpite sem arriscar seu bolso e concorra a prêmios reais toda semana!</h2>
-            <p class="text-xs text-gray-300">Horários oficiais (Brasília) e placares ao vivo sincronizados. Acumule RC$ e lidere a liga.</p>
+            <h2 class="text-base sm:text-lg font-extrabold text-white leading-snug">Palpite sem arriscar seu bolso e concorra a prêmios reais toda semana!</h2>
+            <p class="text-xs text-gray-300 leading-relaxed">Horários oficiais (Brasília) e placares ao vivo sincronizados. Acumule RC$ e lidere a liga.</p>
           </div>
           <div class="flex items-center gap-2 shrink-0">
-            <button onclick="loadRealMatches(true)" id="btn-sync-api" class="bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold text-xs px-4 py-2.5 rounded-xl transition flex items-center gap-1.5 shadow-lg shadow-emerald-500/20">
-              <svg id="sync-icon" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+            <button type="button" onclick="loadRealMatches(true)" id="btn-sync-api" class="w-full sm:w-auto min-h-[42px] bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold text-xs px-4 py-2.5 rounded-xl transition inline-flex items-center justify-center gap-1.5 shadow-lg shadow-emerald-500/20 whitespace-nowrap">
+              <svg id="sync-icon" class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
               <span>Atualizar Grade</span>
             </button>
           </div>
@@ -253,16 +261,16 @@
         <!-- ABA: JOGOS REAIS -->
         <section id="tab-jogos" class="space-y-4">
           <div class="space-y-2.5">
-            <div id="league-filters" class="flex items-center gap-2 overflow-x-auto pb-1">
-              <button onclick="setLeagueFilter('ALL')" data-league="ALL" class="league-pill px-3.5 py-1.5 rounded-full text-xs font-bold bg-emerald-500 text-black whitespace-nowrap">Todos os Jogos</button>
+            <div id="league-filters" class="flex items-center gap-2 overflow-x-auto pb-1.5">
+              <button type="button" onclick="setLeagueFilter('ALL')" data-league="ALL" class="league-pill min-h-[36px] px-3.5 py-1.5 rounded-full text-xs font-bold bg-emerald-500 text-black whitespace-nowrap inline-flex items-center justify-center">Todos os Jogos</button>
             </div>
 
             <div class="flex flex-wrap items-center justify-between gap-2">
-              <div id="status-filters" class="flex items-center gap-1.5">
-                <button onclick="setStatusFilter('ALL')" data-status="ALL" class="status-pill px-3 py-1 rounded-lg text-[11px] font-bold bg-gray-800 text-white border border-gray-700">Todos</button>
-                <button onclick="setStatusFilter('OPEN')" data-status="OPEN" class="status-pill px-3 py-1 rounded-lg text-[11px] font-semibold bg-gray-950 text-gray-400 border border-gray-800 hover:text-white">Abertos p/ Palpite</button>
-                <button onclick="setStatusFilter('LIVE')" data-status="LIVE" class="status-pill px-3 py-1 rounded-lg text-[11px] font-semibold bg-gray-950 text-gray-400 border border-gray-800 hover:text-white">Ao Vivo</button>
-                <button onclick="setStatusFilter('FINISHED')" data-status="FINISHED" class="status-pill px-3 py-1 rounded-lg text-[11px] font-semibold bg-gray-950 text-gray-400 border border-gray-800 hover:text-white">Encerrados</button>
+              <div id="status-filters" class="flex flex-wrap items-center gap-1.5">
+                <button type="button" onclick="setStatusFilter('ALL')" data-status="ALL" class="status-pill min-h-[34px] px-3 py-1.5 rounded-lg text-[11px] font-bold bg-gray-800 text-white border border-gray-700 inline-flex items-center justify-center">Todos</button>
+                <button type="button" onclick="setStatusFilter('OPEN')" data-status="OPEN" class="status-pill min-h-[34px] px-3 py-1.5 rounded-lg text-[11px] font-semibold bg-gray-950 text-gray-400 border border-gray-800 hover:text-white inline-flex items-center justify-center">Abertos p/ Palpite</button>
+                <button type="button" onclick="setStatusFilter('LIVE')" data-status="LIVE" class="status-pill min-h-[34px] px-3 py-1.5 rounded-lg text-[11px] font-semibold bg-gray-950 text-gray-400 border border-gray-800 hover:text-white inline-flex items-center justify-center">Ao Vivo</button>
+                <button type="button" onclick="setStatusFilter('FINISHED')" data-status="FINISHED" class="status-pill min-h-[34px] px-3 py-1.5 rounded-lg text-[11px] font-semibold bg-gray-950 text-gray-400 border border-gray-800 hover:text-white inline-flex items-center justify-center">Encerrados</button>
               </div>
               <span class="text-[11px] text-gray-400">Fuso: <strong class="text-gray-300">Horário de Brasília (UTC-3)</strong></span>
             </div>
@@ -273,7 +281,7 @@
 
         <!-- ABA: MEUS BILHETES -->
         <section id="tab-bilhetes" class="hidden space-y-4">
-          <div class="flex items-center justify-between">
+          <div class="flex flex-wrap items-center justify-between gap-2">
             <h2 class="text-lg font-extrabold text-white">Histórico de Bilhetes</h2>
             <span class="text-xs text-gray-400">Liquidação automática pelo placar oficial</span>
           </div>
@@ -282,15 +290,15 @@
 
         <!-- ABA: RANKING & PRÊMIOS -->
         <section id="tab-ranking" class="hidden space-y-4">
-          <div class="bg-gray-900 border border-gray-800 rounded-2xl p-5">
+          <div class="bg-gray-900 border border-gray-800 rounded-2xl p-4 sm:p-5">
             <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
               <div>
                 <span class="text-[11px] font-bold uppercase tracking-wider text-amber-400">Liga Oficial do Mês</span>
-                <h2 class="text-xl font-black text-white">Ranking Top Tipsters — Resenha Bet</h2>
+                <h2 class="text-lg sm:text-xl font-black text-white">Ranking Top Tipsters — Resenha Bet</h2>
               </div>
-              <div class="bg-amber-400/10 border border-amber-400/30 rounded-xl px-3.5 py-2 text-right">
+              <div class="bg-amber-400/10 border border-amber-400/30 rounded-xl px-3.5 py-2 text-left sm:text-right">
                 <div class="text-[10px] text-amber-300 uppercase font-bold">Premiação Patrocinada</div>
-                <div class="text-sm font-black text-white">1º Lugar: Camisa Oficial + R$ 500</div>
+                <div class="text-xs sm:text-sm font-black text-white">1º Lugar: Camisa Oficial + R$ 500</div>
               </div>
             </div>
             <div id="ranking-container" class="divide-y divide-gray-800"></div>
@@ -300,19 +308,19 @@
       </div>
 
       <!-- COLUNA DIREITA: BOLETIM DE PALPITES + ESPAÇO PATROCINADOR -->
-      <aside class="lg:col-span-4 space-y-5 lg:sticky lg:top-52">
+      <aside class="lg:col-span-4 space-y-5 lg:sticky lg:top-48 min-w-0">
 
         <div class="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-xl">
-          <div class="bg-gray-950 px-4 py-3.5 border-b border-gray-800 flex items-center justify-between">
-            <div class="flex items-center gap-2">
-              <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
-              <h3 class="font-extrabold text-sm text-white uppercase tracking-wide">Boletim de Palpites</h3>
+          <div class="bg-gray-950 px-4 py-3.5 border-b border-gray-800 flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2 min-w-0">
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 shrink-0"></span>
+              <h3 class="font-extrabold text-sm text-white uppercase tracking-wide truncate">Boletim de Palpites</h3>
             </div>
-            <span id="slip-count" class="text-xs font-black px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400">0 seleções</span>
+            <span id="slip-count" class="text-xs font-black px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 shrink-0">0 seleções</span>
           </div>
 
           <div id="betslip-items" class="p-4 space-y-2.5 max-h-80 overflow-y-auto">
-            <div class="text-center py-8 text-gray-500 text-xs">
+            <div class="text-center py-8 text-gray-500 text-xs leading-relaxed">
               Clique em uma odd (<strong class="text-gray-300">1</strong>, <strong class="text-gray-300">X</strong> ou <strong class="text-gray-300">2</strong>) nos jogos abertos para montar seu bilhete gratuito.
             </div>
           </div>
@@ -324,29 +332,29 @@
             </div>
             <div class="flex items-center justify-between text-xs">
               <span class="text-gray-400 font-medium">Odd Total:</span>
-              <span id="slip-total-odd" class="font-black text-white text-sm">1.00</span>
+              <span id="slip-total-odd" class="font-black text-white text-sm tabular-nums">1.00</span>
             </div>
 
             <div>
-              <div class="flex items-center justify-between text-xs mb-1">
+              <div class="flex items-center justify-between gap-2 text-xs mb-1.5">
                 <label for="stake-input" class="text-gray-400 font-semibold">Valor do Palpite (RC$)</label>
-                <div class="flex gap-1">
-                  <button onclick="setQuickStake(50)" class="px-2 py-0.5 rounded bg-gray-800 hover:bg-gray-700 text-[11px] font-bold text-gray-300">50</button>
-                  <button onclick="setQuickStake(100)" class="px-2 py-0.5 rounded bg-gray-800 hover:bg-gray-700 text-[11px] font-bold text-gray-300">100</button>
-                  <button onclick="setQuickStake(250)" class="px-2 py-0.5 rounded bg-gray-800 hover:bg-gray-700 text-[11px] font-bold text-gray-300">250</button>
+                <div class="flex gap-1 shrink-0">
+                  <button type="button" onclick="setQuickStake(50)" class="min-h-[28px] px-2.5 py-0.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-[11px] font-bold text-gray-300 inline-flex items-center justify-center">50</button>
+                  <button type="button" onclick="setQuickStake(100)" class="min-h-[28px] px-2.5 py-0.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-[11px] font-bold text-gray-300 inline-flex items-center justify-center">100</button>
+                  <button type="button" onclick="setQuickStake(250)" class="min-h-[28px] px-2.5 py-0.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-[11px] font-bold text-gray-300 inline-flex items-center justify-center">250</button>
                 </div>
               </div>
-              <input id="stake-input" type="number" min="10" step="10" value="100" oninput="updateSlipTotals()" class="w-full bg-gray-900 border border-gray-700 focus:border-emerald-500 rounded-xl px-3 py-2 text-sm font-black text-white outline-none" />
+              <input id="stake-input" type="number" min="10" step="10" value="100" oninput="updateSlipTotals()" class="w-full min-w-0 bg-gray-900 border border-gray-700 focus:border-emerald-500 rounded-xl px-3 py-2.5 text-sm font-black text-white outline-none tabular-nums" />
             </div>
 
             <div class="flex items-center justify-between pt-1 border-t border-gray-800">
               <span class="text-xs text-gray-400 font-semibold">Retorno Potencial:</span>
-              <span id="slip-potential-return" class="text-base font-black text-emerald-400">RC$ 0,00</span>
+              <span id="slip-potential-return" class="text-base font-black text-emerald-400 tabular-nums">RC$ 0,00</span>
             </div>
 
-            <div class="flex gap-2">
-              <button onclick="clearSlip()" class="px-3 py-2.5 rounded-xl bg-gray-800 hover:bg-gray-700 text-xs font-bold text-gray-300 transition">Limpar</button>
-              <button onclick="placeBet()" class="flex-1 bg-emerald-500 hover:bg-emerald-400 text-black font-black text-sm py-2.5 rounded-xl shadow-lg shadow-emerald-500/20 transition">
+            <div class="flex items-center gap-2">
+              <button type="button" onclick="clearSlip()" class="min-h-[42px] px-3.5 py-2.5 rounded-xl bg-gray-800 hover:bg-gray-700 text-xs font-bold text-gray-300 transition inline-flex items-center justify-center shrink-0">Limpar</button>
+              <button type="button" onclick="placeBet()" class="flex-1 min-h-[42px] bg-emerald-500 hover:bg-emerald-400 text-black font-black text-xs sm:text-sm py-2.5 px-3 rounded-xl shadow-lg shadow-emerald-500/20 transition inline-flex items-center justify-center text-center leading-tight">
                 Confirmar Palpite Grátis
               </button>
             </div>
@@ -361,7 +369,7 @@
           <p class="text-xs text-gray-400 leading-relaxed">
             Impacte milhares de fãs de futebol todos os dias com banners exclusivos, naming rights de ligas e recargas patrocinadas.
           </p>
-          <button onclick="openMediaKitModal()" class="w-full py-2.5 rounded-xl bg-amber-400/15 hover:bg-amber-400/25 border border-amber-400/40 text-amber-300 font-bold text-xs transition">
+          <button type="button" onclick="openMediaKitModal()" class="w-full min-h-[42px] py-2.5 px-4 rounded-xl bg-amber-400/15 hover:bg-amber-400/25 border border-amber-400/40 text-amber-300 font-bold text-xs transition inline-flex items-center justify-center">
             Ver Mídia Kit & Cotas
           </button>
         </div>
@@ -372,10 +380,10 @@
 
   <!-- MODAL: RECARGA PATROCINADA -->
   <div id="recharge-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bg-gray-900 border border-gray-800 rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
-      <div class="flex items-center justify-between">
+    <div class="bg-gray-900 border border-gray-800 rounded-2xl max-w-md w-full p-5 sm:p-6 space-y-4 shadow-2xl">
+      <div class="flex items-center justify-between gap-2">
         <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded bg-amber-400/15 text-amber-300">Recarga Gratuita Patrocinada</span>
-        <button onclick="closeRechargeModal()" class="text-gray-400 hover:text-white text-lg font-bold">✕</button>
+        <button type="button" onclick="closeRechargeModal()" aria-label="Fechar" class="w-8 h-8 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 text-base font-bold inline-flex items-center justify-center shrink-0">✕</button>
       </div>
       <h3 class="text-xl font-black text-white">Ganhe +RC$ 500,00 agora</h3>
       <p class="text-xs text-gray-300 leading-relaxed">
@@ -386,18 +394,18 @@
         <div class="text-sm font-extrabold text-white">Cupom RESENHA10 — 10% OFF em Artigos Esportivos</div>
         <div id="ad-countdown-text" class="text-xs text-amber-300 font-bold pt-1">Aguarde 5s para liberar...</div>
       </div>
-      <button id="btn-claim-recharge" disabled onclick="claimRecharge()" class="w-full py-3 rounded-xl bg-gray-800 text-gray-500 font-black text-sm transition cursor-not-allowed">
+      <button id="btn-claim-recharge" type="button" disabled onclick="claimRecharge()" class="w-full min-h-[44px] py-3 px-4 rounded-xl bg-gray-800 text-gray-500 font-black text-sm transition cursor-not-allowed inline-flex items-center justify-center">
         Liberando em 5s...
       </button>
     </div>
   </div>
 
   <!-- MODAL: MÍDIA KIT & PATROCÍNIO -->
-  <div id="mediakit-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bg-gray-900 border border-gray-800 rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-2xl">
-      <div class="flex items-center justify-between">
+  <div id="mediakit-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-gray-900 border border-gray-800 rounded-2xl max-w-lg w-full p-5 sm:p-6 space-y-4 shadow-2xl my-auto">
+      <div class="flex items-center justify-between gap-2">
         <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded bg-emerald-500/15 text-emerald-400">Comercial & Parcerias</span>
-        <button onclick="closeMediaKitModal()" class="text-gray-400 hover:text-white text-lg font-bold">✕</button>
+        <button type="button" onclick="closeMediaKitModal()" aria-label="Fechar" class="w-8 h-8 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 text-base font-bold inline-flex items-center justify-center shrink-0">✕</button>
       </div>
       <h3 class="text-xl font-black text-white">Anuncie na Resenha Bet</h3>
       <p class="text-xs text-gray-300 leading-relaxed">
@@ -421,23 +429,23 @@
         </div>
       </div>
       <div class="pt-2 flex flex-col sm:flex-row gap-2">
-        <a href="https://wa.me/5551992743197?text=Ol%C3%A1!%20Tenho%20interesse%20em%20patrocinar%20o%20portal%20Resenha%20Bet." target="_blank" rel="noopener noreferrer" class="flex-1 text-center py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-black text-xs transition">
+        <a href="https://wa.me/5551992743197?text=Ol%C3%A1!%20Tenho%20interesse%20em%20patrocinar%20o%20portal%20Resenha%20Bet." target="_blank" rel="noopener noreferrer" class="flex-1 min-h-[44px] py-3 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-black text-xs transition inline-flex items-center justify-center text-center">
           Falar com Comercial no WhatsApp
         </a>
-        <button onclick="closeMediaKitModal()" class="px-4 py-3 rounded-xl bg-gray-800 hover:bg-gray-700 text-xs font-bold text-gray-300">Fechar</button>
+        <button type="button" onclick="closeMediaKitModal()" class="min-h-[44px] px-4 py-3 rounded-xl bg-gray-800 hover:bg-gray-700 text-xs font-bold text-gray-300 inline-flex items-center justify-center">Fechar</button>
       </div>
     </div>
   </div>
 
   <!-- TOAST -->
-  <div id="toast" class="fixed bottom-5 right-5 z-50 hidden bg-gray-900 border border-emerald-500/50 text-white px-4 py-3 rounded-xl shadow-2xl text-xs font-bold flex items-center gap-2">
-    <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-    <span id="toast-msg">Mensagem</span>
+  <div id="toast" class="fixed bottom-5 right-5 left-5 sm:left-auto z-50 hidden bg-gray-900 border border-emerald-500/50 text-white px-4 py-3 rounded-xl shadow-2xl text-xs font-bold flex items-center gap-2.5 max-w-sm sm:ml-auto">
+    <span class="w-2 h-2 rounded-full bg-emerald-400 shrink-0"></span>
+    <span id="toast-msg" class="leading-snug">Mensagem</span>
   </div>
 
   <!-- FOOTER -->
   <footer class="border-t border-gray-800/80 bg-[#060911] py-6 px-4 mt-10">
-    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-500">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-500 text-center sm:text-left">
       <div>
         <strong class="text-gray-300">Resenha Bet</strong> — Plataforma recreativa gratuita (Free-to-Play). Não envolve apostas com dinheiro real.
       </div>
@@ -768,17 +776,17 @@
       }
 
       const allBtnClass = state.activeLeague === 'ALL'
-        ? 'league-pill px-3.5 py-1.5 rounded-full text-xs font-bold bg-emerald-500 text-black whitespace-nowrap'
-        : 'league-pill px-3.5 py-1.5 rounded-full text-xs font-semibold bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700 whitespace-nowrap';
+        ? 'league-pill min-h-[36px] px-3.5 py-1.5 rounded-full text-xs font-bold bg-emerald-500 text-black whitespace-nowrap inline-flex items-center justify-center'
+        : 'league-pill min-h-[36px] px-3.5 py-1.5 rounded-full text-xs font-semibold bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700 whitespace-nowrap inline-flex items-center justify-center';
 
-      let html = `<button onclick="setLeagueFilter('ALL')" data-league="ALL" class="${allBtnClass}">Todos (${state.matches.length})</button>`;
+      let html = `<button type="button" onclick="setLeagueFilter('ALL')" data-league="ALL" class="${allBtnClass}">Todos (${state.matches.length})</button>`;
 
       leagues.forEach(lg => {
         const isSelected = state.activeLeague === lg.code;
         const cls = isSelected
-          ? 'league-pill px-3.5 py-1.5 rounded-full text-xs font-bold bg-emerald-500 text-black whitespace-nowrap'
-          : 'league-pill px-3.5 py-1.5 rounded-full text-xs font-semibold bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700 whitespace-nowrap';
-        html += `<button onclick="setLeagueFilter('${lg.code.replace(/'/g, "\\'")}')" data-league="${lg.code}" class="${cls}">${lg.name} (${lg.count})</button>`;
+          ? 'league-pill min-h-[36px] px-3.5 py-1.5 rounded-full text-xs font-bold bg-emerald-500 text-black whitespace-nowrap inline-flex items-center justify-center'
+          : 'league-pill min-h-[36px] px-3.5 py-1.5 rounded-full text-xs font-semibold bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700 whitespace-nowrap inline-flex items-center justify-center';
+        html += `<button type="button" onclick="setLeagueFilter('${lg.code.replace(/'/g, "\\'")}')" data-league="${lg.code}" class="${cls}">${lg.name} (${lg.count})</button>`;
       });
 
       container.innerHTML = html;
@@ -843,8 +851,8 @@
       document.querySelectorAll('.status-pill').forEach(btn => {
         const isSelected = btn.getAttribute('data-status') === st;
         btn.className = isSelected
-          ? 'status-pill px-3 py-1 rounded-lg text-[11px] font-bold bg-gray-800 text-white border border-gray-700'
-          : 'status-pill px-3 py-1 rounded-lg text-[11px] font-semibold bg-gray-950 text-gray-400 border border-gray-800 hover:text-white';
+          ? 'status-pill min-h-[34px] px-3 py-1.5 rounded-lg text-[11px] font-bold bg-gray-800 text-white border border-gray-700 inline-flex items-center justify-center'
+          : 'status-pill min-h-[34px] px-3 py-1.5 rounded-lg text-[11px] font-semibold bg-gray-950 text-gray-400 border border-gray-800 hover:text-white inline-flex items-center justify-center';
       });
       renderMatches();
     }
@@ -896,7 +904,7 @@
         container.innerHTML = `
           <div class="bg-gray-900 border border-gray-800 rounded-2xl p-8 text-center space-y-2">
             <p class="text-sm font-bold text-gray-300">Nenhuma partida encontrada neste filtro.</p>
-            <button onclick="setLeagueFilter('ALL'); setStatusFilter('ALL');" class="text-xs font-bold text-emerald-400 underline">Ver todos os jogos disponíveis</button>
+            <button type="button" onclick="setLeagueFilter('ALL'); setStatusFilter('ALL');" class="text-xs font-bold text-emerald-400 underline py-1">Ver todos os jogos disponíveis</button>
           </div>`;
         return;
       }
@@ -912,33 +920,33 @@
 
         let statusBadge = `<span class="text-[11px] font-bold text-gray-300 bg-gray-950 border border-gray-800 px-2.5 py-0.5 rounded-full">${formatMatchDateBrasilia(m.date)}</span>`;
         if (isLive) {
-          statusBadge = `<span class="inline-flex items-center gap-1.5 text-[11px] font-black text-red-400 bg-red-500/10 border border-red-500/30 px-2.5 py-0.5 rounded-full"><span class="w-1.5 h-1.5 rounded-full bg-red-500 live-dot"></span>AO VIVO ${m.statusDetail ? `(${m.statusDetail})` : ''}</span>`;
+          statusBadge = `<span class="inline-flex items-center gap-1.5 text-[11px] font-black text-red-400 bg-red-500/10 border border-red-500/30 px-2.5 py-0.5 rounded-full"><span class="w-1.5 h-1.5 rounded-full bg-red-500 live-dot shrink-0"></span><span>AO VIVO ${m.statusDetail ? `(${m.statusDetail})` : ''}</span></span>`;
         } else if (isPost) {
           statusBadge = `<span class="text-[11px] font-bold text-gray-400 bg-gray-800 px-2.5 py-0.5 rounded-full">ENCERRADO • ${formatMatchDateBrasilia(m.date)}</span>`;
         }
 
         return `
-          <div class="bg-gray-900/95 hover:bg-gray-900 border ${isLive ? 'border-red-500/40' : 'border-gray-800'} rounded-2xl p-4 transition">
+          <div class="bg-gray-900/95 hover:bg-gray-900 border ${isLive ? 'border-red-500/40' : 'border-gray-800'} rounded-2xl p-3.5 sm:p-4 transition">
             <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
               <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-400">${m.leagueName}</span>
               ${statusBadge}
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
-              <div class="md:col-span-6 space-y-2">
-                <div class="flex items-center justify-between">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-3.5 md:gap-4 items-center">
+              <div class="md:col-span-6 space-y-2 min-w-0">
+                <div class="flex items-center justify-between gap-2">
                   <div class="flex items-center gap-2.5 min-w-0">
                     ${m.homeLogo ? `<img src="${m.homeLogo}" alt="" class="w-6 h-6 object-contain shrink-0" onerror="this.style.display='none'" />` : ''}
                     <span class="font-bold text-sm text-white truncate">${m.homeName}</span>
                   </div>
-                  ${(isLive || isPost) ? `<span class="font-black text-base ${isLive ? 'text-amber-400' : 'text-white'} tabular-nums">${m.homeScore}</span>` : ''}
+                  ${(isLive || isPost) ? `<span class="font-black text-base ${isLive ? 'text-amber-400' : 'text-white'} tabular-nums shrink-0">${m.homeScore}</span>` : ''}
                 </div>
-                <div class="flex items-center justify-between">
+                <div class="flex items-center justify-between gap-2">
                   <div class="flex items-center gap-2.5 min-w-0">
                     ${m.awayLogo ? `<img src="${m.awayLogo}" alt="" class="w-6 h-6 object-contain shrink-0" onerror="this.style.display='none'" />` : ''}
                     <span class="font-bold text-sm text-white truncate">${m.awayName}</span>
                   </div>
-                  ${(isLive || isPost) ? `<span class="font-black text-base ${isLive ? 'text-amber-400' : 'text-white'} tabular-nums">${m.awayScore}</span>` : ''}
+                  ${(isLive || isPost) ? `<span class="font-black text-base ${isLive ? 'text-amber-400' : 'text-white'} tabular-nums shrink-0">${m.awayScore}</span>` : ''}
                 </div>
               </div>
 
@@ -955,19 +963,19 @@
     function renderOddButton(match, pick, label, oddVal, isSelected, canBet) {
       if (!canBet) {
         return `
-          <div class="rounded-xl bg-gray-950/70 border border-gray-800/80 py-2 px-2 text-center opacity-50 cursor-not-allowed">
-            <div class="text-[10px] text-gray-500 font-semibold">${label}</div>
-            <div class="text-xs font-bold text-gray-400">${oddVal.toFixed(2)}</div>
+          <div class="min-h-[48px] rounded-xl bg-gray-950/70 border border-gray-800/80 py-2 px-2 text-center opacity-50 cursor-not-allowed flex flex-col items-center justify-center">
+            <div class="text-[10px] text-gray-500 font-semibold leading-tight">${label}</div>
+            <div class="text-xs font-bold text-gray-400 tabular-nums leading-tight mt-0.5">${oddVal.toFixed(2)}</div>
           </div>`;
       }
       return `
-        <button onclick="toggleSelection('${match.id}', '${pick}')" class="rounded-xl py-2 px-2 text-center border transition ${
+        <button type="button" onclick="toggleSelection('${match.id}', '${pick}')" class="min-h-[48px] rounded-xl py-2 px-2 text-center border transition flex flex-col items-center justify-center ${
           isSelected
             ? 'bg-emerald-500 border-emerald-400 text-black shadow-lg shadow-emerald-500/20'
             : 'bg-gray-950 hover:bg-gray-800 border-gray-800 text-white'
         }">
-          <div class="text-[10px] font-bold ${isSelected ? 'text-black/80' : 'text-gray-400'}">${label}</div>
-          <div class="text-sm font-black tabular-nums">${oddVal.toFixed(2)}</div>
+          <div class="text-[10px] font-bold leading-tight ${isSelected ? 'text-black/80' : 'text-gray-400'}">${label}</div>
+          <div class="text-sm font-black tabular-nums leading-tight mt-0.5">${oddVal.toFixed(2)}</div>
         </button>`;
     }
 
@@ -1012,7 +1020,7 @@
       if (state.slip.length === 0) {
         footer.classList.add('hidden');
         container.innerHTML = `
-          <div class="text-center py-8 text-gray-500 text-xs">
+          <div class="text-center py-8 text-gray-500 text-xs leading-relaxed">
             Clique em uma odd (<strong class="text-gray-300">1</strong>, <strong class="text-gray-300">X</strong> ou <strong class="text-gray-300">2</strong>) nos jogos abertos para montar seu bilhete gratuito.
           </div>`;
         return;
@@ -1026,9 +1034,9 @@
             <div class="text-xs font-bold text-white truncate">${item.matchTitle}</div>
             <div class="text-xs text-amber-300 font-semibold mt-0.5">${item.pickLabel}</div>
           </div>
-          <div class="flex items-center gap-2 shrink-0">
-            <span class="px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-400 font-black text-xs">@${item.odd.toFixed(2)}</span>
-            <button onclick="toggleSelection('${item.matchId}', '${item.pick}')" class="text-gray-500 hover:text-red-400 text-xs font-bold">✕</button>
+          <div class="flex items-center gap-1.5 shrink-0">
+            <span class="px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-400 font-black text-xs tabular-nums">@${item.odd.toFixed(2)}</span>
+            <button type="button" onclick="toggleSelection('${item.matchId}', '${item.pick}')" aria-label="Remover seleção" class="w-7 h-7 rounded-lg text-gray-500 hover:text-red-400 hover:bg-gray-900 text-xs font-bold inline-flex items-center justify-center">✕</button>
           </div>
         </div>
       `).join('');
@@ -1104,9 +1112,9 @@
       const container = document.getElementById('tickets-container');
       if (state.tickets.length === 0) {
         container.innerHTML = `
-          <div class="bg-gray-900 border border-gray-800 rounded-2xl p-8 text-center space-y-2">
+          <div class="bg-gray-900 border border-gray-800 rounded-2xl p-8 text-center space-y-3">
             <p class="text-sm font-bold text-gray-300">Você ainda não fez nenhum palpite.</p>
-            <button onclick="switchTab('jogos')" class="px-4 py-2 rounded-xl bg-emerald-500 text-black font-bold text-xs">Ver Jogos Reais</button>
+            <button type="button" onclick="switchTab('jogos')" class="min-h-[40px] px-4 py-2 rounded-xl bg-emerald-500 text-black font-bold text-xs inline-flex items-center justify-center">Ver Jogos Reais</button>
           </div>`;
         return;
       }
@@ -1129,18 +1137,18 @@
             </div>
             <div class="space-y-2">
               ${t.selections.map(s => `
-                <div class="flex items-center justify-between text-xs bg-gray-950/80 px-3 py-2 rounded-xl">
-                  <div>
-                    <div class="font-bold text-gray-200">${s.matchTitle} ${s.finalScore ? `<span class="text-emerald-400 font-black ml-1">(${s.finalScore})</span>` : ''}</div>
+                <div class="flex items-center justify-between gap-2 text-xs bg-gray-950/80 px-3 py-2 rounded-xl">
+                  <div class="min-w-0">
+                    <div class="font-bold text-gray-200 truncate">${s.matchTitle} ${s.finalScore ? `<span class="text-emerald-400 font-black ml-1">(${s.finalScore})</span>` : ''}</div>
                     <div class="text-amber-300 font-semibold">${s.pickLabel}</div>
                   </div>
-                  <span class="font-black text-gray-300">@${s.odd.toFixed(2)}</span>
+                  <span class="font-black text-gray-300 tabular-nums shrink-0">@${s.odd.toFixed(2)}</span>
                 </div>
               `).join('')}
             </div>
-            <div class="flex items-center justify-between text-xs pt-1">
-              <span class="text-gray-400">Palpite: <strong class="text-white">${formatCurrency(t.stake)}</strong> (Odd ${t.totalOdd.toFixed(2)})</span>
-              <span class="text-gray-400">Retorno: <strong class="${t.status === 'won' ? 'text-emerald-400' : 'text-white'}">${formatCurrency(t.potentialReturn)}</strong></span>
+            <div class="flex flex-wrap items-center justify-between gap-2 text-xs pt-1">
+              <span class="text-gray-400">Palpite: <strong class="text-white tabular-nums">${formatCurrency(t.stake)}</strong> (Odd ${t.totalOdd.toFixed(2)})</span>
+              <span class="text-gray-400">Retorno: <strong class="${t.status === 'won' ? 'text-emerald-400' : 'text-white'} tabular-nums">${formatCurrency(t.potentialReturn)}</strong></span>
             </div>
           </div>`;
       }).join('');
@@ -1161,16 +1169,16 @@
 
       document.getElementById('ranking-container').innerHTML = leaders.map((u, idx) => `
         <div class="py-3 flex items-center justify-between gap-3 ${u.isUser ? 'bg-emerald-500/10 -mx-3 px-3 rounded-xl border border-emerald-500/30' : ''}">
-          <div class="flex items-center gap-3">
-            <span class="w-7 h-7 rounded-lg flex items-center justify-center font-black text-xs ${
+          <div class="flex items-center gap-3 min-w-0">
+            <span class="w-7 h-7 rounded-lg flex items-center justify-center font-black text-xs shrink-0 ${
               idx === 0 ? 'bg-amber-400 text-black' : idx === 1 ? 'bg-gray-300 text-black' : idx === 2 ? 'bg-amber-700 text-white' : 'bg-gray-800 text-gray-300'
             }">${idx + 1}º</span>
-            <div>
-              <div class="font-bold text-sm text-white">${u.name}</div>
+            <div class="min-w-0">
+              <div class="font-bold text-xs sm:text-sm text-white truncate">${u.name}</div>
               <div class="text-[11px] text-gray-400">Assertividade: ${u.winrate}</div>
             </div>
           </div>
-          <div class="font-black text-sm text-emerald-400 tabular-nums">${formatCurrency(u.balance)}</div>
+          <div class="font-black text-xs sm:text-sm text-emerald-400 tabular-nums shrink-0">${formatCurrency(u.balance)}</div>
         </div>
       `).join('');
     }
@@ -1182,13 +1190,13 @@
         const mbtn = document.getElementById(`mnav-${t}`);
         if (btn) {
           btn.className = t === tab
-            ? 'tab-btn px-4 py-2 rounded-lg text-sm font-bold bg-emerald-500 text-black transition flex items-center gap-1.5'
-            : 'tab-btn px-4 py-2 rounded-lg text-sm font-semibold text-gray-300 hover:text-white transition flex items-center gap-1.5';
+            ? 'tab-btn min-h-[40px] px-4 py-2 rounded-lg text-sm font-bold bg-emerald-500 text-black transition inline-flex items-center justify-center gap-1.5 whitespace-nowrap'
+            : 'tab-btn min-h-[40px] px-4 py-2 rounded-lg text-sm font-semibold text-gray-300 hover:text-white transition inline-flex items-center justify-center gap-1.5 whitespace-nowrap';
         }
         if (mbtn) {
           mbtn.className = t === tab
-            ? 'py-2.5 text-emerald-400 border-b-2 border-emerald-400'
-            : 'py-2.5 text-gray-400 border-b-2 border-transparent';
+            ? 'min-h-[44px] px-2 py-2.5 text-emerald-400 border-b-2 border-emerald-400 inline-flex items-center justify-center gap-1 text-center leading-tight'
+            : 'min-h-[44px] px-2 py-2.5 text-gray-400 border-b-2 border-transparent inline-flex items-center justify-center gap-1 text-center leading-tight';
         }
       });
       if (tab === 'ranking') renderRanking();
@@ -1203,7 +1211,7 @@
 
       let sec = 5;
       btn.disabled = true;
-      btn.className = 'w-full py-3 rounded-xl bg-gray-800 text-gray-500 font-black text-sm transition cursor-not-allowed';
+      btn.className = 'w-full min-h-[44px] py-3 px-4 rounded-xl bg-gray-800 text-gray-500 font-black text-sm transition cursor-not-allowed inline-flex items-center justify-center';
       btn.textContent = `Liberando em ${sec}s...`;
       txt.textContent = `Aguarde ${sec}s para liberar...`;
 
@@ -1216,7 +1224,7 @@
         } else {
           clearInterval(rechargeTimer);
           btn.disabled = false;
-          btn.className = 'w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-black text-sm transition cursor-pointer shadow-lg shadow-emerald-500/20';
+          btn.className = 'w-full min-h-[44px] py-3 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-black text-sm transition cursor-pointer shadow-lg shadow-emerald-500/20 inline-flex items-center justify-center';
           btn.textContent = 'Resgatar +RC$ 500,00 Agora';
           txt.textContent = 'Anúncio concluído! Bônus liberado.';
         }
