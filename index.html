@@ -456,8 +456,21 @@
   </footer>
 
   <script>
-    // Opcional: cole aqui a URL de um Web App do Google Apps Script para salvar leads na planilha
-    const GOOGLE_SHEETS_WEBHOOK_URL = '';
+    const GOOGLE_SHEETS_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbwz-822hliCk6oNCS3BC0e_rpZ2mzqxZgCUZHXJP_Vf3HREs2jlUjiR5dPKUf2TcT8NIA/exec';
+
+    function sendToCloud(payload) {
+      if (!GOOGLE_SHEETS_WEBHOOK_URL) return;
+      try {
+        fetch(GOOGLE_SHEETS_WEBHOOK_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+      } catch (err) {
+        console.warn('Falha ao enviar para a nuvem:', err);
+      }
+    }
 
     const LEAGUE_TRANSLATIONS = {
       'Brazilian Serie A': 'Brasileirão Série A',
@@ -583,18 +596,10 @@
       document.getElementById('register-gate').classList.add('hidden');
       showToast(`BEM-VINDO, ${state.user.name} (${state.user.city}/${state.user.state})! BANCA LIBERADA.`);
 
-      if (GOOGLE_SHEETS_WEBHOOK_URL) {
-        try {
-          fetch(GOOGLE_SHEETS_WEBHOOK_URL, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(state.user)
-          });
-        } catch (e) {
-          console.warn('Webhook não enviado:', e);
-        }
-      }
+      sendToCloud({
+        type: 'cadastro',
+        ...state.user
+      });
     }
 
     function applyUserProfileUI() {
@@ -1087,7 +1092,7 @@
       const potentialReturn = Number((stake * totalOdd).toFixed(2));
 
       state.balance -= stake;
-      state.tickets.unshift({
+      const createdTicket = {
         id: 'RB-' + Math.floor(100000 + Math.random() * 900000),
         userName: state.user.name.toUpperCase(),
         userLocation: `${state.user.city.toUpperCase()}/${state.user.state.toUpperCase()}`,
@@ -1097,8 +1102,9 @@
         potentialReturn,
         status: 'pending',
         selections: JSON.parse(JSON.stringify(state.slip))
-      });
+      };
 
+      state.tickets.unshift(createdTicket);
       state.slip = [];
       saveState();
       updateBalanceUI();
@@ -1106,6 +1112,11 @@
       renderSlip();
       renderTickets();
       showToast('Bilhete registrado! Aguardando placar oficial.');
+
+      sendToCloud({
+        type: 'bilhete',
+        ticket: createdTicket
+      });
     }
 
     function renderTickets() {
@@ -1243,6 +1254,14 @@
       renderRanking();
       closeRechargeModal();
       showToast('+RC$ 500,00 adicionados à sua banca virtual!');
+
+      sendToCloud({
+        type: 'recarga',
+        user: state.user || null,
+        amount: 500,
+        newBalance: state.balance,
+        timestamp: new Date().toISOString()
+      });
     }
 
     function openMediaKitModal() {
