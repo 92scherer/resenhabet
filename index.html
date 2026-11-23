@@ -85,8 +85,9 @@
             required
             minlength="2"
             maxlength="32"
-            placeholder="Ex: João Silva"
-            class="w-full bg-gray-950 border border-gray-700 focus:border-emerald-500 rounded-xl px-3.5 py-2.5 text-sm font-semibold text-white placeholder-gray-500 outline-none transition"
+            oninput="forceUppercaseInput(this)"
+            placeholder="EX: JOÃO SILVA"
+            class="w-full bg-gray-950 border border-gray-700 focus:border-emerald-500 rounded-xl px-3.5 py-2.5 text-sm font-semibold text-white placeholder-gray-500 uppercase outline-none transition"
           />
         </div>
 
@@ -112,8 +113,9 @@
               required
               minlength="2"
               maxlength="40"
-              placeholder="Ex: São Leopoldo"
-              class="w-full bg-gray-950 border border-gray-700 focus:border-emerald-500 rounded-xl px-3.5 py-2.5 text-sm font-semibold text-white placeholder-gray-500 outline-none transition"
+              oninput="forceUppercaseInput(this)"
+              placeholder="EX: SÃO LEOPOLDO"
+              class="w-full bg-gray-950 border border-gray-700 focus:border-emerald-500 rounded-xl px-3.5 py-2.5 text-sm font-semibold text-white placeholder-gray-500 uppercase outline-none transition"
             />
           </div>
 
@@ -182,20 +184,14 @@
     </div>
   </div>
 
-  <!-- HEADER PRINCIPAL (LOGO GRANDE NO CANTO ESQUERDO SEM MOLDURA) -->
+  <!-- HEADER PRINCIPAL (SOMENTE LOGO MAIOR NO CANTO ESQUERDO) -->
   <header class="sticky top-0 z-30 bg-[#090d16]/95 backdrop-blur-md border-b border-gray-800">
     <div class="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between gap-3">
       <div class="flex items-center gap-3.5 cursor-pointer" onclick="switchTab('jogos')">
-        <img src="./logo.PNG" alt="Resenha Bet" class="h-20 sm:h-24 w-auto object-contain shrink-0 drop-shadow-[0_4px_14px_rgba(16,185,129,0.22)] transition-transform hover:scale-105" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');" />
+        <img src="./logo.PNG" alt="Resenha Bet" class="h-24 sm:h-28 w-auto object-contain shrink-0 drop-shadow-[0_6px_18px_rgba(16,185,129,0.25)] transition-transform hover:scale-105" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');" />
         <span class="hidden font-black text-emerald-400 text-2xl">RB</span>
 
-        <div>
-          <div class="flex items-center gap-1.5">
-            <h1 class="font-black text-xl sm:text-2xl tracking-tight text-white leading-none">RESENHA <span class="text-amber-400">BET</span></h1>
-            <span class="hidden sm:inline-block text-[10px] font-bold uppercase px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">Free-to-Play</span>
-          </div>
-          <p id="header-user-greeting" class="text-[11px] sm:text-xs text-gray-400 mt-1">Palpites grátis • Jogos & resultados reais</p>
-        </div>
+        <p id="header-user-greeting" class="hidden sm:block text-xs text-gray-400">Palpites grátis • Jogos & resultados reais</p>
       </div>
 
       <nav class="hidden md:flex items-center gap-1 bg-gray-900/90 p-1 rounded-xl border border-gray-800">
@@ -497,6 +493,16 @@
       setInterval(() => loadRealMatches(false), 60000);
     });
 
+    function forceUppercaseInput(input) {
+      const start = input.selectionStart;
+      const end = input.selectionEnd;
+      const upper = input.value.toUpperCase();
+      if (input.value !== upper) {
+        input.value = upper;
+        input.setSelectionRange(start, end);
+      }
+    }
+
     function checkUserRegistration() {
       const gate = document.getElementById('register-gate');
       if (!state.user || !state.user.name || !state.user.whatsapp || !state.user.city || !state.user.state) {
@@ -519,33 +525,33 @@
 
     async function submitRegistration(event) {
       event.preventDefault();
-      const nameInput = document.getElementById('reg-name').value.trim();
+      const nameInput = document.getElementById('reg-name').value.trim().toUpperCase();
       const waInput = document.getElementById('reg-whatsapp').value.trim();
-      const cityInput = document.getElementById('reg-city').value.trim();
-      const stateInput = document.getElementById('reg-state').value.trim();
+      const cityInput = document.getElementById('reg-city').value.trim().toUpperCase();
+      const stateInput = document.getElementById('reg-state').value.trim().toUpperCase();
       const waDigits = waInput.replace(/\D/g, '');
       const errEl = document.getElementById('reg-error');
 
       if (nameInput.length < 2) {
-        errEl.textContent = 'Por favor, informe seu nome ou apelido.';
+        errEl.textContent = 'POR FAVOR, INFORME SEU NOME OU APELIDO.';
         errEl.classList.remove('hidden');
         return;
       }
 
       if (waDigits.length < 10 || waDigits.length > 11) {
-        errEl.textContent = 'Digite um número de WhatsApp válido com DDD (ex: 51 99999-9999).';
+        errEl.textContent = 'DIGITE UM NÚMERO DE WHATSAPP VÁLIDO COM DDD (EX: 51 99999-9999).';
         errEl.classList.remove('hidden');
         return;
       }
 
       if (cityInput.length < 2) {
-        errEl.textContent = 'Por favor, informe sua cidade.';
+        errEl.textContent = 'POR FAVOR, INFORME SUA CIDADE.';
         errEl.classList.remove('hidden');
         return;
       }
 
       if (!stateInput) {
-        errEl.textContent = 'Selecione o seu estado (UF).';
+        errEl.textContent = 'SELECIONE O SEU ESTADO (UF).';
         errEl.classList.remove('hidden');
         return;
       }
@@ -567,7 +573,7 @@
       renderRanking();
 
       document.getElementById('register-gate').classList.add('hidden');
-      showToast(`Bem-vindo, ${state.user.name} (${state.user.city}/${state.user.state})! Banca liberada.`);
+      showToast(`BEM-VINDO, ${state.user.name} (${state.user.city}/${state.user.state})! BANCA LIBERADA.`);
 
       if (GOOGLE_SHEETS_WEBHOOK_URL) {
         try {
@@ -586,8 +592,8 @@
     function applyUserProfileUI() {
       const greetingEl = document.getElementById('header-user-greeting');
       if (state.user && state.user.name && greetingEl) {
-        const loc = state.user.city && state.user.state ? ` • ${state.user.city}/${state.user.state}` : '';
-        greetingEl.innerHTML = `Olá, <strong class="text-white">${state.user.name}</strong>${loc}`;
+        const loc = state.user.city && state.user.state ? ` • ${state.user.city.toUpperCase()}/${state.user.state.toUpperCase()}` : '';
+        greetingEl.innerHTML = `OLÁ, <strong class="text-white">${state.user.name.toUpperCase()}</strong>${loc}`;
       }
     }
 
@@ -1075,8 +1081,8 @@
       state.balance -= stake;
       state.tickets.unshift({
         id: 'RB-' + Math.floor(100000 + Math.random() * 900000),
-        userName: state.user.name,
-        userLocation: `${state.user.city}/${state.user.state}`,
+        userName: state.user.name.toUpperCase(),
+        userLocation: `${state.user.city.toUpperCase()}/${state.user.state.toUpperCase()}`,
         createdAt: new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo', day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }),
         stake,
         totalOdd,
@@ -1142,15 +1148,15 @@
 
     function renderRanking() {
       const userLabel = state.user && state.user.name
-        ? `${state.user.name} (${state.user.city}/${state.user.state})`
-        : 'Você (Sua Banca)';
+        ? `${state.user.name.toUpperCase()} (${state.user.city.toUpperCase()}/${state.user.state.toUpperCase()})`
+        : 'VOCÊ (SUA BANCA)';
 
       const leaders = [
-        { name: 'Lucas_TricolorRS (Porto Alegre/RS)', winrate: '74%', balance: 4850.00 },
-        { name: 'GabrielTips_Oficial (Curitiba/PR)', winrate: '71%', balance: 3920.50 },
-        { name: 'CamilaFutebol (São Paulo/SP)', winrate: '68%', balance: 3110.00 },
+        { name: 'LUCAS_TRICOLORRS (PORTO ALEGRE/RS)', winrate: '74%', balance: 4850.00 },
+        { name: 'GABRIELTIPS_OFICIAL (CURITIBA/PR)', winrate: '71%', balance: 3920.50 },
+        { name: 'CAMILAFUTEBOL (SÃO PAULO/SP)', winrate: '68%', balance: 3110.00 },
         { name: userLabel, winrate: '—', balance: state.balance, isUser: true },
-        { name: 'RafaGol_SP (Campinas/SP)', winrate: '62%', balance: 1640.00 }
+        { name: 'RAFAGOL_SP (CAMPINAS/SP)', winrate: '62%', balance: 1640.00 }
       ].sort((a, b) => b.balance - a.balance);
 
       document.getElementById('ranking-container').innerHTML = leaders.map((u, idx) => `
