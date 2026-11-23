@@ -434,7 +434,7 @@
 
       </div>
 
-      <!-- COLUNA DIREITA: BOLETIM + APOIE VIA PIX (VERDE NEON + LETRAS PRETAS + BÔNUS +200) -->
+      <!-- COLUNA DIREITA: BOLETIM + APOIE VIA PIX + SEJA PATROCINADOR -->
       <aside id="live-betslip-panel" class="lg:col-span-4 space-y-4 lg:sticky lg:top-24 min-w-0">
 
         <div id="side-picks-window" class="bg-gray-900/95 border border-emerald-500/40 rounded-2xl overflow-hidden shadow-2xl shadow-emerald-500/10 transition-all">
@@ -503,16 +503,16 @@
           </div>
         </div>
 
-        <!-- SEÇÃO APOIE VIA PIX (VERDE NEON + LETRAS PRETAS + BÔNUS +RC$ 200) -->
+        <!-- 1. SEÇÃO APOIE VIA PIX (VERDE NEON + LETRAS PRETAS) -->
         <section aria-label="Apoie via Pix" class="pix-neon-box rounded-2xl border-2 border-[#00ff88] p-4 space-y-2.5 text-[#05080f]">
           <div class="flex items-center justify-between gap-2">
             <h3 class="text-sm font-black uppercase tracking-tight text-[#05080f]">Apoie o Resenha Bet</h3>
             <span class="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#05080f] text-[#00ff88]">
-              +RC$ 200 BÔNUS
+              PIX APOIO
             </span>
           </div>
           <p class="text-xs font-bold text-[#05080f]/90 leading-snug">
-            Apoyou no Pix? Copie a chave e resgate <strong>+RC$ 200,00</strong> na sua banca!
+            Curte a resenha? Apoie o projeto via Pix para ajudar a manter a grade no ar.
           </p>
           <div class="flex items-center justify-between gap-2 bg-[#05080f] text-[#00ff88] rounded-xl px-3 py-2">
             <span id="pix-key-value" class="text-xs font-extrabold select-all truncate">pixresenhabet@gmail.com</span>
@@ -520,12 +520,25 @@
               Copiar chave
             </button>
           </div>
-          <button type="button" onclick="claimPixSupportBonus()" id="btn-claim-pix-bonus" class="w-full h-10 px-3 rounded-xl bg-[#05080f] hover:bg-black text-[#00ff88] font-black text-xs transition inline-flex items-center justify-center gap-1.5">
-            <span>Já apoiei! Ganhar +RC$ 200,00</span>
-          </button>
           <div id="pix-copy-feedback" class="text-[11px] font-black text-[#05080f] hidden">
             Chave Pix copiada!
           </div>
+        </section>
+
+        <!-- 2. SEÇÃO SEJA PATROCINADOR (ABAIXO DO APOIE) -->
+        <section aria-label="Seja Patrocinador" class="bg-gray-900/95 border border-amber-400/35 rounded-2xl p-4 space-y-2.5">
+          <div class="flex items-center justify-between gap-2">
+            <h3 class="text-sm font-black uppercase tracking-tight text-white">Seja Patrocinador</h3>
+            <span class="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-amber-400/15 text-amber-300 border border-amber-400/30">
+              PARCERIA
+            </span>
+          </div>
+          <p class="text-xs text-gray-300 leading-snug">
+            Quer divulgar sua marca, loja ou comércio local na resenha? Fale com a gente e patrocine o projeto.
+          </p>
+          <button type="button" onclick="openSponsorInterest()" class="w-full h-10 px-3 rounded-xl bg-amber-400 hover:bg-amber-300 text-black font-black text-xs transition inline-flex items-center justify-center gap-1.5">
+            <span>Quero ser Patrocinador</span>
+          </button>
         </section>
 
       </aside>
@@ -586,7 +599,6 @@
 
   <script>
     const PIX_KEY = 'pixresenhabet@gmail.com';
-    const PIX_SUPPORT_BONUS = 200.00;
     const GOOGLE_SHEETS_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbwz-822hliCk6oNCS3BC0e_rpZ2mzqxZgCUZHXJP_Vf3HREs2jlUjiR5dPKUf2TcT8NIA/exec';
     const CLOUD_QUEUE_KEY = 'rb_cloud_sync_queue';
     const ODDS_API_KEY = '';
@@ -619,33 +631,22 @@
       }
     }
 
-    function claimPixSupportBonus() {
-      if (!state.user) {
-        checkUserRegistration();
-        return;
-      }
-      state.balance = Number((state.balance + PIX_SUPPORT_BONUS).toFixed(2));
-      addLedgerEntry('Apoio Pix', 'Bônus de apoio via Pix (+RC$ 200,00)', PIX_SUPPORT_BONUS, true);
-      saveState();
-      updateBalanceUI();
-      renderLedger();
-      renderRanking();
-      showToast('Valeu pelo apoio! +RC$ 200,00 adicionados à sua banca.');
-
+    function openSponsorInterest() {
+      const msg = 'Olá! Tenho interesse em ser patrocinador do Resenha Bet.';
       sendToCloud({
-        type: 'apoio_pix',
-        pixKey: PIX_KEY,
-        user: {
-          name: state.user.name,
-          whatsapp: state.user.whatsapp,
-          whatsappDigits: state.user.whatsappDigits,
-          city: state.user.city,
-          state: state.user.state
-        },
-        bonusAmount: PIX_SUPPORT_BONUS,
-        newBalance: state.balance,
+        type: 'interesse_patrocinio',
+        user: state.user
+          ? {
+              name: state.user.name,
+              whatsapp: state.user.whatsapp,
+              whatsappDigits: state.user.whatsappDigits,
+              city: state.user.city,
+              state: state.user.state
+            }
+          : null,
         timestamp: new Date().toISOString()
       });
+      window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank', 'noopener,noreferrer');
     }
 
     function fallbackCopyText(text, cb) {
