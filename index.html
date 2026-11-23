@@ -13,17 +13,7 @@
       darkMode: 'class',
       theme: {
         extend: {
-          fontFamily: { sans: ['Inter', 'sans-serif'] },
-          colors: {
-            brand: {
-              green: '#10b981',
-              neon: '#00e676',
-              gold: '#fbbf24',
-              dark: '#090d16',
-              card: '#111827',
-              border: '#1f2937'
-            }
-          }
+          fontFamily: { sans: ['Inter', 'sans-serif'] }
         }
       }
     }
@@ -49,7 +39,7 @@
 </head>
 <body class="min-h-screen flex flex-col justify-between antialiased selection:bg-emerald-500 selection:text-black">
 
-  <!-- SPLASH SCREEN (2 SEGUNDOS) -->
+  <!-- SPLASH SCREEN -->
   <div id="splash-screen" class="fixed inset-0 z-50 bg-[#05080f] flex flex-col items-center justify-center p-6">
     <div class="relative flex flex-col items-center">
       <div class="w-36 h-36 sm:w-44 sm:h-44 rounded-3xl bg-gradient-to-br from-emerald-500/20 to-amber-400/10 border border-emerald-500/30 flex items-center justify-center shadow-2xl shadow-emerald-500/20 mb-5 overflow-hidden p-3">
@@ -64,12 +54,12 @@
       </div>
       <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-emerald-400">
         <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-        Sincronizando jogos reais ESPN...
+        Carregando jogos reais...
       </div>
     </div>
   </div>
 
-  <!-- TOPO: BARRA DE PATROCÍNIO MASTER -->
+  <!-- BARRA DE PATROCÍNIO MASTER -->
   <div class="bg-gradient-to-r from-emerald-950 via-gray-900 to-amber-950/60 border-b border-emerald-500/20 text-xs py-2 px-4">
     <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
       <div class="flex items-center gap-2">
@@ -85,7 +75,6 @@
   <!-- HEADER PRINCIPAL -->
   <header class="sticky top-0 z-30 bg-[#090d16]/95 backdrop-blur-md border-b border-gray-800">
     <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
-      <!-- Marca -->
       <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('jogos')">
         <div class="w-11 h-11 rounded-xl bg-gray-900 border border-emerald-500/40 flex items-center justify-center overflow-hidden p-1 shrink-0">
           <img src="logo.png" alt="Logo" class="w-full h-full object-contain" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');" />
@@ -96,11 +85,10 @@
             <h1 class="font-black text-lg sm:text-xl tracking-tight text-white leading-none">RESENHA <span class="text-amber-400">BET</span></h1>
             <span class="hidden sm:inline-block text-[10px] font-bold uppercase px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">Free-to-Play</span>
           </div>
-          <p class="text-[11px] text-gray-400 mt-0.5">Palpites grátis • Jogos reais ESPN</p>
+          <p class="text-[11px] text-gray-400 mt-0.5">Palpites grátis • Jogos & placares reais</p>
         </div>
       </div>
 
-      <!-- Navegação Desktop -->
       <nav class="hidden md:flex items-center gap-1 bg-gray-900/90 p-1 rounded-xl border border-gray-800">
         <button onclick="switchTab('jogos')" id="nav-jogos" class="tab-btn px-4 py-2 rounded-lg text-sm font-bold bg-emerald-500 text-black transition">
           Jogos Reais
@@ -114,7 +102,6 @@
         </button>
       </nav>
 
-      <!-- Banca Virtual + Recarga -->
       <div class="flex items-center gap-2 sm:gap-3">
         <div class="bg-gray-900 border border-gray-800 rounded-xl px-3 py-1.5 text-right">
           <div class="text-[10px] uppercase tracking-wider text-gray-400 font-semibold">Banca Virtual</div>
@@ -127,7 +114,6 @@
       </div>
     </div>
 
-    <!-- Navegação Mobile -->
     <div class="md:hidden grid grid-cols-3 border-t border-gray-800 bg-gray-950 text-xs font-bold">
       <button onclick="switchTab('jogos')" id="mnav-jogos" class="py-2.5 text-emerald-400 border-b-2 border-emerald-400">Jogos Reais</button>
       <button onclick="switchTab('bilhetes')" id="mnav-bilhetes" class="py-2.5 text-gray-400 border-b-2 border-transparent">Meus Bilhetes (<span id="mbadge-bilhetes">0</span>)</button>
@@ -139,56 +125,50 @@
   <main class="max-w-7xl w-full mx-auto px-4 py-6 flex-1">
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
 
-      <!-- COLUNA ESQUERDA / CENTRAL (8 cols) -->
       <div class="lg:col-span-8 space-y-6">
 
-        <!-- BANNER PUBLICITÁRIO TOPO (ESPAÇO COMERCIAL #1) -->
+        <!-- BANNER PUBLICITÁRIO TOPO -->
         <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-gray-900 via-emerald-950/60 to-gray-900 border border-emerald-500/30 p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div class="space-y-1">
             <div class="flex items-center gap-2">
               <span class="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded bg-white/10 text-gray-300">Publicidade • Cota Ouro</span>
-              <span id="espn-sync-status" class="text-[11px] text-emerald-400 font-semibold">● Feed ESPN Conectado</span>
+              <span id="espn-sync-status" class="text-[11px] text-emerald-400 font-semibold">● Conectando Proxy Vercel...</span>
             </div>
             <h2 class="text-base sm:text-lg font-extrabold text-white">Palpite sem arriscar seu bolso e concorra a prêmios reais toda semana!</h2>
-            <p class="text-xs text-gray-300">Resultados oficiais sincronizados automaticamente via ESPN. Acumule Resenha Coins (RC$) e suba no ranking.</p>
+            <p class="text-xs text-gray-300">Placares oficiais atualizados via servidor Vercel. Acumule Resenha Coins (RC$) e suba no ranking.</p>
           </div>
           <div class="flex items-center gap-2 shrink-0">
-            <button onclick="syncESPNData(true)" id="btn-sync-espn" class="bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold text-xs px-4 py-2.5 rounded-xl transition flex items-center gap-1.5 shadow-lg shadow-emerald-500/20">
+            <button onclick="fetchMatchesFromProxy(true)" id="btn-sync-espn" class="bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold text-xs px-4 py-2.5 rounded-xl transition flex items-center gap-1.5 shadow-lg shadow-emerald-500/20">
               <svg id="sync-icon" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-              <span>Atualizar ESPN</span>
+              <span>Atualizar Jogos</span>
             </button>
           </div>
         </div>
 
         <!-- ABA: JOGOS REAIS -->
         <section id="tab-jogos" class="space-y-4">
-          <!-- Filtros de Campeonato & Status -->
           <div class="flex flex-wrap items-center justify-between gap-3">
             <div id="league-filters" class="flex items-center gap-2 overflow-x-auto pb-1">
               <button onclick="setLeagueFilter('ALL')" data-league="ALL" class="league-pill px-3.5 py-1.5 rounded-full text-xs font-bold bg-emerald-500 text-black whitespace-nowrap">Todos os Jogos</button>
-              <button onclick="setLeagueFilter('bra.1')" data-league="bra.1" class="league-pill px-3.5 py-1.5 rounded-full text-xs font-semibold bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700 whitespace-nowrap">Brasileirão Série A</button>
+              <button onclick="setLeagueFilter('bra.1')" data-league="bra.1" class="league-pill px-3.5 py-1.5 rounded-full text-xs font-semibold bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700 whitespace-nowrap">Brasileirão A</button>
+              <button onclick="setLeagueFilter('bra.2')" data-league="bra.2" class="league-pill px-3.5 py-1.5 rounded-full text-xs font-semibold bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700 whitespace-nowrap">Brasileirão B</button>
               <button onclick="setLeagueFilter('conmebol.libertadores')" data-league="conmebol.libertadores" class="league-pill px-3.5 py-1.5 rounded-full text-xs font-semibold bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700 whitespace-nowrap">Libertadores</button>
-              <button onclick="setLeagueFilter('uefa.champions')" data-league="uefa.champions" class="league-pill px-3.5 py-1.5 rounded-full text-xs font-semibold bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700 whitespace-nowrap">Champions League</button>
+              <button onclick="setLeagueFilter('uefa.champions')" data-league="uefa.champions" class="league-pill px-3.5 py-1.5 rounded-full text-xs font-semibold bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700 whitespace-nowrap">Champions</button>
               <button onclick="setLeagueFilter('eng.1')" data-league="eng.1" class="league-pill px-3.5 py-1.5 rounded-full text-xs font-semibold bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700 whitespace-nowrap">Premier League</button>
               <button onclick="setLeagueFilter('esp.1')" data-league="esp.1" class="league-pill px-3.5 py-1.5 rounded-full text-xs font-semibold bg-gray-900 text-gray-300 border border-gray-800 hover:border-gray-700 whitespace-nowrap">La Liga</button>
             </div>
           </div>
 
-          <!-- Lista de Partidas -->
-          <div id="matches-container" class="space-y-3">
-            <!-- Renderizado via JS -->
-          </div>
+          <div id="matches-container" class="space-y-3"></div>
         </section>
 
         <!-- ABA: MEUS BILHETES -->
         <section id="tab-bilhetes" class="hidden space-y-4">
           <div class="flex items-center justify-between">
             <h2 class="text-lg font-extrabold text-white">Histórico de Bilhetes</h2>
-            <span class="text-xs text-gray-400">Liquidação automática pelo placar final da ESPN</span>
+            <span class="text-xs text-gray-400">Liquidação automática pelo placar real</span>
           </div>
-          <div id="tickets-container" class="space-y-3">
-            <!-- Renderizado via JS -->
-          </div>
+          <div id="tickets-container" class="space-y-3"></div>
         </section>
 
         <!-- ABA: RANKING & PRÊMIOS -->
@@ -204,18 +184,15 @@
                 <div class="text-sm font-black text-white">1º Lugar: Camisa Oficial + R$ 500</div>
               </div>
             </div>
-            <div id="ranking-container" class="divide-y divide-gray-800">
-              <!-- Renderizado via JS -->
-            </div>
+            <div id="ranking-container" class="divide-y divide-gray-800"></div>
           </div>
         </section>
 
       </div>
 
-      <!-- COLUNA DIREITA: BOLETIM DE PALPITES + ESPAÇO PATROCINADOR (4 cols) -->
+      <!-- COLUNA DIREITA: BOLETIM DE PALPITES + ESPAÇO PATROCINADOR -->
       <aside class="lg:col-span-4 space-y-5 lg:sticky lg:top-24">
 
-        <!-- BOLETIM DE PALPITES (BETSLIP) -->
         <div class="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-xl">
           <div class="bg-gray-950 px-4 py-3.5 border-b border-gray-800 flex items-center justify-between">
             <div class="flex items-center gap-2">
@@ -267,7 +244,6 @@
           </div>
         </div>
 
-        <!-- ESPAÇO PUBLICITÁRIO LATERAL (COTA PATROCINADOR) -->
         <div class="rounded-2xl bg-gradient-to-b from-gray-900 to-gray-950 border border-amber-400/30 p-5 text-center space-y-3">
           <span class="inline-block text-[10px] font-bold uppercase tracking-widest px-2.5 py-0.5 rounded-full bg-amber-400/15 text-amber-300 border border-amber-400/30">
             Espaço Patrocinado
@@ -344,7 +320,7 @@
     </div>
   </div>
 
-  <!-- TOAST DE NOTIFICAÇÃO -->
+  <!-- TOAST -->
   <div id="toast" class="fixed bottom-5 right-5 z-50 hidden bg-gray-900 border border-emerald-500/50 text-white px-4 py-3 rounded-xl shadow-2xl text-xs font-bold flex items-center gap-2">
     <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
     <span id="toast-msg">Mensagem</span>
@@ -363,18 +339,6 @@
   </footer>
 
   <script>
-    // =========================================================
-    // CONFIGURAÇÃO DE LIGAS ESPN (ENDPOINTS PÚBLICOS)
-    // =========================================================
-    const ESPN_LEAGUES = [
-      { code: 'bra.1', name: 'Brasileirão Série A' },
-      { code: 'conmebol.libertadores', name: 'Copa Libertadores' },
-      { code: 'uefa.champions', name: 'Champions League' },
-      { code: 'eng.1', name: 'Premier League' },
-      { code: 'esp.1', name: 'La Liga' }
-    ];
-
-    // Estado persistente
     let state = {
       balance: parseFloat(localStorage.getItem('rb_balance')) || 1000.00,
       tickets: JSON.parse(localStorage.getItem('rb_tickets')) || [],
@@ -383,7 +347,6 @@
       activeLeague: 'ALL'
     };
 
-    // Splash screen 2s
     window.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => {
         document.getElementById('splash-screen').classList.add('splash-hidden');
@@ -392,7 +355,7 @@
       updateBalanceUI();
       renderTickets();
       renderRanking();
-      syncESPNData(false);
+      fetchMatchesFromProxy(false);
     });
 
     function saveState() {
@@ -419,127 +382,61 @@
     }
 
     // =========================================================
-    // INTEGRAÇÃO REAL COM A API PÚBLICA DA ESPN
+    // CONEXÃO VIA VERCEL SERVERLESS PROXY (/api/jogos)
     // =========================================================
-    function getESPNDateRange() {
-      const fmt = (d) => d.toISOString().slice(0, 10).replace(/-/g, '');
-      const start = new Date();
-      start.setDate(start.getDate() - 1); // Inclui jogos encerrados ontem para liquidação
-      const end = new Date();
-      end.setDate(end.getDate() + 4); // Próximos 4 dias de rodada
-      return `${fmt(start)}-${fmt(end)}`;
-    }
-
-    function generateRealisticOdds(homeComp, awayComp, eventId) {
-      // Tenta usar odds oficiais caso a ESPN forneça
-      // Caso contrário, calcula odds equilibradas e determinísticas baseadas no retrospecto (record)
-      const parseWinRate = (comp) => {
-        try {
-          const summary = comp.records?.[0]?.summary; // ex: "15-6-5"
-          if (!summary) return 0.45;
-          const parts = summary.split('-').map(Number);
-          const total = parts.reduce((a, b) => a + b, 0);
-          return total > 0 ? (parts[0] + parts[1] * 0.3) / total : 0.45;
-        } catch { return 0.45; }
-      };
-
-      const hRate = parseWinRate(homeComp) + 0.08; // fator casa
-      const aRate = parseWinRate(awayComp);
-      const seed = (parseInt(String(eventId).slice(-3), 10) || 50) / 1000;
-
-      let odd1 = Math.max(1.35, Math.min(4.80, (1 / Math.max(0.22, hRate)) * 0.88 + seed));
-      let odd2 = Math.max(1.45, Math.min(5.50, (1 / Math.max(0.18, aRate)) * 0.92 - seed));
-      let oddX = Math.max(2.85, Math.min(4.20, 3.15 + Math.abs(odd1 - odd2) * 0.25));
-
-      return {
-        home: Number(odd1.toFixed(2)),
-        draw: Number(oddX.toFixed(2)),
-        away: Number(odd2.toFixed(2))
-      };
-    }
-
-    async function syncESPNData(manual = false) {
+    async function fetchMatchesFromProxy(manual = false) {
       const container = document.getElementById('matches-container');
       const statusEl = document.getElementById('espn-sync-status');
       const icon = document.getElementById('sync-icon');
 
       if (manual) icon.classList.add('animate-spin');
-      statusEl.textContent = '● Buscando jogos na ESPN...';
+      statusEl.textContent = '● Sincronizando jogos via Vercel...';
 
       if (state.matches.length === 0) {
         container.innerHTML = `
           <div class="bg-gray-900 border border-gray-800 rounded-2xl p-8 text-center space-y-2">
             <div class="w-8 h-8 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
-            <p class="text-sm font-bold text-white">Carregando partidas reais da ESPN...</p>
-            <p class="text-xs text-gray-400">Brasileirão, Libertadores, Champions, Premier League e La Liga</p>
+            <p class="text-sm font-bold text-white">Buscando jogos e placares reais...</p>
+            <p class="text-xs text-gray-400">Conectando ao servidor Vercel (/api/jogos)</p>
           </div>`;
       }
 
-      const dateRange = getESPNDateRange();
-      const fetchedMatches = [];
+      try {
+        const res = await fetch('/api/jogos');
+        if (!res.ok) throw new Error('Rota /api/jogos indisponível neste ambiente');
 
-      await Promise.all(ESPN_LEAGUES.map(async (league) => {
-        try {
-          const url = `https://site.api.espn.com/apis/site/v2/sports/soccer/${league.code}/scoreboard?dates=${dateRange}`;
-          const res = await fetch(url);
-          if (!res.ok) return;
-          const data = await res.json();
-          const events = data.events || [];
-
-          events.forEach(ev => {
-            const comp = ev.competitions?.[0];
-            if (!comp || !comp.competitors || comp.competitors.length < 2) return;
-
-            const home = comp.competitors.find(c => c.homeAway === 'home') || comp.competitors[0];
-            const away = comp.competitors.find(c => c.homeAway === 'away') || comp.competitors[1];
-
-            const statusType = ev.status?.type?.state || 'pre'; // 'pre' | 'in' | 'post'
-            const statusDetail = ev.status?.type?.shortDetail || '';
-
-            fetchedMatches.push({
-              id: String(ev.id),
-              leagueCode: league.code,
-              leagueName: league.name,
-              date: ev.date,
-              status: statusType,
-              statusDetail,
-              homeName: home.team?.shortDisplayName || home.team?.displayName || 'Casa',
-              homeLogo: home.team?.logo || '',
-              homeScore: parseInt(home.score ?? '0', 10),
-              awayName: away.team?.shortDisplayName || away.team?.displayName || 'Fora',
-              awayLogo: away.team?.logo || '',
-              awayScore: parseInt(away.score ?? '0', 10),
-              odds: generateRealisticOdds(home, away, ev.id)
-            });
-          });
-        } catch (err) {
-          console.warn('Falha ao buscar liga ESPN:', league.code, err);
+        const data = await res.json();
+        if (!data.ok || !Array.isArray(data.matches)) {
+          throw new Error(data.error || 'Resposta inválida do servidor');
         }
-      }));
 
-      // Ordena: Ao vivo primeiro, depois próximos jogos por horário, depois encerrados recentes
-      const orderWeight = { in: 0, pre: 1, post: 2 };
-      fetchedMatches.sort((a, b) => {
-        if (orderWeight[a.status] !== orderWeight[b.status]) {
-          return orderWeight[a.status] - orderWeight[b.status];
-        }
-        return new Date(a.date) - new Date(b.date);
-      });
+        state.matches = data.matches;
+        settleTicketsWithRealScores();
+        renderMatches();
 
-      state.matches = fetchedMatches;
-      settleTicketsWithRealScores();
-      renderMatches();
-
-      const nowStr = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-      statusEl.textContent = `● ESPN Ao Vivo (${fetchedMatches.length} jogos • ${nowStr})`;
-      if (manual) {
-        icon.classList.remove('animate-spin');
-        showToast(`${fetchedMatches.length} jogos reais sincronizados com a ESPN!`);
+        const nowStr = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+        statusEl.textContent = `● Ao Vivo Vercel (${state.matches.length} jogos • ${nowStr})`;
+        if (manual) showToast(`${state.matches.length} jogos reais atualizados!`);
+      } catch (err) {
+        console.warn('Aviso Proxy Vercel:', err.message);
+        statusEl.textContent = '● Aguardando deploy na Vercel (/api/jogos)';
+        container.innerHTML = `
+          <div class="bg-gray-900 border border-amber-500/30 rounded-2xl p-6 text-center space-y-3">
+            <div class="inline-block px-3 py-1 rounded-full bg-amber-400/15 text-amber-300 text-xs font-bold">
+              Rota /api/jogos não encontrada localmente
+            </div>
+            <h3 class="text-base font-extrabold text-white">Publique na Vercel para ativar os jogos reais</h3>
+            <p class="text-xs text-gray-400 max-w-md mx-auto leading-relaxed">
+              Para evitar o bloqueio de CORS do navegador, a busca da ESPN roda dentro da função serverless <code class="text-emerald-400">api/jogos.js</code> na Vercel. Assim que fizer o deploy no GitHub + Vercel, os jogos reais aparecem aqui automaticamente.
+            </p>
+          </div>`;
+      } finally {
+        if (manual) icon.classList.remove('animate-spin');
       }
     }
 
     // =========================================================
-    // LIQUIDAÇÃO AUTOMÁTICA BASEADA NO PLACAR REAL DA ESPN
+    // LIQUIDAÇÃO AUTOMÁTICA PELO PLACAR REAL
     // =========================================================
     function settleTicketsWithRealScores() {
       if (!state.tickets.length || !state.matches.length) return;
@@ -582,7 +479,7 @@
       if (changed) {
         if (newlyWonAmount > 0) {
           state.balance += newlyWonAmount;
-          showToast(`GREEN! Você ganhou ${formatCurrency(newlyWonAmount)} com resultados reais!`);
+          showToast(`GREEN! Você ganhou ${formatCurrency(newlyWonAmount)} com placares reais!`);
         }
         saveState();
         updateBalanceUI();
@@ -654,7 +551,6 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
-              <!-- Confronto + Placar Real -->
               <div class="md:col-span-6 space-y-2">
                 <div class="flex items-center justify-between">
                   <div class="flex items-center gap-2.5 min-w-0">
@@ -672,7 +568,6 @@
                 </div>
               </div>
 
-              <!-- Botões de Odds (1 X 2) -->
               <div class="md:col-span-6 grid grid-cols-3 gap-2">
                 ${renderOddButton(m, '1', 'Casa', m.odds.home, isSel1, canBet)}
                 ${renderOddButton(m, 'X', 'Empate', m.odds.draw, isSelX, canBet)}
@@ -825,11 +720,11 @@
       renderMatches();
       renderSlip();
       renderTickets();
-      showToast('Bilhete registrado! Aguardando resultado oficial na ESPN.');
+      showToast('Bilhete registrado! Aguardando placar oficial.');
     }
 
     // =========================================================
-    // RENDERIZAÇÃO DE BILHETES & RANKING
+    // BILHETES & RANKING
     // =========================================================
     function renderTickets() {
       const container = document.getElementById('tickets-container');
@@ -903,7 +798,7 @@
     }
 
     // =========================================================
-    // NAVEGAÇÃO & MODAIS DE MONETIZAÇÃO
+    // NAVEGAÇÃO & MODAIS
     // =========================================================
     function switchTab(tab) {
       ['jogos', 'bilhetes', 'ranking'].forEach(t => {
