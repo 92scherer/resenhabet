@@ -44,6 +44,11 @@
     .pick-pop { animation: pop-in 0.16s ease-out; }
     #splash-screen { transition: opacity 0.45s ease, visibility 0.45s ease; }
     .splash-hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+    .pix-neon-box {
+      background: linear-gradient(135deg, #00ff88 0%, #00e676 100%);
+      color: #05080f;
+      box-shadow: 0 0 26px rgba(0, 255, 136, 0.28);
+    }
   </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between antialiased selection:bg-emerald-500 selection:text-black">
@@ -429,7 +434,7 @@
 
       </div>
 
-      <!-- COLUNA DIREITA: BOLETIM + APOIE VIA PIX -->
+      <!-- COLUNA DIREITA: BOLETIM + APOIE VIA PIX (VERDE NEON + LETRAS PRETAS + BÔNUS +200) -->
       <aside id="live-betslip-panel" class="lg:col-span-4 space-y-4 lg:sticky lg:top-24 min-w-0">
 
         <div id="side-picks-window" class="bg-gray-900/95 border border-emerald-500/40 rounded-2xl overflow-hidden shadow-2xl shadow-emerald-500/10 transition-all">
@@ -498,25 +503,28 @@
           </div>
         </div>
 
-        <!-- SEÇÃO APOIE VIA PIX -->
-        <section aria-label="Apoie via Pix" class="rounded-2xl bg-gray-900/95 border border-gray-800 p-4 space-y-2.5">
+        <!-- SEÇÃO APOIE VIA PIX (VERDE NEON + LETRAS PRETAS + BÔNUS +RC$ 200) -->
+        <section aria-label="Apoie via Pix" class="pix-neon-box rounded-2xl border-2 border-[#00ff88] p-4 space-y-2.5 text-[#05080f]">
           <div class="flex items-center justify-between gap-2">
-            <h3 class="text-sm font-extrabold text-white">Apoie o Resenha Bet</h3>
-            <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
-              Pix
+            <h3 class="text-sm font-black uppercase tracking-tight text-[#05080f]">Apoie o Resenha Bet</h3>
+            <span class="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#05080f] text-[#00ff88]">
+              +RC$ 200 BÔNUS
             </span>
           </div>
-          <p class="text-xs text-gray-400 leading-relaxed">
-            Curte o app gratuito? Se quiser contribuir com qualquer valor via Pix:
+          <p class="text-xs font-bold text-[#05080f]/90 leading-snug">
+            Apoyou no Pix? Copie a chave e resgate <strong>+RC$ 200,00</strong> na sua banca!
           </p>
-          <div class="flex items-center justify-between gap-2 bg-gray-950 border border-gray-800 rounded-xl px-3 py-2">
-            <span id="pix-key-value" class="text-xs font-bold text-gray-200 select-all truncate">pixresenhabet@gmail.com</span>
-            <button type="button" onclick="copyPixKey()" id="btn-copy-pix" class="h-8 px-3 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold text-[11px] transition shrink-0 inline-flex items-center justify-center">
+          <div class="flex items-center justify-between gap-2 bg-[#05080f] text-[#00ff88] rounded-xl px-3 py-2">
+            <span id="pix-key-value" class="text-xs font-extrabold select-all truncate">pixresenhabet@gmail.com</span>
+            <button type="button" onclick="copyPixKey()" id="btn-copy-pix" class="h-8 px-3 rounded-lg bg-[#00ff88] hover:bg-[#5cffb3] text-[#05080f] font-black text-[11px] transition shrink-0 inline-flex items-center justify-center">
               Copiar chave
             </button>
           </div>
-          <div id="pix-copy-feedback" class="text-[11px] font-semibold text-emerald-400 hidden">
-            Chave Pix copiada para a área de transferência.
+          <button type="button" onclick="claimPixSupportBonus()" id="btn-claim-pix-bonus" class="w-full h-10 px-3 rounded-xl bg-[#05080f] hover:bg-black text-[#00ff88] font-black text-xs transition inline-flex items-center justify-center gap-1.5">
+            <span>Já apoiei! Ganhar +RC$ 200,00</span>
+          </button>
+          <div id="pix-copy-feedback" class="text-[11px] font-black text-[#05080f] hidden">
+            Chave Pix copiada!
           </div>
         </section>
 
@@ -578,6 +586,7 @@
 
   <script>
     const PIX_KEY = 'pixresenhabet@gmail.com';
+    const PIX_SUPPORT_BONUS = 200.00;
     const GOOGLE_SHEETS_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbwz-822hliCk6oNCS3BC0e_rpZ2mzqxZgCUZHXJP_Vf3HREs2jlUjiR5dPKUf2TcT8NIA/exec';
     const CLOUD_QUEUE_KEY = 'rb_cloud_sync_queue';
     const ODDS_API_KEY = '';
@@ -608,6 +617,35 @@
       } else {
         fallbackCopyText(PIX_KEY, onCopied);
       }
+    }
+
+    function claimPixSupportBonus() {
+      if (!state.user) {
+        checkUserRegistration();
+        return;
+      }
+      state.balance = Number((state.balance + PIX_SUPPORT_BONUS).toFixed(2));
+      addLedgerEntry('Apoio Pix', 'Bônus de apoio via Pix (+RC$ 200,00)', PIX_SUPPORT_BONUS, true);
+      saveState();
+      updateBalanceUI();
+      renderLedger();
+      renderRanking();
+      showToast('Valeu pelo apoio! +RC$ 200,00 adicionados à sua banca.');
+
+      sendToCloud({
+        type: 'apoio_pix',
+        pixKey: PIX_KEY,
+        user: {
+          name: state.user.name,
+          whatsapp: state.user.whatsapp,
+          whatsappDigits: state.user.whatsappDigits,
+          city: state.user.city,
+          state: state.user.state
+        },
+        bonusAmount: PIX_SUPPORT_BONUS,
+        newBalance: state.balance,
+        timestamp: new Date().toISOString()
+      });
     }
 
     function fallbackCopyText(text, cb) {
