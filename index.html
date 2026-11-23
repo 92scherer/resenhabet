@@ -39,7 +39,7 @@
 </head>
 <body class="min-h-screen flex flex-col justify-between antialiased selection:bg-emerald-500 selection:text-black">
 
-  <!-- SPLASH SCREEN (LOGO BEM MAIOR SEM MOLDURA) -->
+  <!-- SPLASH SCREEN -->
   <div id="splash-screen" class="fixed inset-0 z-50 bg-[#05080f] flex flex-col items-center justify-center p-6">
     <div class="relative flex flex-col items-center">
       <div class="flex items-center justify-center mb-6">
@@ -59,24 +59,35 @@
     </div>
   </div>
 
-  <!-- TELA DE CADASTRO OBRIGATÓRIO (NOME + WHATSAPP + CIDADE + ESTADO) -->
+  <!-- TELA DE ACESSO: CADASTRO COM SENHA + LOGIN RÁPIDO -->
   <div id="register-gate" class="fixed inset-0 z-40 hidden bg-[#05080f]/95 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
     <div class="bg-gray-900 border border-emerald-500/30 rounded-3xl max-w-md w-full p-5 sm:p-7 shadow-2xl shadow-emerald-500/10 space-y-4 my-auto">
       <div class="flex flex-col items-center text-center">
         <div class="flex items-center justify-center mb-2">
-          <img src="./logo.PNG" alt="Resenha Bet" class="h-44 sm:h-64 w-auto object-contain drop-shadow-[0_8px_24px_rgba(16,185,129,0.28)]" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');" />
+          <img src="./logo.PNG" alt="Resenha Bet" class="h-40 sm:h-56 w-auto object-contain drop-shadow-[0_8px_24px_rgba(16,185,129,0.28)]" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');" />
           <span class="hidden font-black text-emerald-400 text-3xl">RESENHA BET</span>
         </div>
         <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
-          100% Gratuito • Sem Depósito
+          100% Gratuito • Banca Salva
         </span>
-        <h2 class="text-xl sm:text-2xl font-black text-white mt-2">Entre para a Resenha!</h2>
-        <p class="text-xs text-gray-400 mt-1 leading-relaxed">
-          Preencha seus dados para liberar sua banca grátis de <strong class="text-emerald-400">RC$ 1.000,00</strong> e participar do ranking oficial.
+        <h2 id="auth-title" class="text-xl sm:text-2xl font-black text-white mt-2">Crie sua Conta na Resenha!</h2>
+        <p id="auth-subtitle" class="text-xs text-gray-400 mt-1 leading-relaxed">
+          Cadastre-se e crie sua senha para liberar <strong class="text-emerald-400">RC$ 1.000,00</strong> e manter seus valores salvos para os próximos jogos.
         </p>
       </div>
 
-      <form id="register-form" onsubmit="submitRegistration(event)" class="space-y-3.5">
+      <!-- Alternar Cadastro / Entrar -->
+      <div class="grid grid-cols-2 gap-1.5 bg-gray-950 p-1 rounded-xl border border-gray-800">
+        <button type="button" id="auth-tab-register" onclick="setAuthMode('register')" class="min-h-[38px] rounded-lg text-xs font-black bg-emerald-500 text-black transition inline-flex items-center justify-center">
+          Criar Cadastro
+        </button>
+        <button type="button" id="auth-tab-login" onclick="setAuthMode('login')" class="min-h-[38px] rounded-lg text-xs font-bold text-gray-400 hover:text-white transition inline-flex items-center justify-center">
+          Já Tenho Conta
+        </button>
+      </div>
+
+      <!-- FORMULÁRIO DE CADASTRO -->
+      <form id="register-form" onsubmit="submitRegistration(event)" class="space-y-3">
         <div>
           <label for="reg-name" class="block text-xs font-bold text-gray-300 mb-1">Seu Nome ou Apelido *</label>
           <input
@@ -158,16 +169,76 @@
           </div>
         </div>
 
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+          <div class="min-w-0">
+            <label for="reg-password" class="block text-xs font-bold text-gray-300 mb-1">Crie sua Senha *</label>
+            <input
+              id="reg-password"
+              type="password"
+              required
+              minlength="4"
+              maxlength="24"
+              placeholder="Mín. 4 caracteres"
+              class="w-full min-w-0 bg-gray-950 border border-gray-700 focus:border-emerald-500 rounded-xl px-3.5 py-2.5 text-sm font-semibold text-white placeholder-gray-500 outline-none transition"
+            />
+          </div>
+          <div class="min-w-0">
+            <label for="reg-password-confirm" class="block text-xs font-bold text-gray-300 mb-1">Confirme a Senha *</label>
+            <input
+              id="reg-password-confirm"
+              type="password"
+              required
+              minlength="4"
+              maxlength="24"
+              placeholder="Repita a senha"
+              class="w-full min-w-0 bg-gray-950 border border-gray-700 focus:border-emerald-500 rounded-xl px-3.5 py-2.5 text-sm font-semibold text-white placeholder-gray-500 outline-none transition"
+            />
+          </div>
+        </div>
+
         <div id="reg-error" class="hidden text-xs font-bold text-red-400 bg-red-500/10 border border-red-500/30 rounded-xl px-3 py-2 text-center"></div>
 
         <button type="submit" class="w-full min-h-[46px] py-3.5 px-4 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-400 hover:from-emerald-400 hover:to-emerald-300 text-black font-black text-sm shadow-lg shadow-emerald-500/25 transition inline-flex items-center justify-center gap-2">
-          <span>Liberar Minha Banca de RC$ 1.000,00</span>
+          <span>Criar Conta & Liberar RC$ 1.000,00</span>
+          <span aria-hidden="true">→</span>
+        </button>
+      </form>
+
+      <!-- FORMULÁRIO DE LOGIN -->
+      <form id="login-form" onsubmit="submitLogin(event)" class="hidden space-y-3.5">
+        <div>
+          <label for="login-whatsapp" class="block text-xs font-bold text-gray-300 mb-1">WhatsApp Cadastrado *</label>
+          <input
+            id="login-whatsapp"
+            type="tel"
+            maxlength="15"
+            oninput="maskWhatsApp(this)"
+            placeholder="(51) 99999-9999"
+            class="w-full min-w-0 bg-gray-950 border border-gray-700 focus:border-emerald-500 rounded-xl px-3.5 py-2.5 text-sm font-semibold text-white placeholder-gray-500 outline-none transition"
+          />
+        </div>
+
+        <div>
+          <label for="login-password" class="block text-xs font-bold text-gray-300 mb-1">Sua Senha *</label>
+          <input
+            id="login-password"
+            type="password"
+            maxlength="24"
+            placeholder="Digite sua senha"
+            class="w-full min-w-0 bg-gray-950 border border-gray-700 focus:border-emerald-500 rounded-xl px-3.5 py-2.5 text-sm font-semibold text-white placeholder-gray-500 outline-none transition"
+          />
+        </div>
+
+        <div id="login-error" class="hidden text-xs font-bold text-red-400 bg-red-500/10 border border-red-500/30 rounded-xl px-3 py-2 text-center"></div>
+
+        <button type="submit" id="btn-login-submit" class="w-full min-h-[46px] py-3.5 px-4 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-400 hover:from-emerald-400 hover:to-emerald-300 text-black font-black text-sm shadow-lg shadow-emerald-500/25 transition inline-flex items-center justify-center gap-2">
+          <span>Entrar & Recuperar Minha Banca</span>
           <span aria-hidden="true">→</span>
         </button>
       </form>
 
       <p class="text-[11px] text-center text-gray-500">
-        Plataforma recreativa Free-to-Play. Proibido para menores de 18 anos.
+        Plataforma recreativa gratuita (Free-to-Play). Proibido para menores de 18 anos.
       </p>
     </div>
   </div>
@@ -179,20 +250,25 @@
         <span class="px-2 py-0.5 rounded bg-amber-400/15 text-amber-300 border border-amber-400/30 font-bold uppercase text-[10px] tracking-wider shrink-0">Patrocinador Master</span>
         <span class="text-gray-300 leading-snug">Copa <strong class="text-white">Resenha Bet</strong> — Prêmio de <strong class="text-emerald-400">R$ 1.000 em Produtos</strong> para o Top 1 do mês!</span>
       </div>
-      <button onclick="openMediaKitModal()" class="text-amber-300 hover:text-amber-200 font-semibold underline underline-offset-2 transition shrink-0 py-0.5">
+      <button type="button" onclick="openMediaKitModal()" class="text-amber-300 hover:text-amber-200 font-semibold underline underline-offset-2 transition shrink-0 py-0.5">
         Anuncie sua marca aqui →
       </button>
     </div>
   </div>
 
-  <!-- HEADER PRINCIPAL (SOMENTE LOGO BEM MAIOR NO CANTO ESQUERDO) -->
+  <!-- HEADER PRINCIPAL -->
   <header class="sticky top-0 z-30 bg-[#090d16]/95 backdrop-blur-md border-b border-gray-800">
     <div class="max-w-7xl mx-auto px-3 sm:px-4 py-2 flex items-center justify-between gap-2 sm:gap-4">
       <button type="button" onclick="switchTab('jogos')" class="flex items-center gap-3 text-left min-w-0 group focus:outline-none">
         <img src="./logo.PNG" alt="Resenha Bet" class="h-32 sm:h-48 md:h-56 w-auto object-contain shrink-0 drop-shadow-[0_8px_24px_rgba(16,185,129,0.28)] transition-transform group-hover:scale-105" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');" />
         <span class="hidden font-black text-emerald-400 text-2xl">RB</span>
 
-        <p id="header-user-greeting" class="hidden xl:block text-xs text-gray-400 truncate">Palpites grátis • Jogos & resultados reais</p>
+        <div class="hidden xl:flex flex-col min-w-0">
+          <p id="header-user-greeting" class="text-xs text-gray-400 truncate">Palpites grátis • Jogos & resultados reais</p>
+          <button type="button" id="btn-logout-desktop" onclick="logoutUser()" class="hidden text-[11px] text-amber-400 hover:underline font-semibold text-left mt-0.5">
+            Trocar conta / Sair
+          </button>
+        </div>
       </button>
 
       <nav class="hidden md:flex items-center gap-1 bg-gray-900/90 p-1 rounded-xl border border-gray-800 shrink-0">
@@ -210,7 +286,7 @@
 
       <div class="flex items-center gap-2 shrink-0">
         <div class="bg-gray-900 border border-gray-800 rounded-xl px-2.5 sm:px-3 py-1.5 text-right">
-          <div class="text-[9px] sm:text-[10px] uppercase tracking-wider text-gray-400 font-semibold leading-tight">Banca Virtual</div>
+          <div class="text-[9px] sm:text-[10px] uppercase tracking-wider text-gray-400 font-semibold leading-tight">Banca Salva</div>
           <div id="user-balance" class="font-black text-xs sm:text-base text-emerald-400 tabular-nums leading-tight mt-0.5">RC$ 1.000,00</div>
         </div>
         <button type="button" onclick="openRechargeModal()" class="min-h-[42px] sm:min-h-[44px] bg-gradient-to-r from-amber-400 to-yellow-500 hover:from-amber-300 hover:to-yellow-400 text-black font-extrabold text-xs sm:text-sm px-3 sm:px-3.5 py-2 rounded-xl shadow-lg shadow-amber-500/20 transition inline-flex items-center justify-center gap-1.5 shrink-0">
@@ -248,7 +324,7 @@
               <span id="api-sync-status" class="text-[11px] text-emerald-400 font-semibold">● Conectando grade ao vivo...</span>
             </div>
             <h2 class="text-base sm:text-lg font-extrabold text-white leading-snug">Palpite sem arriscar seu bolso e concorra a prêmios reais toda semana!</h2>
-            <p class="text-xs text-gray-300 leading-relaxed">Horários oficiais (Brasília) e placares ao vivo sincronizados. Acumule RC$ e lidere a liga.</p>
+            <p class="text-xs text-gray-300 leading-relaxed">Horários oficiais (Brasília) e placares ao vivo sincronizados. Sua banca fica salva para os próximos jogos.</p>
           </div>
           <div class="flex items-center gap-2 shrink-0">
             <button type="button" onclick="loadRealMatches(true)" id="btn-sync-api" class="w-full sm:w-auto min-h-[42px] bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold text-xs px-4 py-2.5 rounded-xl transition inline-flex items-center justify-center gap-1.5 shadow-lg shadow-emerald-500/20 whitespace-nowrap">
@@ -472,6 +548,62 @@
       }
     }
 
+    function getUserStorageKey(user) {
+      const digits = (user?.whatsappDigits || user?.whatsapp || '').replace(/\D/g, '');
+      return digits ? `rb_account_${digits}` : null;
+    }
+
+    function loadSavedAccountForUser(user) {
+      const key = getUserStorageKey(user);
+      if (!key) return null;
+      try {
+        const raw = localStorage.getItem(key);
+        return raw ? JSON.parse(raw) : null;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function persistAccountSnapshot() {
+      if (!state.user) return;
+      const key = getUserStorageKey(state.user);
+      const snapshot = {
+        user: {
+          name: state.user.name,
+          whatsapp: state.user.whatsapp,
+          whatsappDigits: state.user.whatsappDigits,
+          city: state.user.city,
+          state: state.user.state,
+          password: state.user.password,
+          registeredAt: state.user.registeredAt
+        },
+        balance: Number(state.balance.toFixed(2)),
+        tickets: state.tickets,
+        updatedAt: new Date().toISOString()
+      };
+
+      localStorage.setItem('rb_user', JSON.stringify(snapshot.user));
+      localStorage.setItem('rb_balance', snapshot.balance.toFixed(2));
+      localStorage.setItem('rb_tickets', JSON.stringify(snapshot.tickets));
+      if (key) {
+        localStorage.setItem(key, JSON.stringify(snapshot));
+      }
+
+      sendToCloud({
+        type: 'sync_estado',
+        user: {
+          name: snapshot.user.name,
+          whatsapp: snapshot.user.whatsapp,
+          whatsappDigits: snapshot.user.whatsappDigits,
+          city: snapshot.user.city,
+          state: snapshot.user.state
+        },
+        balance: snapshot.balance,
+        tickets: snapshot.tickets,
+        updatedAt: snapshot.updatedAt
+      });
+    }
+
     const LEAGUE_TRANSLATIONS = {
       'Brazilian Serie A': 'Brasileirão Série A',
       'Copa do Brasil': 'Copa do Brasil',
@@ -489,10 +621,15 @@
       'FIFA World Cup': 'Copa do Mundo'
     };
 
+    const initialUser = JSON.parse(localStorage.getItem('rb_user')) || null;
+    const initialAccount = initialUser ? loadSavedAccountForUser(initialUser) : null;
+
     let state = {
-      user: JSON.parse(localStorage.getItem('rb_user')) || null,
-      balance: parseFloat(localStorage.getItem('rb_balance')) || 1000.00,
-      tickets: JSON.parse(localStorage.getItem('rb_tickets')) || [],
+      user: initialAccount?.user || initialUser,
+      balance: initialAccount && typeof initialAccount.balance === 'number'
+        ? initialAccount.balance
+        : (parseFloat(localStorage.getItem('rb_balance')) || 1000.00),
+      tickets: initialAccount?.tickets || JSON.parse(localStorage.getItem('rb_tickets')) || [],
       slip: [],
       matches: [],
       activeLeague: 'ALL',
@@ -524,13 +661,64 @@
       }
     }
 
+    function setAuthMode(mode) {
+      const isRegister = mode === 'register';
+      document.getElementById('auth-tab-register').className = isRegister
+        ? 'min-h-[38px] rounded-lg text-xs font-black bg-emerald-500 text-black transition inline-flex items-center justify-center'
+        : 'min-h-[38px] rounded-lg text-xs font-bold text-gray-400 hover:text-white transition inline-flex items-center justify-center';
+      document.getElementById('auth-tab-login').className = !isRegister
+        ? 'min-h-[38px] rounded-lg text-xs font-black bg-emerald-500 text-black transition inline-flex items-center justify-center'
+        : 'min-h-[38px] rounded-lg text-xs font-bold text-gray-400 hover:text-white transition inline-flex items-center justify-center';
+
+      document.getElementById('register-form').classList.toggle('hidden', !isRegister);
+      document.getElementById('login-form').classList.toggle('hidden', isRegister);
+
+      document.getElementById('auth-title').textContent = isRegister
+        ? 'Crie sua Conta na Resenha!'
+        : 'Acesse sua Conta Salva';
+      document.getElementById('auth-subtitle').innerHTML = isRegister
+        ? 'Cadastre-se e crie sua senha para liberar <strong class="text-emerald-400">RC$ 1.000,00</strong> e manter seus valores salvos para os próximos jogos.'
+        : 'Informe seu <strong class="text-white">WhatsApp</strong> e sua <strong class="text-emerald-400">senha</strong> para entrar e manter sua banca.';
+    }
+
     function checkUserRegistration() {
       const gate = document.getElementById('register-gate');
-      if (!state.user || !state.user.name || !state.user.whatsapp || !state.user.city || !state.user.state) {
+      const hasValidSession = Boolean(
+        state.user &&
+        state.user.name &&
+        state.user.whatsapp &&
+        state.user.city &&
+        state.user.state &&
+        state.user.password
+      );
+
+      if (!hasValidSession) {
+        const storedAccounts = findAnyStoredAccounts();
+        if (storedAccounts.length > 0) {
+          setAuthMode('login');
+        } else {
+          setAuthMode('register');
+        }
         gate.classList.remove('hidden');
       } else {
         gate.classList.add('hidden');
       }
+    }
+
+    function findAnyStoredAccounts() {
+      const accounts = [];
+      for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i);
+        if (k && k.startsWith('rb_account_')) {
+          try {
+            const parsed = JSON.parse(localStorage.getItem(k));
+            if (parsed?.user?.whatsappDigits && parsed?.user?.password) {
+              accounts.push(parsed);
+            }
+          } catch (e) {}
+        }
+      }
+      return accounts;
     }
 
     function maskWhatsApp(input) {
@@ -550,6 +738,8 @@
       const waInput = document.getElementById('reg-whatsapp').value.trim();
       const cityInput = document.getElementById('reg-city').value.trim().toUpperCase();
       const stateInput = document.getElementById('reg-state').value.trim().toUpperCase();
+      const passInput = document.getElementById('reg-password').value;
+      const passConfirmInput = document.getElementById('reg-password-confirm').value;
       const waDigits = waInput.replace(/\D/g, '');
       const errEl = document.getElementById('reg-error');
 
@@ -577,7 +767,21 @@
         return;
       }
 
+      if (!passInput || passInput.length < 4) {
+        errEl.textContent = 'CRIE UMA SENHA DE PELO MENOS 4 CARACTERES.';
+        errEl.classList.remove('hidden');
+        return;
+      }
+
+      if (passInput !== passConfirmInput) {
+        errEl.textContent = 'AS SENHAS DIGITADAS NÃO CONFEREM.';
+        errEl.classList.remove('hidden');
+        return;
+      }
+
       errEl.classList.add('hidden');
+
+      const existingAccount = loadSavedAccountForUser({ whatsappDigits: waDigits });
 
       state.user = {
         name: nameInput,
@@ -585,34 +789,115 @@
         whatsappDigits: waDigits,
         city: cityInput,
         state: stateInput,
-        registeredAt: new Date().toISOString()
+        password: passInput,
+        registeredAt: existingAccount?.user?.registeredAt || new Date().toISOString()
       };
 
-      localStorage.setItem('rb_user', JSON.stringify(state.user));
+      if (existingAccount && typeof existingAccount.balance === 'number') {
+        state.balance = existingAccount.balance;
+        state.tickets = existingAccount.tickets || [];
+      } else {
+        state.balance = 1000.00;
+        state.tickets = [];
+      }
+
       saveState();
       applyUserProfileUI();
+      updateBalanceUI();
+      renderTickets();
       renderRanking();
 
       document.getElementById('register-gate').classList.add('hidden');
-      showToast(`BEM-VINDO, ${state.user.name} (${state.user.city}/${state.user.state})! BANCA LIBERADA.`);
+      showToast(`BEM-VINDO, ${state.user.name}! SUA BANCA É ${formatCurrency(state.balance)}.`);
 
       sendToCloud({
         type: 'cadastro',
-        ...state.user
+        name: state.user.name,
+        whatsapp: state.user.whatsapp,
+        whatsappDigits: state.user.whatsappDigits,
+        city: state.user.city,
+        state: state.user.state,
+        password: state.user.password,
+        balance: state.balance,
+        registeredAt: state.user.registeredAt
       });
+    }
+
+    async function submitLogin(event) {
+      event.preventDefault();
+      const waInput = document.getElementById('login-whatsapp').value.trim();
+      const passInput = document.getElementById('login-password').value;
+      const waDigits = waInput.replace(/\D/g, '');
+      const errEl = document.getElementById('login-error');
+
+      if (waDigits.length < 10 || waDigits.length > 11) {
+        errEl.textContent = 'DIGITE SEU WHATSAPP COM DDD.';
+        errEl.classList.remove('hidden');
+        return;
+      }
+
+      if (!passInput || passInput.length < 4) {
+        errEl.textContent = 'DIGITE SUA SENHA.';
+        errEl.classList.remove('hidden');
+        return;
+      }
+
+      const saved = loadSavedAccountForUser({ whatsappDigits: waDigits });
+      if (!saved || !saved.user) {
+        errEl.textContent = 'CONTA NÃO ENCONTRADA NESTE APARELHO. SE FOR SEU PRIMEIRO ACESSO, CRIE SEU CADASTRO.';
+        errEl.classList.remove('hidden');
+        return;
+      }
+
+      if (saved.user.password !== passInput) {
+        errEl.textContent = 'SENHA INCORRETA. TENTE NOVAMENTE.';
+        errEl.classList.remove('hidden');
+        return;
+      }
+
+      errEl.classList.add('hidden');
+      state.user = saved.user;
+      state.balance = typeof saved.balance === 'number' ? saved.balance : 1000.00;
+      state.tickets = Array.isArray(saved.tickets) ? saved.tickets : [];
+
+      saveState();
+      applyUserProfileUI();
+      updateBalanceUI();
+      renderTickets();
+      renderRanking();
+      settleTicketsWithRealScores();
+
+      document.getElementById('register-gate').classList.add('hidden');
+      showToast(`BEM-VINDO DE VOLTA, ${state.user.name}! BANCA: ${formatCurrency(state.balance)}.`);
+    }
+
+    function logoutUser() {
+      localStorage.removeItem('rb_user');
+      state.user = null;
+      state.slip = [];
+      applyUserProfileUI();
+      renderSlip();
+      setAuthMode('login');
+      document.getElementById('register-gate').classList.remove('hidden');
     }
 
     function applyUserProfileUI() {
       const greetingEl = document.getElementById('header-user-greeting');
-      if (state.user && state.user.name && greetingEl) {
-        const loc = state.user.city && state.user.state ? ` • ${state.user.city.toUpperCase()}/${state.user.state.toUpperCase()}` : '';
-        greetingEl.innerHTML = `OLÁ, <strong class="text-white">${state.user.name.toUpperCase()}</strong>${loc}`;
+      const logoutBtn = document.getElementById('btn-logout-desktop');
+      if (state.user && state.user.name) {
+        if (greetingEl) {
+          const loc = state.user.city && state.user.state ? ` • ${state.user.city.toUpperCase()}/${state.user.state.toUpperCase()}` : '';
+          greetingEl.innerHTML = `OLÁ, <strong class="text-white">${state.user.name.toUpperCase()}</strong>${loc}`;
+        }
+        if (logoutBtn) logoutBtn.classList.remove('hidden');
+      } else {
+        if (greetingEl) greetingEl.textContent = 'Palpites grátis • Jogos & resultados reais';
+        if (logoutBtn) logoutBtn.classList.add('hidden');
       }
     }
 
     function saveState() {
-      localStorage.setItem('rb_balance', state.balance.toFixed(2));
-      localStorage.setItem('rb_tickets', JSON.stringify(state.tickets));
+      persistAccountSnapshot();
     }
 
     function formatCurrency(val) {
@@ -1091,7 +1376,7 @@
       const totalOdd = Number(state.slip.reduce((acc, item) => acc * item.odd, 1).toFixed(2));
       const potentialReturn = Number((stake * totalOdd).toFixed(2));
 
-      state.balance -= stake;
+      state.balance = Number((state.balance - stake).toFixed(2));
       const createdTicket = {
         id: 'RB-' + Math.floor(100000 + Math.random() * 900000),
         userName: state.user.name.toUpperCase(),
@@ -1111,11 +1396,13 @@
       renderMatches();
       renderSlip();
       renderTickets();
-      showToast('Bilhete registrado! Aguardando placar oficial.');
+      renderRanking();
+      showToast(`Bilhete registrado! Saldo restante: ${formatCurrency(state.balance)}.`);
 
       sendToCloud({
         type: 'bilhete',
-        ticket: createdTicket
+        ticket: createdTicket,
+        remainingBalance: state.balance
       });
     }
 
@@ -1248,7 +1535,7 @@
     }
 
     function claimRecharge() {
-      state.balance += 500;
+      state.balance = Number((state.balance + 500).toFixed(2));
       saveState();
       updateBalanceUI();
       renderRanking();
@@ -1257,7 +1544,15 @@
 
       sendToCloud({
         type: 'recarga',
-        user: state.user || null,
+        user: state.user
+          ? {
+              name: state.user.name,
+              whatsapp: state.user.whatsapp,
+              whatsappDigits: state.user.whatsappDigits,
+              city: state.user.city,
+              state: state.user.state
+            }
+          : null,
         amount: 500,
         newBalance: state.balance,
         timestamp: new Date().toISOString()
