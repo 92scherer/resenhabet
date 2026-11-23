@@ -1,8 +1,6 @@
 export default async function handler(req, res) {
-  // Libera acesso CORS para qualquer origem
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
-  // Cache de 3 minutos na borda da Vercel para resposta instantânea
   res.setHeader('Cache-Control', 's-maxage=180, stale-while-revalidate=300');
 
   if (req.method === 'OPTIONS') {
@@ -12,20 +10,23 @@ export default async function handler(req, res) {
   const LEAGUES = [
     { code: 'bra.1', name: 'Brasileirão Série A' },
     { code: 'bra.2', name: 'Brasileirão Série B' },
+    { code: 'bra.copa_do_brasil', name: 'Copa do Brasil' },
     { code: 'conmebol.libertadores', name: 'Copa Libertadores' },
     { code: 'conmebol.sudamericana', name: 'Copa Sul-Americana' },
     { code: 'uefa.champions', name: 'Champions League' },
     { code: 'eng.1', name: 'Premier League' },
-    { code: 'esp.1', name: 'La Liga' }
+    { code: 'esp.1', name: 'La Liga' },
+    { code: 'ita.1', name: 'Serie A Italiana' },
+    { code: 'ger.1', name: 'Bundesliga' },
+    { code: 'fifa.worldq.conmebol', name: 'Eliminatórias Sul-Americanas' }
   ];
 
-  // Janela de datas: ontem até +5 dias
   const formatDate = (offsetDays) => {
     const d = new Date();
     d.setDate(d.getDate() + offsetDays);
     return d.toISOString().slice(0, 10).replace(/-/g, '');
   };
-  const dateRange = `${formatDate(-1)}-${formatDate(5)}`;
+  const dateRange = `${formatDate(-1)}-${formatDate(10)}`;
 
   const generateOdds = (homeComp, awayComp, eventId) => {
     const parseWinRate = (comp) => {
@@ -63,9 +64,7 @@ export default async function handler(req, res) {
         try {
           const url = `https://site.api.espn.com/apis/site/v2/sports/soccer/${league.code}/scoreboard?dates=${dateRange}`;
           const response = await fetch(url, {
-            headers: {
-              'User-Agent': 'Mozilla/5.0 (compatible; ResenhaBet/1.0)'
-            }
+            headers: { 'User-Agent': 'Mozilla/5.0' }
           });
           if (!response.ok) return;
 
@@ -84,7 +83,7 @@ export default async function handler(req, res) {
               leagueCode: league.code,
               leagueName: league.name,
               date: ev.date,
-              status: ev.status?.type?.state || 'pre', // 'pre' | 'in' | 'post'
+              status: ev.status?.type?.state || 'pre',
               statusDetail: ev.status?.type?.shortDetail || '',
               homeName: home.team?.shortDisplayName || home.team?.displayName || 'Casa',
               homeLogo: home.team?.logo || '',
@@ -96,7 +95,7 @@ export default async function handler(req, res) {
             });
           });
         } catch (err) {
-          console.error(`Erro na liga ${league.code}:`, err.message);
+          console.error(`Erro liga ${league.code}:`, err.message);
         }
       })
     );
