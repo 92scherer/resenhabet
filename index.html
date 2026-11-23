@@ -398,7 +398,6 @@
             <span id="slip-count" class="text-[11px] font-black px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 shrink-0">0 marcadas</span>
           </div>
 
-          <!-- Resumo compacto no topo da janela -->
           <div id="slip-mini-summary" class="hidden grid grid-cols-3 divide-x divide-gray-800 bg-gray-950/80 border-b border-gray-800 text-center">
             <div class="py-2 px-1.5">
               <div class="text-[9px] uppercase font-bold text-gray-400">Jogos/Linhas</div>
@@ -414,7 +413,6 @@
             </div>
           </div>
 
-          <!-- Lista compacta das apostas marcadas na hora -->
           <div id="betslip-items" class="p-3 space-y-2 max-h-64 overflow-y-auto">
             <div class="text-center py-5 px-2 text-gray-500 text-[11px] leading-relaxed">
               Clique em qualquer odd ao lado (<strong class="text-gray-300">1X2</strong>, <strong class="text-emerald-400">+1 Gol</strong>, <strong class="text-amber-300">Escanteios</strong> ou <strong class="text-sky-300">Lateral</strong>) para ver sua aposta aparecer aqui na hora.
@@ -673,6 +671,87 @@
       }
 
       return { code: cleanSlug || 'outros', name: 'Futebol Internacional' };
+    }
+
+    function getTeamInitials(name) {
+      const ignore = new Set(['FC', 'EC', 'SC', 'SE', 'CR', 'CA', 'AD', 'CD', 'CF', 'DE', 'DA', 'DO', 'LOS', 'LAS', 'REAL', 'ATLETICO', 'ATLÉTICO']);
+      const words = String(name || 'FC')
+        .replace(/[^A-Za-zÀ-ÿ0-9\s]/g, ' ')
+        .trim()
+        .split(/\s+/)
+        .filter(Boolean);
+      const filtered = words.filter(w => !ignore.has(w.toUpperCase()));
+      const pool = filtered.length ? filtered : words;
+      if (pool.length >= 2) {
+        return (pool[0][0] + pool[1][0]).toUpperCase();
+      }
+      return (pool[0] || 'FC').slice(0, 3).toUpperCase();
+    }
+
+    function getTeamPalette(name) {
+      const palettes = [
+        { bg: '#064e3b', stroke: '#34d399', text: '#ecfdf5' },
+        { bg: '#1e3a8a', stroke: '#60a5fa', text: '#eff6ff' },
+        { bg: '#7f1d1d', stroke: '#f87171', text: '#fef2f2' },
+        { bg: '#78350f', stroke: '#fbbf24', text: '#fffbeb' },
+        { bg: '#312e81', stroke: '#818cf8', text: '#eef2ff' },
+        { bg: '#134e4a', stroke: '#2dd4bf', text: '#f0fdfa' },
+        { bg: '#4c1d95', stroke: '#c084fc', text: '#faf5ff' },
+        { bg: '#1f2937', stroke: '#10b981', text: '#f9fafb' }
+      ];
+      let hash = 0;
+      const str = String(name || '');
+      for (let i = 0; i < str.length; i++) {
+        hash = ((hash << 5) - hash) + str.charCodeAt(i);
+        hash |= 0;
+      }
+      return palettes[Math.abs(hash) % palettes.length];
+    }
+
+    function resolveTeamLogoUrl(comp) {
+      const direct = comp?.team?.logo || comp?.team?.logos?.[0]?.href || '';
+      if (direct && typeof direct === 'string' && direct.startsWith('http')) {
+        return direct.replace(/^http:\/\//i, 'https://');
+      }
+      const teamId = comp?.team?.id || comp?.id || '';
+      if (teamId) {
+        return `https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/${encodeURIComponent(teamId)}.png&h=80&w=80`;
+      }
+      return '';
+    }
+
+    function renderTeamCrest(name, logoUrl = '', sizeClass = 'w-6 h-6') {
+      const initials = getTeamInitials(name);
+      const pal = getTeamPalette(name);
+      const safeName = String(name || 'Time').replace(/"/g, '&quot;');
+
+      const fallbackSvg = `
+        <span class="crest-fallback ${logoUrl ? 'hidden' : 'inline-flex'} ${sizeClass} items-center justify-center rounded-full shrink-0 select-none" style="background:${pal.bg};border:1.5px solid ${pal.stroke};color:${pal.text};" title="${safeName}">
+          <svg viewBox="0 0 28 28" class="w-full h-full p-0.5" fill="none">
+            <path d="M14 2.5L23 6V14.5C23 20.5 19 24.5 14 26C9 24.5 5 20.5 5 14.5V6L14 2.5Z" fill="${pal.bg}" stroke="${pal.stroke}" stroke-width="1.8"/>
+            <text x="14" y="16.8" text-anchor="middle" fill="${pal.text}" font-size="${initials.length >= 3 ? '7.2' : '8.8'}" font-weight="900" font-family="Inter, sans-serif">${initials}</text>
+          </svg>
+        </span>`;
+
+      if (!logoUrl) {
+        return fallbackSvg;
+      }
+
+      return `
+        <span class="inline-flex ${sizeClass} items-center justify-center shrink-0 relative">
+          <img
+            src="${logoUrl}"
+            alt="${safeName}"
+            class="${sizeClass} object-contain rounded-full bg-white/5 p-0.5"
+            onerror="this.classList.add('hidden'); if(this.nextElementSibling) this.nextElementSibling.classList.remove('hidden');"
+          />
+          <span class="crest-fallback hidden ${sizeClass} items-center justify-center rounded-full shrink-0 select-none" style="background:${pal.bg};border:1.5px solid ${pal.stroke};color:${pal.text};" title="${safeName}">
+            <svg viewBox="0 0 28 28" class="w-full h-full p-0.5" fill="none">
+              <path d="M14 2.5L23 6V14.5C23 20.5 19 24.5 14 26C9 24.5 5 20.5 5 14.5V6L14 2.5Z" fill="${pal.bg}" stroke="${pal.stroke}" stroke-width="1.8"/>
+              <text x="14" y="16.8" text-anchor="middle" fill="${pal.text}" font-size="${initials.length >= 3 ? '7.2' : '8.8'}" font-weight="900" font-family="Inter, sans-serif">${initials}</text>
+            </svg>
+          </span>
+        </span>`;
     }
 
     const initialUser = JSON.parse(localStorage.getItem('rb_user')) || null;
@@ -1074,10 +1153,10 @@
           status: stateType,
           statusDetail: detailText,
           homeName,
-          homeLogo: homeComp.team?.logo || '',
+          homeLogo: resolveTeamLogoUrl(homeComp),
           homeScore: parseInt(homeComp.score || '0', 10),
           awayName,
-          awayLogo: awayComp.team?.logo || '',
+          awayLogo: resolveTeamLogoUrl(awayComp),
           awayScore: parseInt(awayComp.score || '0', 10),
           markets: computeDeterministicMarkets(ev.id, homeName, awayName)
         });
@@ -1427,14 +1506,14 @@
               <div class="xl:col-span-5 space-y-2 min-w-0">
                 <div class="flex items-center justify-between gap-2">
                   <div class="flex items-center gap-2.5 min-w-0">
-                    ${m.homeLogo ? `<img src="${m.homeLogo}" alt="" class="w-6 h-6 object-contain shrink-0" onerror="this.style.display='none'" />` : ''}
+                    ${renderTeamCrest(m.homeName, m.homeLogo, 'w-6 h-6')}
                     <span class="font-bold text-sm text-white truncate">${m.homeName}</span>
                   </div>
                   ${(isLive || isPost) ? `<span class="font-black text-base ${isLive ? 'text-amber-400' : 'text-white'} tabular-nums shrink-0">${m.homeScore}</span>` : ''}
                 </div>
                 <div class="flex items-center justify-between gap-2">
                   <div class="flex items-center gap-2.5 min-w-0">
-                    ${m.awayLogo ? `<img src="${m.awayLogo}" alt="" class="w-6 h-6 object-contain shrink-0" onerror="this.style.display='none'" />` : ''}
+                    ${renderTeamCrest(m.awayName, m.awayLogo, 'w-6 h-6')}
                     <span class="font-bold text-sm text-white truncate">${m.awayName}</span>
                   </div>
                   ${(isLive || isPost) ? `<span class="font-black text-base ${isLive ? 'text-amber-400' : 'text-white'} tabular-nums shrink-0">${m.awayScore}</span>` : ''}
@@ -1538,6 +1617,10 @@
       state.slip.push({
         matchId: match.id,
         matchTitle: `${match.homeName} x ${match.awayName}`,
+        homeName: match.homeName,
+        homeLogo: match.homeLogo,
+        awayName: match.awayName,
+        awayLogo: match.awayLogo,
         leagueName: match.leagueName,
         market,
         marketName: details.marketName,
@@ -1585,8 +1668,12 @@
               <span class="text-[9px] font-black uppercase px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-400 shrink-0">${item.marketName}</span>
               <span class="text-[10px] font-semibold text-gray-400 truncate">${item.leagueName}</span>
             </div>
-            <div class="text-[11px] font-bold text-white truncate mt-0.5">${item.matchTitle}</div>
-            <div class="text-[11px] text-amber-300 font-extrabold truncate">${item.pickLabel}</div>
+            <div class="flex items-center gap-1.5 mt-0.5 min-w-0">
+              ${renderTeamCrest(item.homeName, item.homeLogo, 'w-4 h-4')}
+              <span class="text-[11px] font-bold text-white truncate">${item.matchTitle}</span>
+              ${renderTeamCrest(item.awayName, item.awayLogo, 'w-4 h-4')}
+            </div>
+            <div class="text-[11px] text-amber-300 font-extrabold truncate mt-0.5">${item.pickLabel}</div>
           </div>
           <div class="flex items-center gap-1 shrink-0">
             <span class="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-black text-[11px] tabular-nums">@${item.odd.toFixed(2)}</span>
@@ -1714,8 +1801,13 @@
               ${t.selections.map(s => `
                 <div class="flex items-center justify-between gap-2 text-xs bg-gray-950/80 px-3 py-2 rounded-xl">
                   <div class="min-w-0">
-                    <div class="font-bold text-gray-200 truncate">${s.matchTitle} ${s.finalScore ? `<span class="text-emerald-400 font-black ml-1">(${s.finalScore})</span>` : ''}</div>
-                    <div class="text-[11px] text-gray-400 truncate">${s.leagueName || ''}</div>
+                    <div class="flex items-center gap-1.5 min-w-0">
+                      ${s.homeName ? renderTeamCrest(s.homeName, s.homeLogo, 'w-4 h-4') : ''}
+                      <span class="font-bold text-gray-200 truncate">${s.matchTitle}</span>
+                      ${s.awayName ? renderTeamCrest(s.awayName, s.awayLogo, 'w-4 h-4') : ''}
+                      ${s.finalScore ? `<span class="text-emerald-400 font-black ml-1 shrink-0">(${s.finalScore})</span>` : ''}
+                    </div>
+                    <div class="text-[11px] text-gray-400 truncate mt-0.5">${s.leagueName || ''}</div>
                     <div class="text-amber-300 font-semibold">${s.marketName ? `${s.marketName}: ` : ''}${s.pickLabel}</div>
                   </div>
                   <span class="font-black text-gray-300 tabular-nums shrink-0">@${s.odd.toFixed(2)}</span>
