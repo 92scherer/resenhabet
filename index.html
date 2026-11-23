@@ -648,6 +648,11 @@
     const GOOGLE_SHEETS_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbwz-822hliCk6oNCS3BC0e_rpZ2mzqxZgCUZHXJP_Vf3HREs2jlUjiR5dPKUf2TcT8NIA/exec';
     const CLOUD_QUEUE_KEY = 'rb_cloud_sync_queue';
 
+    // Opcional: cole sua chave gratuita da The Odds API para buscar cotações reais com cache automático.
+    const ODDS_API_KEY = '';
+    const REAL_ODDS_CACHE_KEY = 'rb_real_odds_cache_v1';
+    const REAL_ODDS_CACHE_TTL_MS = 6 * 60 * 60 * 1000; // 6 horas para economizar créditos gratuitos
+
     (function setupDynamicManifest() {
       try {
         const manifestObj = {
@@ -958,16 +963,14 @@
       const pal = getTeamPalette(name);
       const safeName = String(name || 'Time').replace(/"/g, '&quot;');
 
-      const fallbackSvg = `
-        <span class="crest-fallback ${logoUrl ? 'hidden' : 'inline-flex'} ${sizeClass} items-center justify-center rounded-full shrink-0 select-none" style="background:${pal.bg};border:1.5px solid ${pal.stroke};color:${pal.text};" title="${safeName}">
-          <svg viewBox="0 0 28 28" class="w-full h-full p-0.5" fill="none">
-            <path d="M14 2.5L23 6V14.5C23 20.5 19 24.5 14 26C9 24.5 5 20.5 5 14.5V6L14 2.5Z" fill="${pal.bg}" stroke="${pal.stroke}" stroke-width="1.8"/>
-            <text x="14" y="16.8" text-anchor="middle" fill="${pal.text}" font-size="${initials.length >= 3 ? '7.2' : '8.8'}" font-weight="900" font-family="Inter, sans-serif">${initials}</text>
-          </svg>
-        </span>`;
-
       if (!logoUrl) {
-        return fallbackSvg;
+        return `
+          <span class="crest-fallback inline-flex ${sizeClass} items-center justify-center rounded-full shrink-0 select-none" style="background:${pal.bg};border:1.5px solid ${pal.stroke};color:${pal.text};" title="${safeName}">
+            <svg viewBox="0 0 28 28" class="w-full h-full p-0.5" fill="none">
+              <path d="M14 2.5L23 6V14.5C23 20.5 19 24.5 14 26C9 24.5 5 20.5 5 14.5V6L14 2.5Z" fill="${pal.bg}" stroke="${pal.stroke}" stroke-width="1.8"/>
+              <text x="14" y="16.8" text-anchor="middle" fill="${pal.text}" font-size="${initials.length >= 3 ? '7.2' : '8.8'}" font-weight="900" font-family="Inter, sans-serif">${initials}</text>
+            </svg>
+          </span>`;
       }
 
       return `
@@ -1009,6 +1012,7 @@
       ],
       slip: [],
       matches: [],
+      realOddsEvents: [],
       matchMarketTabs: {},
       activeLeague: 'ALL',
       activeDate: 'ALL',
@@ -1381,7 +1385,152 @@
       return list;
     }
 
-    function computeDeterministicMarkets(eventId, homeName, awayName) {
+    function normalizeTeamComparable(name) {
+      return String(name || '')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .replace(/\b(fc|ec|sc|se|cr|ca|ad|cd|cf|club|atletico|de|da|do|dos|das)\b/g, ' ')
+        .replace(/[^a-z0-9\s]/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
+    function getCachedRealOddsEvents(forceRefresh = false) {
+      if (!ODDS_API_KEY || !ODDS_API_KEY.trim()) {
+        return Promise.resolve([]);
+      }
+
+      if (!forceRefresh) {
+        try {
+          const raw = localStorage.getItem(REAL_ODDS_CACHE_KEY);
+          if (raw) {
+            const parsed = JSON.parse(raw);
+            if (parsed && Array.isArray(parsed.events) && (Date.now() - (parsed.fetchedAt || 0) < REAL_ODDS_CACHE_TTL_MS)) {
+              return Promise.resolve(parsed.events);
+            }
+          }
+        } catch (e) {}
+      }
+
+      const url = `https://api.the-odds-api.com/v4/sports/soccer/odds/?apiKey=${encodeURIComponent(ODDS_API_KEY.trim())}&regions=eu,uk&markets=h2h,totals&oddsFormat=decimal`;
+      return fetch(url)
+        .then(res => res.ok ? res.json() : [])
+        .then(events => {
+          if (Array.isArray(events) && events.length) {
+            try {
+              localStorage.setItem(REAL_ODDS_CACHE_KEY, JSON.stringify({
+                fetchedAt: Date.now(),
+                events
+              }));
+            } catch (e) {}
+            return events;
+          }
+          return [];
+        })
+        .catch(() => []);
+    }
+
+    function findMatchingRealOddsEvent(match, oddsEvents) {
+      if (!Array.isArray(oddsEvents) || !oddsEvents.length) return null;
+      const targetHome = normalizeTeamComparable(match.homeName);
+      const targetAway = normalizeTeamComparable(match.awayName);
+      if (!targetHome || !targetAway) return null;
+
+      return oddsEvents.find(ev => {
+        const evHome = normalizeTeamComparable(ev.home_team);
+        const evAway = normalizeTeamComparable(ev.away_team);
+        if (!evHome || !evAway) return false;
+        const homeOk = evHome === targetHome || evHome.includes(targetHome) || targetHome.includes(evHome);
+        const awayOk = evAway === targetAway || evAway.includes(targetAway) || targetAway.includes(evAway);
+        return homeOk && awayOk;
+      }) || null;
+    }
+
+    function applyRealOddsToMarkets(baseMarkets, match, realEvent) {
+      if (!realEvent || !Array.isArray(realEvent.bookmakers) || !realEvent.bookmakers.length) {
+        return { markets: baseMarkets, isReal: false };
+      }
+
+      let hasRealOdd = false;
+      const updated = {
+        result: { ...baseMarkets.result },
+        goals: { ...baseMarkets.goals },
+        corners: { ...baseMarkets.corners },
+        throwIns: { ...baseMarkets.throwIns }
+      };
+
+      const evHomeNorm = normalizeTeamComparable(realEvent.home_team);
+      const evAwayNorm = normalizeTeamComparable(realEvent.away_team);
+      const matchHomeNorm = normalizeTeamComparable(match.homeName);
+      const matchAwayNorm = normalizeTeamComparable(match.awayName);
+      const swappedSides =
+        (evHomeNorm.includes(matchAwayNorm) || matchAwayNorm.includes(evHomeNorm)) &&
+        (evAwayNorm.includes(matchHomeNorm) || matchHomeNorm.includes(evAwayNorm));
+
+      for (const bk of realEvent.bookmakers) {
+        if (!Array.isArray(bk.markets)) continue;
+        for (const mkt of bk.markets) {
+          if (mkt.key === 'h2h' && Array.isArray(mkt.outcomes)) {
+            let hOdd = null;
+            let dOdd = null;
+            let aOdd = null;
+
+            mkt.outcomes.forEach(o => {
+              const price = Number(o.price);
+              if (!price || price <= 1) return;
+              const oNorm = normalizeTeamComparable(o.name);
+              if (oNorm === 'draw' || oNorm.includes('empate')) {
+                dOdd = price;
+              } else if (oNorm === evHomeNorm || evHomeNorm.includes(oNorm) || oNorm.includes(evHomeNorm)) {
+                if (swappedSides) aOdd = price;
+                else hOdd = price;
+              } else if (oNorm === evAwayNorm || evAwayNorm.includes(oNorm) || oNorm.includes(evAwayNorm)) {
+                if (swappedSides) hOdd = price;
+                else aOdd = price;
+              }
+            });
+
+            if (hOdd && aOdd) {
+              updated.result.home = Number(hOdd.toFixed(2));
+              updated.result.away = Number(aOdd.toFixed(2));
+              if (dOdd) updated.result.draw = Number(dOdd.toFixed(2));
+              const dForCalc = updated.result.draw || 3.2;
+              updated.result.dc1x = Number(Math.max(1.03, (1 / (1 / updated.result.home + 1 / dForCalc)) * 0.96).toFixed(2));
+              updated.result.dcx2 = Number(Math.max(1.03, (1 / (1 / dForCalc + 1 / updated.result.away)) * 0.96).toFixed(2));
+              hasRealOdd = true;
+            }
+          }
+
+          if (mkt.key === 'totals' && Array.isArray(mkt.outcomes)) {
+            mkt.outcomes.forEach(o => {
+              const price = Number(o.price);
+              const point = Number(o.point);
+              const name = String(o.name || '').toLowerCase();
+              if (!price || price <= 1) return;
+              if (name === 'over' && point === 1.5) {
+                updated.goals.over15 = Number(price.toFixed(2));
+                hasRealOdd = true;
+              } else if (name === 'over' && point === 2.5) {
+                updated.goals.over25 = Number(price.toFixed(2));
+                hasRealOdd = true;
+              } else if (name === 'over' && point === 3.5) {
+                updated.goals.over35 = Number(price.toFixed(2));
+                hasRealOdd = true;
+              } else if (name === 'under' && point === 1.5) {
+                updated.goals.under15 = Number(price.toFixed(2));
+                hasRealOdd = true;
+              }
+            });
+          }
+        }
+        if (hasRealOdd) break;
+      }
+
+      return { markets: updated, isReal: hasRealOdd };
+    }
+
+    function computeDeterministicMarkets(eventId, homeName, awayName, realOddsEvents = []) {
       const str = `${eventId}-${homeName}-${awayName}`;
       let hash = 0;
       for (let i = 0; i < str.length; i++) {
@@ -1394,7 +1543,7 @@
       const d = Number((2.95 + ((abs >> 3) % 95) / 100).toFixed(2));
       const a = Number((1.75 + ((abs >> 5) % 260) / 100).toFixed(2));
 
-      return {
+      const fallbackMarkets = {
         result: {
           home: h,
           draw: d,
@@ -1424,9 +1573,17 @@
           totalUnder375: Number((1.95 + ((abs >> 14) % 60) / 100).toFixed(2))
         }
       };
+
+      const matched = findMatchingRealOddsEvent({ homeName, awayName }, realOddsEvents);
+      if (matched) {
+        const merged = applyRealOddsToMarkets(fallbackMarkets, { homeName, awayName }, matched);
+        return merged.markets;
+      }
+
+      return fallbackMarkets;
     }
 
-    function parseEventsFromScoreboardJson(data, fallbackSlug = '', fallbackName = '') {
+    function parseEventsFromScoreboardJson(data, fallbackSlug = '', fallbackName = '', realOddsEvents = []) {
       const leagueIndex = new Map();
       (data.leagues || []).forEach(lg => {
         if (lg?.slug) {
@@ -1468,7 +1625,7 @@
           awayName,
           awayLogo: resolveTeamLogoUrl(awayComp),
           awayScore: parseInt(awayComp.score || '0', 10),
-          markets: computeDeterministicMarkets(ev.id, homeName, awayName)
+          markets: computeDeterministicMarkets(ev.id, homeName, awayName, realOddsEvents)
         });
       });
       return items;
@@ -1490,6 +1647,9 @@
           </div>`;
       }
 
+      const realOddsEvents = await getCachedRealOddsEvents(Boolean(manual));
+      state.realOddsEvents = realOddsEvents;
+
       const days = getSingleDayStrings(5);
       const matchesById = new Map();
 
@@ -1506,7 +1666,7 @@
             const res = await fetch(url);
             if (!res.ok) return;
             const data = await res.json();
-            parseEventsFromScoreboardJson(data, slug, lgInfo.name).forEach(ev => {
+            parseEventsFromScoreboardJson(data, slug, lgInfo.name, realOddsEvents).forEach(ev => {
               matchesById.set(ev.id, ev);
             });
           } catch (err) {}
@@ -1519,7 +1679,7 @@
           const res = await fetch(url);
           if (!res.ok) return;
           const data = await res.json();
-          parseEventsFromScoreboardJson(data).forEach(ev => {
+          parseEventsFromScoreboardJson(data, '', '', realOddsEvents).forEach(ev => {
             if (!matchesById.has(ev.id)) {
               matchesById.set(ev.id, ev);
             }
@@ -1557,8 +1717,9 @@
         minute: '2-digit'
       });
 
+      const oddsModeLabel = realOddsEvents.length ? ' • Odds API Ativa' : ' • Odds Recreativas';
       if (statusEl) {
-        statusEl.textContent = `● Grade Oficial (${state.matches.length} jogos • ${nowStr})`;
+        statusEl.textContent = `● Grade Oficial (${state.matches.length} jogos • ${nowStr}${oddsModeLabel})`;
       }
 
       if (manual) {
