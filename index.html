@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="Resenha Bet" />
-  <title>Resenha Bet — Portal de Palpites Esportivos Gratuitos</title>
+  <title>Resenha Bet — Palpites Esportivos Gratuitos</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -52,7 +52,7 @@
   <div id="splash-screen" class="fixed inset-0 z-50 bg-[#05080f] flex flex-col items-center justify-center p-6">
     <div class="relative flex flex-col items-center">
       <div class="flex items-center justify-center mb-6">
-        <img src="./logo.PNG" alt="Resenha Bet" class="w-56 h-56 sm:w-72 sm:h-72 object-contain drop-shadow-[0_14px_36px_rgba(16,185,129,0.28)]" onerror="this.style.display='none'; document.getElementById('splash-fallback-svg').classList.remove('hidden');" />
+        <img src="./logo.PNG" alt="Resenha Bet" class="w-52 h-52 sm:w-64 sm:h-64 object-contain drop-shadow-[0_14px_36px_rgba(16,185,129,0.28)]" onerror="this.style.display='none'; document.getElementById('splash-fallback-svg').classList.remove('hidden');" />
         <div id="splash-fallback-svg" class="hidden flex flex-col items-center justify-center text-center">
           <svg class="w-24 h-24 text-emerald-400 mb-2 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <circle cx="12" cy="12" r="10"/>
@@ -63,7 +63,7 @@
       </div>
       <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-emerald-400">
         <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping shrink-0"></span>
-        <span>Carregando grade oficial...</span>
+        <span>Carregando grade...</span>
       </div>
     </div>
   </div>
@@ -81,7 +81,7 @@
         </span>
         <h2 id="auth-title" class="text-xl sm:text-2xl font-black text-white mt-2">Crie sua Conta na Resenha!</h2>
         <p id="auth-subtitle" class="text-xs text-gray-400 mt-1 leading-relaxed">
-          Cadastre-se e crie sua senha para liberar <strong class="text-emerald-400">RC$ 1.000,00</strong> e manter seus valores salvos para os próximos jogos.
+          Cadastre-se e crie sua senha para liberar <strong class="text-emerald-400">RC$ 1.000,00</strong> e manter seus valores salvos.
         </p>
       </div>
 
@@ -249,37 +249,19 @@
     </div>
   </div>
 
-  <!-- BARRA DE PATROCÍNIO MASTER -->
-  <div class="bg-gradient-to-r from-emerald-950 via-gray-900 to-amber-950/60 border-b border-emerald-500/20 text-xs py-2 px-4">
-    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
-      <div class="flex flex-wrap items-center gap-2 min-w-0">
-        <span class="px-2 py-0.5 rounded bg-amber-400/15 text-amber-300 border border-amber-400/30 font-bold uppercase text-[10px] tracking-wider shrink-0">Patrocinador Master</span>
-        <span class="text-gray-300 leading-snug">Copa <strong class="text-white">Resenha Bet</strong> — Prêmio de <strong class="text-emerald-400">R$ 1.000 em Produtos</strong> para o Top 1 do mês!</span>
-      </div>
-      <div class="flex items-center gap-3 shrink-0">
-        <button type="button" id="btn-install-app" onclick="triggerInstallPrompt()" class="hidden text-emerald-400 hover:text-emerald-300 font-bold underline underline-offset-2 transition">
-          Instalar App
-        </button>
-        <button type="button" onclick="openMediaKitModal()" class="text-amber-300 hover:text-amber-200 font-semibold underline underline-offset-2 transition">
-          Anuncie sua marca aqui →
-        </button>
-      </div>
-    </div>
-  </div>
-
   <!-- HEADER PRINCIPAL -->
   <header class="sticky top-0 z-30 bg-[#090d16]/95 backdrop-blur-md border-b border-gray-800">
     <div class="max-w-7xl mx-auto px-4 h-16 sm:h-20 flex items-center justify-between gap-4">
       <div class="flex items-center gap-3 min-w-0">
         <button type="button" onclick="switchTab('jogos')" class="flex items-center gap-3 text-left min-w-0 focus:outline-none">
-          <img src="./logo.PNG" alt="Resenha Bet" class="h-10 sm:h-12 w-auto object-contain shrink-0 transition-transform group-hover:scale-105" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');" />
+          <img src="./logo.PNG" alt="Resenha Bet" class="h-10 sm:h-12 w-auto object-contain shrink-0" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');" />
           <span class="hidden font-black text-emerald-400 text-xl shrink-0">RB</span>
           <div class="flex flex-col min-w-0">
             <span class="font-black text-sm sm:text-base tracking-tight text-white leading-tight truncate">
               RESENHA <span class="text-emerald-400">BET</span>
             </span>
             <p id="header-user-greeting" class="text-[11px] text-gray-400 truncate">
-              Palpites grátis • Jogos &amp; resultados reais
+              Palpites grátis • Jogos reais
             </p>
           </div>
         </button>
@@ -295,13 +277,17 @@
           <span id="badge-bilhetes-alert" class="hidden px-1.5 py-0.5 text-[9px] leading-none rounded-full bg-amber-400 text-black font-black shrink-0">!</span>
         </button>
         <button type="button" onclick="switchTab('ranking')" id="nav-ranking" class="tab-btn h-9 px-4 rounded-lg text-xs font-semibold text-gray-300 hover:text-white transition inline-flex items-center justify-center gap-1.5 whitespace-nowrap">
-          <span>Ranking &amp; Prêmios</span>
+          <span>Ranking</span>
         </button>
       </nav>
 
       <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+        <button type="button" id="btn-install-app" onclick="triggerInstallPrompt()" class="hidden md:inline-flex h-10 px-3 rounded-xl border border-gray-800 bg-gray-900 hover:bg-gray-800 text-xs font-bold text-emerald-400 items-center justify-center whitespace-nowrap transition shrink-0">
+          Instalar App
+        </button>
+
         <div class="h-10 bg-gray-900 border border-gray-800 rounded-xl px-3 flex flex-col justify-center text-right">
-          <span class="text-[9px] uppercase tracking-wider text-gray-400 font-semibold leading-none">Banca Salva</span>
+          <span class="text-[9px] uppercase tracking-wider text-gray-400 font-semibold leading-none">Banca</span>
           <span id="user-balance" class="font-black text-xs sm:text-sm text-emerald-400 tabular-nums leading-tight mt-0.5">RC$ 1.000,00</span>
         </div>
 
@@ -310,8 +296,8 @@
           <span class="hidden sm:inline text-[10px] bg-black/20 px-1.5 py-0.5 rounded font-bold leading-none">GRÁTIS</span>
         </button>
 
-        <button type="button" id="btn-logout-desktop" onclick="logoutUser()" class="hidden sm:inline-flex h-10 px-3 rounded-xl border border-gray-800 bg-gray-900/70 hover:bg-gray-800 text-[11px] font-semibold text-amber-400 items-center justify-center whitespace-nowrap transition shrink-0">
-          Trocar conta / Sair
+        <button type="button" id="btn-logout-desktop" onclick="logoutUser()" class="hidden sm:inline-flex h-10 px-3 rounded-xl border border-gray-800 bg-gray-900/70 hover:bg-gray-800 text-[11px] font-semibold text-gray-300 hover:text-white items-center justify-center whitespace-nowrap transition shrink-0">
+          Sair
         </button>
       </div>
     </div>
@@ -336,37 +322,28 @@
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 items-start">
 
       <!-- COLUNA ESQUERDA: GRADE DE JOGOS / BILHETES / RANKING -->
-      <div class="lg:col-span-8 space-y-5 min-w-0">
+      <div class="lg:col-span-8 space-y-4 min-w-0">
 
-        <!-- BANNER PUBLICITÁRIO TOPO -->
-        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-gray-900 via-emerald-950/60 to-gray-900 border border-emerald-500/30 p-4 sm:p-5 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
-          <div class="space-y-1 min-w-0">
-            <div class="flex flex-wrap items-center gap-2">
-              <span class="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded bg-white/10 text-gray-300 shrink-0">Múltiplas Opções</span>
-              <span id="api-sync-status" class="text-[11px] text-emerald-400 font-semibold">● Conectando grade ao vivo...</span>
-              <span id="cloud-sync-badge" class="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">Nuvem: OK</span>
-            </div>
-            <h2 class="text-base sm:text-lg font-extrabold text-white leading-snug">Resultado, + de 1 Gol, Escanteios e Lateral com várias linhas por jogo!</h2>
-            <p class="text-xs text-gray-300 leading-relaxed">Cada opção clicada aparece na hora na janela menor ao lado para você acompanhar suas escolhas.</p>
+        <!-- BARRA LIMPA DE SINCRONIZAÇÃO -->
+        <div class="rounded-2xl bg-gray-900/90 border border-gray-800 px-4 py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div class="flex items-center gap-2.5 min-w-0">
+            <span id="api-sync-status" class="text-xs text-emerald-400 font-semibold truncate">● Conectando grade ao vivo...</span>
           </div>
-          <div class="flex items-center shrink-0">
-            <button type="button" onclick="loadRealMatches(true)" id="btn-sync-api" class="w-full sm:w-auto h-11 bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold text-xs px-4 rounded-xl transition inline-flex items-center justify-center gap-1.5 shadow-lg shadow-emerald-500/20 whitespace-nowrap">
-              <svg id="sync-icon" class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-              <span>Atualizar Grade</span>
-            </button>
-          </div>
+          <button type="button" onclick="loadRealMatches(true)" id="btn-sync-api" class="w-full sm:w-auto h-9 bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold text-xs px-3.5 rounded-xl transition inline-flex items-center justify-center gap-1.5 whitespace-nowrap shrink-0">
+            <svg id="sync-icon" class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+            <span>Atualizar</span>
+          </button>
         </div>
 
         <!-- ABA: JOGOS REAIS -->
         <section id="tab-jogos" class="space-y-4">
           <div class="space-y-2.5">
-            <!-- BUSCA RÁPIDA POR TIME OU CAMPEONATO -->
             <div class="relative">
               <input
                 id="match-search-input"
                 type="search"
                 oninput="setSearchQuery(this.value)"
-                placeholder="Buscar time ou campeonato (ex: Grêmio, Flamengo, Champions, Premier)..."
+                placeholder="Buscar time ou campeonato..."
                 class="w-full h-10 bg-gray-900 border border-gray-800 focus:border-emerald-500 rounded-xl pl-3.5 pr-9 text-xs font-semibold text-white placeholder-gray-500 outline-none transition"
               />
               <button
@@ -378,11 +355,10 @@
               >✕</button>
             </div>
 
-            <div id="league-filters" class="flex items-center gap-2 overflow-x-auto pb-1.5">
+            <div id="league-filters" class="flex items-center gap-2 overflow-x-auto pb-1">
               <button type="button" onclick="setLeagueFilter('ALL')" data-league="ALL" class="league-pill h-9 px-3.5 rounded-full text-xs font-bold bg-emerald-500 text-black whitespace-nowrap inline-flex items-center justify-center">Todos os Jogos</button>
             </div>
 
-            <!-- FILTROS RÁPIDOS DE DATA + STATUS -->
             <div class="flex flex-wrap items-center justify-between gap-2">
               <div id="date-filters" class="flex flex-wrap items-center gap-1.5">
                 <button type="button" onclick="setDateFilter('ALL')" data-date="ALL" class="date-pill h-8 px-3 rounded-lg text-[11px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 inline-flex items-center justify-center">Todas Datas</button>
@@ -390,13 +366,10 @@
                 <button type="button" onclick="setDateFilter('TOMORROW')" data-date="TOMORROW" class="date-pill h-8 px-3 rounded-lg text-[11px] font-semibold bg-gray-950 text-gray-400 border border-gray-800 hover:text-white inline-flex items-center justify-center">Amanhã</button>
                 <button type="button" onclick="setDateFilter('UPCOMING')" data-date="UPCOMING" class="date-pill h-8 px-3 rounded-lg text-[11px] font-semibold bg-gray-950 text-gray-400 border border-gray-800 hover:text-white inline-flex items-center justify-center">Próximos Dias</button>
               </div>
-              <span class="text-[11px] text-gray-400">Fuso: <strong class="text-gray-300">Horário de Brasília (UTC-3)</strong></span>
-            </div>
 
-            <div class="flex flex-wrap items-center justify-between gap-2">
               <div id="status-filters" class="flex flex-wrap items-center gap-1.5">
                 <button type="button" onclick="setStatusFilter('ALL')" data-status="ALL" class="status-pill h-8 px-3 rounded-lg text-[11px] font-bold bg-gray-800 text-white border border-gray-700 inline-flex items-center justify-center">Todos</button>
-                <button type="button" onclick="setStatusFilter('OPEN')" data-status="OPEN" class="status-pill h-8 px-3 rounded-lg text-[11px] font-semibold bg-gray-950 text-gray-400 border border-gray-800 hover:text-white inline-flex items-center justify-center">Abertos p/ Palpite</button>
+                <button type="button" onclick="setStatusFilter('OPEN')" data-status="OPEN" class="status-pill h-8 px-3 rounded-lg text-[11px] font-semibold bg-gray-950 text-gray-400 border border-gray-800 hover:text-white inline-flex items-center justify-center">Abertos</button>
                 <button type="button" onclick="setStatusFilter('LIVE')" data-status="LIVE" class="status-pill h-8 px-3 rounded-lg text-[11px] font-semibold bg-gray-950 text-gray-400 border border-gray-800 hover:text-white inline-flex items-center justify-center">Ao Vivo</button>
                 <button type="button" onclick="setStatusFilter('FINISHED')" data-status="FINISHED" class="status-pill h-8 px-3 rounded-lg text-[11px] font-semibold bg-gray-950 text-gray-400 border border-gray-800 hover:text-white inline-flex items-center justify-center">Encerrados</button>
               </div>
@@ -409,11 +382,10 @@
         <!-- ABA: MEUS BILHETES -->
         <section id="tab-bilhetes" class="hidden space-y-5">
           <div class="flex flex-wrap items-center justify-between gap-2">
-            <h2 class="text-lg font-extrabold text-white">Histórico de Bilhetes</h2>
-            <span class="text-xs text-gray-400">Liquidação automática pelo placar oficial</span>
+            <h2 class="text-lg font-extrabold text-white">Meus Bilhetes</h2>
+            <span class="text-xs text-gray-400">Liquidação automática pelo placar</span>
           </div>
 
-          <!-- RESUMO DE ESTATÍSTICAS PESSOAIS -->
           <div id="stats-summary-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
             <div class="bg-gray-900 border border-gray-800 rounded-2xl p-3">
               <div class="text-[10px] uppercase font-bold text-gray-400">Palpites</div>
@@ -435,31 +407,21 @@
 
           <div id="tickets-container" class="space-y-3"></div>
 
-          <!-- HISTÓRICO DE MOVIMENTAÇÕES DA BANCA -->
           <div class="bg-gray-900 border border-gray-800 rounded-2xl p-4 sm:p-5 space-y-3">
             <div class="flex items-center justify-between gap-2 border-b border-gray-800 pb-2.5">
-              <div>
-                <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-400">Extrato da Conta</span>
-                <h3 class="text-sm sm:text-base font-extrabold text-white">Movimentações da Banca</h3>
-              </div>
+              <h3 class="text-sm font-extrabold text-white">Movimentações da Banca</h3>
               <span id="ledger-count" class="text-[11px] text-gray-400 font-semibold">0 registros</span>
             </div>
             <div id="ledger-container" class="divide-y divide-gray-800/80 max-h-72 overflow-y-auto"></div>
           </div>
         </section>
 
-        <!-- ABA: RANKING & PRÊMIOS -->
+        <!-- ABA: RANKING -->
         <section id="tab-ranking" class="hidden space-y-4">
           <div class="bg-gray-900 border border-gray-800 rounded-2xl p-4 sm:p-5">
-            <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
-              <div>
-                <span class="text-[11px] font-bold uppercase tracking-wider text-amber-400">Liga Oficial do Mês</span>
-                <h2 class="text-lg sm:text-xl font-black text-white">Ranking Top Tipsters — Resenha Bet</h2>
-              </div>
-              <div class="bg-amber-400/10 border border-amber-400/30 rounded-xl px-3.5 py-2 text-left sm:text-right">
-                <div class="text-[10px] text-amber-300 uppercase font-bold">Premiação Patrocinada</div>
-                <div class="text-xs sm:text-sm font-black text-white">1º Lugar: Camisa Oficial + R$ 500</div>
-              </div>
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+              <h2 class="text-lg sm:text-xl font-black text-white">Ranking da Resenha</h2>
+              <span class="text-xs text-gray-400">Ordenado por banca</span>
             </div>
             <div id="ranking-container" class="divide-y divide-gray-800"></div>
           </div>
@@ -467,7 +429,7 @@
 
       </div>
 
-      <!-- COLUNA DIREITA: JANELA MENOR AO VIVO AO LADO COM AS APOSTAS SELECIONADAS -->
+      <!-- COLUNA DIREITA: BOLETIM + APOIE VIA PIX -->
       <aside id="live-betslip-panel" class="lg:col-span-4 space-y-4 lg:sticky lg:top-24 min-w-0">
 
         <div id="side-picks-window" class="bg-gray-900/95 border border-emerald-500/40 rounded-2xl overflow-hidden shadow-2xl shadow-emerald-500/10 transition-all">
@@ -479,7 +441,7 @@
             <span id="slip-count" class="text-[11px] font-black px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 shrink-0">0 marcadas</span>
           </div>
 
-          <div id="slip-mini-summary" class="hidden grid grid-cols-3 divide-x divide-gray-800 bg-gray-950/80 border-b border-gray-800 text-center">
+          <div id="slip-mini-summary" class="hidden grid-cols-3 divide-x divide-gray-800 bg-gray-950/80 border-b border-gray-800 text-center">
             <div class="py-2 px-1.5 flex flex-col justify-center">
               <span class="text-[9px] uppercase font-bold text-gray-400 leading-none">Seleções</span>
               <span id="mini-picks-val" class="text-xs font-black text-white tabular-nums leading-tight mt-1">0</span>
@@ -496,7 +458,7 @@
 
           <div id="betslip-items" class="p-3 space-y-2 max-h-64 overflow-y-auto">
             <div class="text-center py-5 px-2 text-gray-500 text-[11px] leading-relaxed">
-              Clique em qualquer odd ao lado (<strong class="text-gray-300">1X2</strong>, <strong class="text-emerald-400">+1 Gol</strong>, <strong class="text-amber-300">Escanteios</strong> ou <strong class="text-sky-300">Lateral</strong>) para ver sua aposta aparecer aqui na hora.
+              Clique em qualquer odd ao lado (<strong class="text-gray-300">1X2</strong>, <strong class="text-emerald-400">+1 Gol</strong>, <strong class="text-amber-300">Escanteios</strong> ou <strong class="text-sky-300">Lateral</strong>) para montar seu bilhete.
             </div>
           </div>
 
@@ -530,24 +492,33 @@
             <div class="grid grid-cols-12 gap-2 pt-0.5">
               <button type="button" onclick="clearSlip()" class="col-span-4 h-10 rounded-xl bg-gray-800 hover:bg-gray-700 text-xs font-bold text-gray-300 transition inline-flex items-center justify-center">Limpar</button>
               <button type="button" onclick="placeBet()" class="col-span-8 h-10 bg-emerald-500 hover:bg-emerald-400 text-black font-black text-xs px-3 rounded-xl shadow-lg shadow-emerald-500/20 transition inline-flex items-center justify-center text-center leading-tight">
-                Confirmar Palpite Grátis
+                Confirmar Palpite
               </button>
             </div>
           </div>
         </div>
 
-        <div class="rounded-2xl bg-gradient-to-b from-gray-900 to-gray-950 border border-amber-400/30 p-4 text-center space-y-2.5">
-          <span class="inline-block text-[10px] font-bold uppercase tracking-widest px-2.5 py-0.5 rounded-full bg-amber-400/15 text-amber-300 border border-amber-400/30">
-            Espaço Patrocinado
-          </span>
-          <h4 class="font-black text-sm text-white">Sua Marca no Centro da Resenha</h4>
-          <p class="text-[11px] text-gray-400 leading-relaxed">
-            Impacte milhares de fãs de futebol todos os dias com banners exclusivos, naming rights de ligas e recargas patrocinadas.
+        <!-- SEÇÃO APOIE VIA PIX -->
+        <section aria-label="Apoie via Pix" class="rounded-2xl bg-gray-900/95 border border-gray-800 p-4 space-y-2.5">
+          <div class="flex items-center justify-between gap-2">
+            <h3 class="text-sm font-extrabold text-white">Apoie o Resenha Bet</h3>
+            <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+              Pix
+            </span>
+          </div>
+          <p class="text-xs text-gray-400 leading-relaxed">
+            Curte o app gratuito? Se quiser contribuir com qualquer valor via Pix:
           </p>
-          <button type="button" onclick="openMediaKitModal()" class="w-full h-10 px-3 rounded-xl bg-amber-400/15 hover:bg-amber-400/25 border border-amber-400/40 text-amber-300 font-bold text-xs transition inline-flex items-center justify-center">
-            Ver Mídia Kit &amp; Cotas
-          </button>
-        </div>
+          <div class="flex items-center justify-between gap-2 bg-gray-950 border border-gray-800 rounded-xl px-3 py-2">
+            <span id="pix-key-value" class="text-xs font-bold text-gray-200 select-all truncate">pixresenhabet@gmail.com</span>
+            <button type="button" onclick="copyPixKey()" id="btn-copy-pix" class="h-8 px-3 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold text-[11px] transition shrink-0 inline-flex items-center justify-center">
+              Copiar chave
+            </button>
+          </div>
+          <div id="pix-copy-feedback" class="text-[11px] font-semibold text-emerald-400 hidden">
+            Chave Pix copiada para a área de transferência.
+          </div>
+        </section>
 
       </aside>
     </div>
@@ -567,62 +538,23 @@
     </button>
   </div>
 
-  <!-- MODAL: RECARGA PATROCINADA -->
+  <!-- MODAL: RECARGA GRATUITA -->
   <div id="recharge-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-gray-900 border border-gray-800 rounded-2xl max-w-md w-full p-5 sm:p-6 space-y-4 shadow-2xl">
       <div class="flex items-center justify-between gap-2">
-        <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded bg-amber-400/15 text-amber-300">Recarga Gratuita Patrocinada</span>
+        <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded bg-amber-400/15 text-amber-300">Recarga Gratuita</span>
         <button type="button" onclick="closeRechargeModal()" aria-label="Fechar" class="w-8 h-8 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 text-base font-bold inline-flex items-center justify-center shrink-0">✕</button>
       </div>
       <h3 class="text-xl font-black text-white">Ganhe +RC$ 500,00 agora</h3>
       <p class="text-xs text-gray-300 leading-relaxed">
-        Na <strong>Resenha Bet</strong> você nunca tira dinheiro do bolso. Assista ao destaque do nosso patrocinador por 5 segundos para liberar mais moedas virtuais na sua banca.
+        Moedas virtuais gratuitas para continuar brincando nos palpites. Aguarde 5 segundos para liberar.
       </p>
-      <div class="rounded-xl bg-gradient-to-r from-emerald-950 to-gray-950 border border-emerald-500/30 p-4 text-center space-y-2">
-        <div class="text-[10px] uppercase tracking-widest text-emerald-400 font-bold">Anúncio Parceiro</div>
-        <div class="text-sm font-extrabold text-white">Cupom RESENHA10 — 10% OFF em Artigos Esportivos</div>
-        <div id="ad-countdown-text" class="text-xs text-amber-300 font-bold pt-1">Aguarde 5s para liberar...</div>
+      <div class="rounded-xl bg-gray-950 border border-gray-800 p-4 text-center">
+        <div id="ad-countdown-text" class="text-xs text-amber-300 font-bold">Aguarde 5s para liberar...</div>
       </div>
       <button id="btn-claim-recharge" type="button" disabled onclick="claimRecharge()" class="w-full h-11 px-4 rounded-xl bg-gray-800 text-gray-500 font-black text-sm transition cursor-not-allowed inline-flex items-center justify-center">
         Liberando em 5s...
       </button>
-    </div>
-  </div>
-
-  <!-- MODAL: MÍDIA KIT & PATROCÍNIO -->
-  <div id="mediakit-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-    <div class="bg-gray-900 border border-gray-800 rounded-2xl max-w-lg w-full p-5 sm:p-6 space-y-4 shadow-2xl my-auto">
-      <div class="flex items-center justify-between gap-2">
-        <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded bg-emerald-500/15 text-emerald-400">Comercial &amp; Parcerias</span>
-        <button type="button" onclick="closeMediaKitModal()" aria-label="Fechar" class="w-8 h-8 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 text-base font-bold inline-flex items-center justify-center shrink-0">✕</button>
-      </div>
-      <h3 class="text-xl font-black text-white">Anuncie na Resenha Bet</h3>
-      <p class="text-xs text-gray-300 leading-relaxed">
-        Somos uma plataforma 100% gratuita de entretenimento e palpites esportivos com dados reais. Sem bloqueios de anúncios e com alta retenção diária.
-      </p>
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-left">
-        <div class="p-3 rounded-xl bg-gray-950 border border-gray-800">
-          <div class="text-[10px] font-bold text-amber-400 uppercase">Cota Master</div>
-          <div class="text-sm font-black text-white mt-0.5">Naming Rights</div>
-          <p class="text-[11px] text-gray-400 mt-1">Logo no topo + nome da Liga Mensal oficial.</p>
-        </div>
-        <div class="p-3 rounded-xl bg-gray-950 border border-gray-800">
-          <div class="text-[10px] font-bold text-emerald-400 uppercase">Recarga VIP</div>
-          <div class="text-sm font-black text-white mt-0.5">Modal de Bônus</div>
-          <p class="text-[11px] text-gray-400 mt-1">Exibição garantida toda vez que o usuário recarrega moedas.</p>
-        </div>
-        <div class="p-3 rounded-xl bg-gray-950 border border-gray-800">
-          <div class="text-[10px] font-bold text-sky-400 uppercase">Banner Feed</div>
-          <div class="text-sm font-black text-white mt-0.5">Display &amp; Link</div>
-          <p class="text-[11px] text-gray-400 mt-1">Destaque fixo na grade de jogos e lateral do boletim.</p>
-        </div>
-      </div>
-      <div class="pt-2 flex flex-col sm:flex-row gap-2">
-        <a href="https://wa.me/5551992743197?text=Ol%C3%A1!%20Tenho%20interesse%20em%20patrocinar%20o%20portal%20Resenha%20Bet." target="_blank" rel="noopener noreferrer" class="flex-1 h-11 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-black text-xs transition inline-flex items-center justify-center text-center">
-          Falar com Comercial no WhatsApp
-        </a>
-        <button type="button" onclick="closeMediaKitModal()" class="h-11 px-4 rounded-xl bg-gray-800 hover:bg-gray-700 text-xs font-bold text-gray-300 inline-flex items-center justify-center">Fechar</button>
-      </div>
     </div>
   </div>
 
@@ -632,26 +564,63 @@
     <span id="toast-msg" class="leading-snug">Mensagem</span>
   </div>
 
-  <!-- FOOTER -->
-  <footer class="border-t border-gray-800/80 bg-[#060911] py-6 px-4 mt-10">
-    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-500 text-center sm:text-left">
+  <!-- FOOTER LIMPO -->
+  <footer class="border-t border-gray-800/80 bg-[#060911] py-5 px-4 mt-10">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-gray-500 text-center sm:text-left">
       <div>
-        <strong class="text-gray-300">Resenha Bet</strong> — Plataforma recreativa gratuita (Free-to-Play). Não envolve apostas com dinheiro real.
+        <strong class="text-gray-300">Resenha Bet</strong> — Plataforma recreativa gratuita (Free-to-Play).
       </div>
       <div>
-        Desenvolvido por <a href="https://instagram.com/cristianscherer.dev" target="_blank" rel="noopener noreferrer" class="text-emerald-400 hover:underline font-semibold">@cristianscherer.dev</a>
+        Pix apoio: <span class="text-emerald-400 font-semibold select-all">pixresenhabet@gmail.com</span>
       </div>
     </div>
   </footer>
 
   <script>
+    const PIX_KEY = 'pixresenhabet@gmail.com';
     const GOOGLE_SHEETS_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbwz-822hliCk6oNCS3BC0e_rpZ2mzqxZgCUZHXJP_Vf3HREs2jlUjiR5dPKUf2TcT8NIA/exec';
     const CLOUD_QUEUE_KEY = 'rb_cloud_sync_queue';
-
-    // Opcional: cole sua chave gratuita da The Odds API para buscar cotações reais com cache automático.
     const ODDS_API_KEY = '';
     const REAL_ODDS_CACHE_KEY = 'rb_real_odds_cache_v1';
     const REAL_ODDS_CACHE_TTL_MS = 6 * 60 * 60 * 1000;
+
+    function copyPixKey() {
+      const btn = document.getElementById('btn-copy-pix');
+      const feedback = document.getElementById('pix-copy-feedback');
+
+      const onCopied = () => {
+        if (btn) {
+          btn.textContent = 'Copiada!';
+          setTimeout(() => { btn.textContent = 'Copiar chave'; }, 2000);
+        }
+        if (feedback) {
+          feedback.classList.remove('hidden');
+          clearTimeout(window._pixFeedbackTimer);
+          window._pixFeedbackTimer = setTimeout(() => feedback.classList.add('hidden'), 3000);
+        }
+        showToast('Chave Pix copiada: pixresenhabet@gmail.com');
+      };
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(PIX_KEY).then(onCopied).catch(() => {
+          fallbackCopyText(PIX_KEY, onCopied);
+        });
+      } else {
+        fallbackCopyText(PIX_KEY, onCopied);
+      }
+    }
+
+    function fallbackCopyText(text, cb) {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); } catch (e) {}
+      document.body.removeChild(ta);
+      if (cb) cb();
+    }
 
     (function setupDynamicManifest() {
       try {
@@ -695,7 +664,7 @@
       const btn = document.getElementById('btn-install-app');
       if (btn) btn.classList.add('hidden');
       if (outcome === 'accepted') {
-        showToast('Resenha Bet adicionado à sua tela inicial!');
+        showToast('Resenha Bet adicionado à tela inicial.');
       }
     }
 
@@ -714,22 +683,6 @@
       } catch (e) {}
     }
 
-    function updateCloudSyncBadge() {
-      const badge = document.getElementById('cloud-sync-badge');
-      if (!badge) return;
-      const queueLen = getCloudQueue().length;
-      if (!navigator.onLine) {
-        badge.textContent = `Offline (${queueLen} pendente${queueLen === 1 ? '' : 's'})`;
-        badge.className = 'text-[10px] font-bold px-2 py-0.5 rounded bg-amber-400/15 text-amber-300 border border-amber-400/30';
-      } else if (queueLen > 0) {
-        badge.textContent = `Sincronizando (${queueLen})`;
-        badge.className = 'text-[10px] font-bold px-2 py-0.5 rounded bg-amber-400/15 text-amber-300 border border-amber-400/30';
-      } else {
-        badge.textContent = 'Nuvem: OK';
-        badge.className = 'text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30';
-      }
-    }
-
     async function postPayloadNow(payload) {
       if (!GOOGLE_SHEETS_WEBHOOK_URL) return true;
       await fetch(GOOGLE_SHEETS_WEBHOOK_URL, {
@@ -742,15 +695,9 @@
     }
 
     async function flushCloudQueue() {
-      if (!navigator.onLine || !GOOGLE_SHEETS_WEBHOOK_URL) {
-        updateCloudSyncBadge();
-        return;
-      }
+      if (!navigator.onLine || !GOOGLE_SHEETS_WEBHOOK_URL) return;
       const queue = getCloudQueue();
-      if (!queue.length) {
-        updateCloudSyncBadge();
-        return;
-      }
+      if (!queue.length) return;
       const remaining = [];
       for (const item of queue) {
         try {
@@ -760,7 +707,6 @@
         }
       }
       saveCloudQueue(remaining);
-      updateCloudSyncBadge();
     }
 
     function sendToCloud(payload) {
@@ -770,24 +716,16 @@
         const q = getCloudQueue();
         q.push(enriched);
         saveCloudQueue(q);
-        updateCloudSyncBadge();
         return;
       }
-      postPayloadNow(enriched).then(() => {
-        updateCloudSyncBadge();
-      }).catch(() => {
+      postPayloadNow(enriched).catch(() => {
         const q = getCloudQueue();
         q.push(enriched);
         saveCloudQueue(q);
-        updateCloudSyncBadge();
       });
     }
 
-    window.addEventListener('online', () => {
-      flushCloudQueue();
-      showToast('Conexão restabelecida — sincronizando dados...');
-    });
-    window.addEventListener('offline', () => updateCloudSyncBadge());
+    window.addEventListener('online', () => flushCloudQueue());
 
     function normalizeDigits(val) {
       let d = String(val || '').replace(/\D/g, '');
@@ -1004,7 +942,7 @@
         {
           id: 'MOV-INIT',
           kind: 'Banca Inicial',
-          title: 'Saldo inicial gratuito da Resenha',
+          title: 'Saldo inicial gratuito',
           amount: initialBalance,
           isCredit: true,
           createdAt: 'Início'
@@ -1024,9 +962,8 @@
       setTimeout(() => {
         document.getElementById('splash-screen').classList.add('splash-hidden');
         checkUserRegistration();
-      }, 1500);
+      }, 1200);
 
-      updateCloudSyncBadge();
       flushCloudQueue();
       applyUserProfileUI();
       updateBalanceUI();
@@ -1082,8 +1019,8 @@
         ? 'Crie sua Conta na Resenha!'
         : 'Acesse sua Conta Salva';
       document.getElementById('auth-subtitle').innerHTML = isRegister
-        ? 'Cadastre-se e crie sua senha para liberar <strong class="text-emerald-400">RC$ 1.000,00</strong> e manter seus valores salvos para os próximos jogos.'
-        : 'Informe seu <strong class="text-white">WhatsApp</strong> e sua <strong class="text-emerald-400">senha</strong> para entrar e manter sua banca.';
+        ? 'Cadastre-se e crie sua senha para liberar <strong class="text-emerald-400">RC$ 1.000,00</strong> e manter seus valores salvos.'
+        : 'Informe seu <strong class="text-white">WhatsApp</strong> e sua <strong class="text-emerald-400">senha</strong> para entrar.';
     }
 
     function checkUserRegistration() {
@@ -1099,11 +1036,7 @@
 
       if (!hasValidSession) {
         const storedAccounts = findAnyStoredAccounts();
-        if (storedAccounts.length > 0) {
-          setAuthMode('login');
-        } else {
-          setAuthMode('register');
-        }
+        setAuthMode(storedAccounts.length > 0 ? 'login' : 'register');
         gate.classList.remove('hidden');
       } else {
         gate.classList.add('hidden');
@@ -1149,43 +1082,37 @@
       const errEl = document.getElementById('reg-error');
 
       if (nameInput.length < 2) {
-        errEl.textContent = 'POR FAVOR, INFORME SEU NOME OU APELIDO.';
+        errEl.textContent = 'INFORME SEU NOME OU APELIDO.';
         errEl.classList.remove('hidden');
         return;
       }
-
       if (waDigits.length < 10 || waDigits.length > 11) {
-        errEl.textContent = 'DIGITE UM NÚMERO DE WHATSAPP VÁLIDO COM DDD (EX: 51 99999-9999).';
+        errEl.textContent = 'DIGITE UM WHATSAPP VÁLIDO COM DDD.';
         errEl.classList.remove('hidden');
         return;
       }
-
       if (cityInput.length < 2) {
-        errEl.textContent = 'POR FAVOR, INFORME SUA CIDADE.';
+        errEl.textContent = 'INFORME SUA CIDADE.';
         errEl.classList.remove('hidden');
         return;
       }
-
       if (!stateInput) {
-        errEl.textContent = 'SELECIONE O SEU ESTADO (UF).';
+        errEl.textContent = 'SELECIONE O ESTADO (UF).';
         errEl.classList.remove('hidden');
         return;
       }
-
       if (!passInput || passInput.length < 4) {
         errEl.textContent = 'CRIE UMA SENHA DE PELO MENOS 4 CARACTERES.';
         errEl.classList.remove('hidden');
         return;
       }
-
       if (passInput !== passConfirmInput) {
-        errEl.textContent = 'AS SENHAS DIGITADAS NÃO CONFEREM.';
+        errEl.textContent = 'AS SENHAS NÃO CONFEREM.';
         errEl.classList.remove('hidden');
         return;
       }
 
       errEl.classList.add('hidden');
-
       const existingAccount = loadSavedAccountForUser({ whatsappDigits: waDigits });
 
       state.user = {
@@ -1209,7 +1136,7 @@
           {
             id: 'MOV-INIT',
             kind: 'Banca Inicial',
-            title: 'Saldo inicial gratuito da Resenha',
+            title: 'Saldo inicial gratuito',
             amount: 1000.00,
             isCredit: true,
             createdAt: 'Hoje'
@@ -1226,7 +1153,7 @@
       renderRanking();
 
       document.getElementById('register-gate').classList.add('hidden');
-      showToast(`BEM-VINDO, ${state.user.name}! SUA BANCA É ${formatCurrency(state.balance)}.`);
+      showToast(`Bem-vindo, ${state.user.name}! Banca: ${formatCurrency(state.balance)}.`);
 
       sendToCloud({
         type: 'cadastro',
@@ -1253,7 +1180,6 @@
         errEl.classList.remove('hidden');
         return;
       }
-
       if (!passInput || passInput.length < 4) {
         errEl.textContent = 'DIGITE SUA SENHA.';
         errEl.classList.remove('hidden');
@@ -1262,13 +1188,12 @@
 
       const saved = loadSavedAccountForUser({ whatsappDigits: waDigits });
       if (!saved || !saved.user) {
-        errEl.textContent = 'CONTA NÃO ENCONTRADA NESTE APARELHO. SE FOR SEU PRIMEIRO ACESSO, CRIE SEU CADASTRO.';
+        errEl.textContent = 'CONTA NÃO ENCONTRADA NESTE APARELHO.';
         errEl.classList.remove('hidden');
         return;
       }
-
       if (saved.user.password !== passInput) {
-        errEl.textContent = 'SENHA INCORRETA. TENTE NOVAMENTE.';
+        errEl.textContent = 'SENHA INCORRETA.';
         errEl.classList.remove('hidden');
         return;
       }
@@ -1289,7 +1214,7 @@
       settleTicketsWithRealScores();
 
       document.getElementById('register-gate').classList.add('hidden');
-      showToast(`BEM-VINDO DE VOLTA, ${state.user.name}! BANCA: ${formatCurrency(state.balance)}.`);
+      showToast(`Bem-vindo de volta, ${state.user.name}!`);
     }
 
     function logoutUser() {
@@ -1308,11 +1233,11 @@
       if (state.user && state.user.name) {
         if (greetingEl) {
           const loc = state.user.city && state.user.state ? ` • ${state.user.city.toUpperCase()}/${state.user.state.toUpperCase()}` : '';
-          greetingEl.innerHTML = `OLÁ, <strong class="text-white">${state.user.name.toUpperCase()}</strong>${loc}`;
+          greetingEl.innerHTML = `<strong class="text-white">${state.user.name.toUpperCase()}</strong>${loc}`;
         }
         if (logoutBtn) logoutBtn.classList.remove('hidden');
       } else {
-        if (greetingEl) greetingEl.textContent = 'Palpites grátis • Jogos & resultados reais';
+        if (greetingEl) greetingEl.textContent = 'Palpites grátis • Jogos reais';
         if (logoutBtn) logoutBtn.classList.add('hidden');
       }
     }
@@ -1400,7 +1325,6 @@
       if (!ODDS_API_KEY || !ODDS_API_KEY.trim()) {
         return Promise.resolve([]);
       }
-
       if (!forceRefresh) {
         try {
           const raw = localStorage.getItem(REAL_ODDS_CACHE_KEY);
@@ -1412,17 +1336,13 @@
           }
         } catch (e) {}
       }
-
       const url = `https://api.the-odds-api.com/v4/sports/soccer/odds/?apiKey=${encodeURIComponent(ODDS_API_KEY.trim())}&regions=eu,uk&markets=h2h,totals&oddsFormat=decimal`;
       return fetch(url)
         .then(res => res.ok ? res.json() : [])
         .then(events => {
           if (Array.isArray(events) && events.length) {
             try {
-              localStorage.setItem(REAL_ODDS_CACHE_KEY, JSON.stringify({
-                fetchedAt: Date.now(),
-                events
-              }));
+              localStorage.setItem(REAL_ODDS_CACHE_KEY, JSON.stringify({ fetchedAt: Date.now(), events }));
             } catch (e) {}
             return events;
           }
@@ -1472,10 +1392,7 @@
         if (!Array.isArray(bk.markets)) continue;
         for (const mkt of bk.markets) {
           if (mkt.key === 'h2h' && Array.isArray(mkt.outcomes)) {
-            let hOdd = null;
-            let dOdd = null;
-            let aOdd = null;
-
+            let hOdd = null, dOdd = null, aOdd = null;
             mkt.outcomes.forEach(o => {
               const price = Number(o.price);
               if (!price || price <= 1) return;
@@ -1483,14 +1400,11 @@
               if (oNorm === 'draw' || oNorm.includes('empate')) {
                 dOdd = price;
               } else if (oNorm === evHomeNorm || evHomeNorm.includes(oNorm) || oNorm.includes(evHomeNorm)) {
-                if (swappedSides) aOdd = price;
-                else hOdd = price;
+                if (swappedSides) aOdd = price; else hOdd = price;
               } else if (oNorm === evAwayNorm || evAwayNorm.includes(oNorm) || oNorm.includes(evAwayNorm)) {
-                if (swappedSides) hOdd = price;
-                else aOdd = price;
+                if (swappedSides) hOdd = price; else aOdd = price;
               }
             });
-
             if (hOdd && aOdd) {
               updated.result.home = Number(hOdd.toFixed(2));
               updated.result.away = Number(aOdd.toFixed(2));
@@ -1501,26 +1415,16 @@
               hasRealOdd = true;
             }
           }
-
           if (mkt.key === 'totals' && Array.isArray(mkt.outcomes)) {
             mkt.outcomes.forEach(o => {
               const price = Number(o.price);
               const point = Number(o.point);
               const name = String(o.name || '').toLowerCase();
               if (!price || price <= 1) return;
-              if (name === 'over' && point === 1.5) {
-                updated.goals.over15 = Number(price.toFixed(2));
-                hasRealOdd = true;
-              } else if (name === 'over' && point === 2.5) {
-                updated.goals.over25 = Number(price.toFixed(2));
-                hasRealOdd = true;
-              } else if (name === 'over' && point === 3.5) {
-                updated.goals.over35 = Number(price.toFixed(2));
-                hasRealOdd = true;
-              } else if (name === 'under' && point === 1.5) {
-                updated.goals.under15 = Number(price.toFixed(2));
-                hasRealOdd = true;
-              }
+              if (name === 'over' && point === 1.5) { updated.goals.over15 = Number(price.toFixed(2)); hasRealOdd = true; }
+              else if (name === 'over' && point === 2.5) { updated.goals.over25 = Number(price.toFixed(2)); hasRealOdd = true; }
+              else if (name === 'over' && point === 3.5) { updated.goals.over35 = Number(price.toFixed(2)); hasRealOdd = true; }
+              else if (name === 'under' && point === 1.5) { updated.goals.under15 = Number(price.toFixed(2)); hasRealOdd = true; }
             });
           }
         }
@@ -1576,19 +1480,15 @@
 
       const matched = findMatchingRealOddsEvent({ homeName, awayName }, realOddsEvents);
       if (matched) {
-        const merged = applyRealOddsToMarkets(fallbackMarkets, { homeName, awayName }, matched);
-        return merged.markets;
+        return applyRealOddsToMarkets(fallbackMarkets, { homeName, awayName }, matched).markets;
       }
-
       return fallbackMarkets;
     }
 
     function parseEventsFromScoreboardJson(data, fallbackSlug = '', fallbackName = '', realOddsEvents = []) {
       const leagueIndex = new Map();
       (data.leagues || []).forEach(lg => {
-        if (lg?.slug) {
-          leagueIndex.set(String(lg.slug).toLowerCase(), lg.name || lg.shortName || '');
-        }
+        if (lg?.slug) leagueIndex.set(String(lg.slug).toLowerCase(), lg.name || lg.shortName || '');
       });
 
       const items = [];
@@ -1637,13 +1537,13 @@
       const icon = document.getElementById('sync-icon');
 
       if (manual && icon) icon.classList.add('animate-spin');
-      if (statusEl) statusEl.textContent = '● Sincronizando grade ao vivo...';
+      if (statusEl) statusEl.textContent = '● Sincronizando grade...';
 
       if (state.matches.length === 0) {
         container.innerHTML = `
           <div class="bg-gray-900 border border-gray-800 rounded-2xl p-8 text-center space-y-2">
             <div class="w-8 h-8 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
-            <p class="text-sm font-bold text-white">Carregando partidas reais de hoje e próximos dias...</p>
+            <p class="text-sm font-bold text-white">Carregando partidas...</p>
           </div>`;
       }
 
@@ -1680,17 +1580,12 @@
           if (!res.ok) return;
           const data = await res.json();
           parseEventsFromScoreboardJson(data, '', '', realOddsEvents).forEach(ev => {
-            if (!matchesById.has(ev.id)) {
-              matchesById.set(ev.id, ev);
-            }
+            if (!matchesById.has(ev.id)) matchesById.set(ev.id, ev);
           });
-        } catch (err) {
-          console.warn('Falha ao buscar data:', ymd, err);
-        }
+        } catch (err) {}
       }));
 
       const loaded = Array.from(matchesById.values());
-
       const prioritySlugs = new Set([
         'bra.1', 'bra.copa_do_brazil', 'conmebol.libertadores', 'conmebol.sudamericana',
         'uefa.champions', 'uefa.europa', 'eng.1', 'esp.1', 'ita.1', 'ger.1', 'fra.1', 'fifa.world'
@@ -1717,14 +1612,13 @@
         minute: '2-digit'
       });
 
-      const oddsModeLabel = realOddsEvents.length ? ' • Odds API Ativa' : ' • Odds Recreativas';
       if (statusEl) {
-        statusEl.textContent = `● Grade Oficial (${state.matches.length} jogos • ${nowStr}${oddsModeLabel})`;
+        statusEl.textContent = `● ${state.matches.length} jogos • Atualizado ${nowStr}`;
       }
 
       if (manual) {
         if (icon) icon.classList.remove('animate-spin');
-        showToast(`${state.matches.length} jogos atualizados no horário de Brasília!`);
+        showToast('Grade atualizada.');
       }
     }
 
@@ -1741,7 +1635,6 @@
       });
 
       const leagues = Array.from(leagueCounts.values()).sort((a, b) => b.count - a.count);
-
       if (state.activeLeague !== 'ALL' && !leagueCounts.has(state.activeLeague)) {
         state.activeLeague = 'ALL';
       }
@@ -1826,7 +1719,7 @@
       if (changed) {
         if (newlyWonAmount > 0) {
           state.balance = Number((state.balance + newlyWonAmount).toFixed(2));
-          showToast(`GREEN! Você ganhou ${formatCurrency(newlyWonAmount)}!`);
+          showToast(`Green! +${formatCurrency(newlyWonAmount)}`);
         }
         saveState();
         updateBalanceUI();
@@ -1850,14 +1743,14 @@
       ticket.cashedOutAt = new Date().toLocaleTimeString('pt-BR', { timeZone: 'America/Sao_Paulo', hour: '2-digit', minute: '2-digit' });
 
       state.balance = Number((state.balance + returnAmount).toFixed(2));
-      addLedgerEntry('Cash-Out', `Encerramento antecipado ${ticket.id}`, returnAmount, true);
+      addLedgerEntry('Cash-Out', `Encerramento ${ticket.id}`, returnAmount, true);
       saveState();
       updateBalanceUI();
       updateStatusAlertBadges();
       renderTickets();
       renderLedger();
       renderRanking();
-      showToast(`Cash-out concluído: +${formatCurrency(returnAmount)} devolvidos!`);
+      showToast(`Cash-out: +${formatCurrency(returnAmount)}`);
 
       sendToCloud({
         type: 'cash_out',
@@ -1872,24 +1765,13 @@
       if (!ticket) return;
 
       const lines = [
-        `⚽ *RESENHA BET — BILHETE ${ticket.id}*`,
-        `👤 Jogador: *${ticket.userName}* (${ticket.userLocation})`,
-        `━━━━━━━━━━━━━━━━━━`,
+        `⚽ *RESENHA BET — ${ticket.id}*`,
         ...ticket.selections.map(s => `• *${s.matchTitle}* (${s.marketName}) → ${s.pickLabel} [@${Number(s.odd).toFixed(2)}]${s.finalScore ? ` [${s.finalScore}]` : ''}`),
-        `━━━━━━━━━━━━━━━━━━`,
-        `🎲 Odd Total: *${Number(ticket.totalOdd).toFixed(2)}*`,
-        `💰 Palpite: *${formatCurrency(ticket.stake)}*`,
-        `🏆 Retorno Potencial: *${formatCurrency(ticket.potentialReturn)}*`,
-        `📌 Status: *${ticket.status === 'won' ? 'GREEN' : ticket.status === 'lost' ? 'RED' : ticket.status === 'cashed_out' ? 'CASH-OUT' : 'AGUARDANDO'}*`
+        `Odd Total: *${Number(ticket.totalOdd).toFixed(2)}* • Retorno: *${formatCurrency(ticket.potentialReturn)}*`
       ];
 
       const text = lines.join('\n');
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).catch(() => {});
-      }
-      const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
-      window.open(url, '_blank', 'noopener,noreferrer');
-      showToast('Bilhete pronto para enviar no WhatsApp!');
+      window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank', 'noopener,noreferrer');
     }
 
     function setLeagueFilter(code) {
@@ -1945,7 +1827,6 @@
     function formatMatchDateBrasilia(isoDate) {
       const d = new Date(isoDate);
       if (isNaN(d.getTime())) return 'Em breve';
-
       const tz = 'America/Sao_Paulo';
       const now = new Date();
       const tomorrow = new Date(now);
@@ -1954,20 +1835,13 @@
       const dKey = d.toLocaleDateString('pt-BR', { timeZone: tz });
       const todayKey = now.toLocaleDateString('pt-BR', { timeZone: tz });
       const tomorrowKey = tomorrow.toLocaleDateString('pt-BR', { timeZone: tz });
-
-      const timeStr = d.toLocaleTimeString('pt-BR', {
-        timeZone: tz,
-        hour: '2-digit',
-        minute: '2-digit'
-      });
+      const timeStr = d.toLocaleTimeString('pt-BR', { timeZone: tz, hour: '2-digit', minute: '2-digit' });
 
       if (dKey === todayKey) return `Hoje • ${timeStr}`;
       if (dKey === tomorrowKey) return `Amanhã • ${timeStr}`;
-
       const weekday = d.toLocaleDateString('pt-BR', { timeZone: tz, weekday: 'short' }).replace('.', '');
       const dayMonth = d.toLocaleDateString('pt-BR', { timeZone: tz, day: '2-digit', month: '2-digit' });
-      const capWeekday = weekday.charAt(0).toUpperCase() + weekday.slice(1);
-      return `${capWeekday} ${dayMonth} • ${timeStr}`;
+      return `${weekday.charAt(0).toUpperCase() + weekday.slice(1)} ${dayMonth} • ${timeStr}`;
     }
 
     function getMatchMarketOptions(match, tab) {
@@ -2056,9 +1930,7 @@
     }
 
     function renderKtoOddBox(match, opt, isSelected, canBet, stacked = false) {
-      if (!opt) {
-        return `<div class="h-11 rounded-lg bg-gray-950/30 border border-gray-800/50"></div>`;
-      }
+      if (!opt) return `<div class="h-11 rounded-lg bg-gray-950/30 border border-gray-800/50"></div>`;
       if (!canBet) {
         return stacked
           ? `
@@ -2098,33 +1970,22 @@
 
     function renderMatches() {
       const container = document.getElementById('matches-container');
-
       let filtered = state.matches;
-      if (state.activeLeague !== 'ALL') {
-        filtered = filtered.filter(m => m.leagueCode === state.activeLeague);
-      }
-      if (state.activeDate !== 'ALL') {
-        filtered = filtered.filter(m => getMatchRelativeDay(m.date) === state.activeDate);
-      }
-      if (state.activeStatus === 'OPEN') {
-        filtered = filtered.filter(m => m.status === 'pre');
-      } else if (state.activeStatus === 'LIVE') {
-        filtered = filtered.filter(m => m.status === 'in');
-      } else if (state.activeStatus === 'FINISHED') {
-        filtered = filtered.filter(m => m.status === 'post');
-      }
+
+      if (state.activeLeague !== 'ALL') filtered = filtered.filter(m => m.leagueCode === state.activeLeague);
+      if (state.activeDate !== 'ALL') filtered = filtered.filter(m => getMatchRelativeDay(m.date) === state.activeDate);
+      if (state.activeStatus === 'OPEN') filtered = filtered.filter(m => m.status === 'pre');
+      else if (state.activeStatus === 'LIVE') filtered = filtered.filter(m => m.status === 'in');
+      else if (state.activeStatus === 'FINISHED') filtered = filtered.filter(m => m.status === 'post');
       if (state.searchQuery) {
-        filtered = filtered.filter(m => {
-          const haystack = `${m.homeName} ${m.awayName} ${m.leagueName}`.toLowerCase();
-          return haystack.includes(state.searchQuery);
-        });
+        filtered = filtered.filter(m => `${m.homeName} ${m.awayName} ${m.leagueName}`.toLowerCase().includes(state.searchQuery));
       }
 
       if (filtered.length === 0) {
         container.innerHTML = `
           <div class="bg-gray-900 border border-gray-800 rounded-2xl p-8 text-center space-y-2">
-            <p class="text-sm font-bold text-gray-300">Nenhuma partida encontrada neste filtro.</p>
-            <button type="button" onclick="clearSearchQuery(); setLeagueFilter('ALL'); setDateFilter('ALL'); setStatusFilter('ALL');" class="text-xs font-bold text-emerald-400 underline py-1">Ver todos os jogos disponíveis</button>
+            <p class="text-sm font-bold text-gray-300">Nenhum jogo encontrado neste filtro.</p>
+            <button type="button" onclick="clearSearchQuery(); setLeagueFilter('ALL'); setDateFilter('ALL'); setStatusFilter('ALL');" class="text-xs font-bold text-emerald-400 underline py-1">Limpar filtros</button>
           </div>`;
         return;
       }
@@ -2141,7 +2002,7 @@
         if (isLive) {
           statusBadge = `<span class="h-6 inline-flex items-center gap-1.5 text-[11px] font-black text-red-400 bg-red-500/10 border border-red-500/30 px-2.5 rounded-md shrink-0"><span class="w-1.5 h-1.5 rounded-full bg-red-500 live-dot shrink-0"></span><span>AO VIVO ${m.statusDetail ? `(${m.statusDetail})` : ''}</span></span>`;
         } else if (isPost) {
-          statusBadge = `<span class="h-6 inline-flex items-center text-[11px] font-bold text-gray-400 bg-gray-800 px-2.5 rounded-md shrink-0">ENCERRADO • ${formatMatchDateBrasilia(m.date)}</span>`;
+          statusBadge = `<span class="h-6 inline-flex items-center text-[11px] font-bold text-gray-400 bg-gray-800 px-2.5 rounded-md shrink-0">ENCERRADO</span>`;
         }
 
         const marketTabsConfig = [
@@ -2176,23 +2037,14 @@
         } else {
           marketsBodyHtml = `
             <div class="space-y-1.5">
-              <div class="hidden sm:grid sm:grid-cols-12 text-[10px] font-extrabold uppercase tracking-wider text-gray-500 px-2.5">
-                <span class="sm:col-span-4">${marketConfig.headers[0]}</span>
-                <span class="sm:col-span-4 text-center">${marketConfig.headers[1]}</span>
-                <span class="sm:col-span-4 text-center">${marketConfig.headers[2]}</span>
-              </div>
               ${marketConfig.rows.map(row => {
                 const leftSelected = row.left && state.slip.some(s => s.matchId === m.id && s.pick === row.left.pick);
                 const rightSelected = row.right && state.slip.some(s => s.matchId === m.id && s.pick === row.right.pick);
                 return `
                   <div class="bg-[#0b101b]/80 border border-gray-800/80 rounded-xl p-2 grid grid-cols-1 sm:grid-cols-12 items-center gap-1.5">
                     <span class="sm:col-span-4 text-[11px] font-bold text-gray-300 px-1 truncate">${row.lineLabel}</span>
-                    <div class="sm:col-span-4">
-                      ${renderKtoOddBox(m, row.left, leftSelected, canBet, false)}
-                    </div>
-                    <div class="sm:col-span-4">
-                      ${renderKtoOddBox(m, row.right, rightSelected, canBet, false)}
-                    </div>
+                    <div class="sm:col-span-4">${renderKtoOddBox(m, row.left, leftSelected, canBet, false)}</div>
+                    <div class="sm:col-span-4">${renderKtoOddBox(m, row.right, rightSelected, canBet, false)}</div>
                   </div>`;
               }).join('')}
             </div>`;
@@ -2203,7 +2055,7 @@
             <div class="flex flex-wrap items-center justify-between gap-2 border-b border-gray-800/80 pb-2.5">
               <div class="flex items-center gap-2 min-w-0">
                 <span class="h-6 inline-flex items-center px-2.5 rounded-md text-[11px] font-black uppercase tracking-wider bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 truncate">${m.leagueName}</span>
-                ${matchPicksCount > 0 ? `<span class="h-6 inline-flex items-center px-2 rounded-md text-[10px] font-black bg-emerald-500 text-black shrink-0">${matchPicksCount} no bilhete</span>` : ''}
+                ${matchPicksCount > 0 ? `<span class="h-6 inline-flex items-center px-2 rounded-md text-[10px] font-black bg-emerald-500 text-black shrink-0">${matchPicksCount}</span>` : ''}
               </div>
               ${statusBadge}
             </div>
@@ -2224,10 +2076,6 @@
                   </div>
                   ${(isLive || isPost) ? `<span class="w-6 text-right font-black text-base ${isLive ? 'text-amber-400' : 'text-white'} tabular-nums shrink-0">${m.awayScore}</span>` : ''}
                 </div>
-                <div class="h-5 flex items-center justify-between gap-1.5 text-[11px] text-gray-400 pt-1 border-t border-gray-800/60 truncate">
-                  <span class="truncate">${m.leagueName}</span>
-                  <span class="text-emerald-400 font-bold shrink-0">+3 linhas</span>
-                </div>
               </div>
 
               <div class="xl:col-span-7 flex flex-col gap-2 min-w-0">
@@ -2240,7 +2088,6 @@
                       }">${mt.label}</button>`;
                   }).join('')}
                 </div>
-
                 ${marketsBodyHtml}
               </div>
             </div>
@@ -2290,12 +2137,9 @@
       }
 
       const sameMarketIdx = state.slip.findIndex(s => s.matchId === matchId && s.market === market);
-      if (sameMarketIdx !== -1) {
-        state.slip.splice(sameMarketIdx, 1);
-      }
+      if (sameMarketIdx !== -1) state.slip.splice(sameMarketIdx, 1);
 
       const details = getSelectionDetails(match, market, pick);
-
       state.slip.push({
         matchId: match.id,
         matchTitle: `${match.homeName} x ${match.awayName}`,
@@ -2329,17 +2173,19 @@
       if (totalCount === 0) {
         footer.classList.add('hidden');
         miniSummary.classList.add('hidden');
+        miniSummary.classList.remove('grid');
         mobileBar.classList.add('hidden');
         sideWindow.className = 'bg-gray-900/95 border border-gray-800 rounded-2xl overflow-hidden shadow-xl transition-all';
         container.innerHTML = `
           <div class="text-center py-5 px-2 text-gray-500 text-[11px] leading-relaxed">
-            Clique em qualquer odd ao lado (<strong class="text-gray-300">1X2</strong>, <strong class="text-emerald-400">+1 Gol</strong>, <strong class="text-amber-300">Escanteios</strong> ou <strong class="text-sky-300">Lateral</strong>) para ver sua aposta aparecer aqui na hora.
+            Clique em qualquer odd ao lado (<strong class="text-gray-300">1X2</strong>, <strong class="text-emerald-400">+1 Gol</strong>, <strong class="text-amber-300">Escanteios</strong> ou <strong class="text-sky-300">Lateral</strong>) para montar seu bilhete.
           </div>`;
         return;
       }
 
       footer.classList.remove('hidden');
       miniSummary.classList.remove('hidden');
+      miniSummary.classList.add('grid');
       mobileBar.classList.remove('hidden');
       sideWindow.className = 'bg-gray-900 border-2 border-emerald-400 rounded-2xl overflow-hidden shadow-2xl shadow-emerald-500/20 transition-all';
 
@@ -2410,11 +2256,11 @@
       const stake = parseFloat(document.getElementById('stake-input').value) || 0;
 
       if (stake < 10) {
-        showToast('O palpite mínimo é de RC$ 10,00.');
+        showToast('Palpite mínimo: RC$ 10,00.');
         return;
       }
       if (stake > state.balance) {
-        showToast('Saldo insuficiente! Clique em +RC$ 500 Grátis no topo.');
+        showToast('Saldo insuficiente.');
         openRechargeModal();
         return;
       }
@@ -2438,7 +2284,7 @@
       };
 
       state.tickets.unshift(createdTicket);
-      addLedgerEntry('Palpite', `Bilhete ${ticketId} (${createdTicket.selections.length} ${createdTicket.selections.length === 1 ? 'jogo' : 'jogos'})`, stake, false);
+      addLedgerEntry('Palpite', `Bilhete ${ticketId}`, stake, false);
       state.slip = [];
       saveState();
       updateBalanceUI();
@@ -2448,7 +2294,7 @@
       renderTickets();
       renderLedger();
       renderRanking();
-      showToast(`Bilhete registrado! Saldo restante: ${formatCurrency(state.balance)}.`);
+      showToast(`Bilhete registrado! Saldo: ${formatCurrency(state.balance)}.`);
 
       sendToCloud({
         type: 'bilhete',
@@ -2483,8 +2329,8 @@
       if (state.tickets.length === 0) {
         container.innerHTML = `
           <div class="bg-gray-900 border border-gray-800 rounded-2xl p-8 text-center space-y-3">
-            <p class="text-sm font-bold text-gray-300">Você ainda não fez nenhum palpite.</p>
-            <button type="button" onclick="switchTab('jogos')" class="h-10 px-4 rounded-xl bg-emerald-500 text-black font-bold text-xs inline-flex items-center justify-center">Ver Jogos Reais</button>
+            <p class="text-sm font-bold text-gray-300">Nenhum bilhete ainda.</p>
+            <button type="button" onclick="switchTab('jogos')" class="h-10 px-4 rounded-xl bg-emerald-500 text-black font-bold text-xs inline-flex items-center justify-center">Ver Jogos</button>
           </div>`;
         return;
       }
@@ -2492,27 +2338,18 @@
       container.innerHTML = state.tickets.map(t => {
         const cashOutValue = (t.stake * 0.85).toFixed(2);
         const badgeMap = {
-          pending: '<span class="h-6 inline-flex items-center px-2.5 rounded-full text-[11px] font-bold bg-amber-400/15 text-amber-300 border border-amber-400/30">Aguardando Resultado</span>',
-          won: '<span class="h-6 inline-flex items-center px-2.5 rounded-full text-[11px] font-black bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">GREEN • PAGO</span>',
+          pending: '<span class="h-6 inline-flex items-center px-2.5 rounded-full text-[11px] font-bold bg-amber-400/15 text-amber-300 border border-amber-400/30">Aguardando</span>',
+          won: '<span class="h-6 inline-flex items-center px-2.5 rounded-full text-[11px] font-black bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">GREEN</span>',
           lost: '<span class="h-6 inline-flex items-center px-2.5 rounded-full text-[11px] font-bold bg-red-500/15 text-red-400 border border-red-500/30">RED</span>',
           cashed_out: `<span class="h-6 inline-flex items-center px-2.5 rounded-full text-[11px] font-bold bg-sky-500/15 text-sky-300 border border-sky-500/30">CASH-OUT (${formatCurrency(t.cashOutAmount || 0)})</span>`
         };
 
-        const alertTag = t.unreadChange
-          ? `<span class="h-6 inline-flex items-center px-2 rounded-full text-[10px] font-black bg-amber-400 text-black animate-pulse">NOVO RESULTADO!</span>`
-          : '';
-
-        const borderClass = t.unreadChange
-          ? (t.status === 'won' ? 'border-emerald-400 shadow-lg shadow-emerald-500/15' : 'border-amber-400')
-          : 'border-gray-800';
-
         return `
-          <div class="bg-gray-900 border ${borderClass} rounded-2xl p-4 space-y-3 transition">
+          <div class="bg-gray-900 border border-gray-800 rounded-2xl p-4 space-y-3 transition">
             <div class="flex flex-wrap items-center justify-between gap-2 border-b border-gray-800 pb-2.5">
               <div class="flex flex-wrap items-center gap-2">
                 <span class="font-black text-xs text-white">${t.id}</span>
                 <span class="text-[11px] text-gray-500">• ${t.createdAt}</span>
-                ${alertTag}
               </div>
               <div class="flex flex-wrap items-center gap-1.5">
                 ${badgeMap[t.status] || badgeMap.pending}
@@ -2535,7 +2372,6 @@
                       ${s.awayName ? renderTeamCrest(s.awayName, s.awayLogo, 'w-4 h-4') : ''}
                       ${s.finalScore ? `<span class="text-emerald-400 font-black ml-1 shrink-0">(${s.finalScore})</span>` : ''}
                     </div>
-                    <div class="text-[11px] text-gray-400 truncate">${s.leagueName || ''}</div>
                     <div class="text-amber-300 font-semibold">${s.marketName ? `${s.marketName}: ` : ''}${s.pickLabel}</div>
                   </div>
                   <span class="font-black text-gray-300 tabular-nums shrink-0">@${s.odd.toFixed(2)}</span>
@@ -2559,7 +2395,7 @@
       if (countEl) countEl.textContent = `${items.length} ${items.length === 1 ? 'registro' : 'registros'}`;
 
       if (!items.length) {
-        container.innerHTML = `<div class="py-4 text-center text-xs text-gray-500">Nenhuma movimentação registrada ainda.</div>`;
+        container.innerHTML = `<div class="py-4 text-center text-xs text-gray-500">Nenhuma movimentação.</div>`;
         return;
       }
 
@@ -2584,7 +2420,7 @@
     function renderRanking() {
       const userLabel = state.user && state.user.name
         ? `${state.user.name.toUpperCase()} (${state.user.city.toUpperCase()}/${state.user.state.toUpperCase()})`
-        : 'VOCÊ (SUA BANCA)';
+        : 'VOCÊ';
 
       const leaders = [
         { name: 'LUCAS_TRICOLORRS (PORTO ALEGRE/RS)', winrate: '74%', balance: 4850.00 },
@@ -2657,8 +2493,8 @@
           clearInterval(rechargeTimer);
           btn.disabled = false;
           btn.className = 'w-full h-11 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-black text-sm transition cursor-pointer shadow-lg shadow-emerald-500/20 inline-flex items-center justify-center';
-          btn.textContent = 'Resgatar +RC$ 500,00 Agora';
-          txt.textContent = 'Anúncio concluído! Bônus liberado.';
+          btn.textContent = 'Resgatar +RC$ 500,00';
+          txt.textContent = 'Pronto para resgatar.';
         }
       }, 1000);
     }
@@ -2670,13 +2506,13 @@
 
     function claimRecharge() {
       state.balance = Number((state.balance + 500).toFixed(2));
-      addLedgerEntry('Recarga Grátis', 'Bônus patrocinado +RC$ 500,00', 500, true);
+      addLedgerEntry('Recarga', 'Recarga gratuita +RC$ 500,00', 500, true);
       saveState();
       updateBalanceUI();
       renderLedger();
       renderRanking();
       closeRechargeModal();
-      showToast('+RC$ 500,00 adicionados à sua banca virtual!');
+      showToast('+RC$ 500,00 adicionados.');
 
       sendToCloud({
         type: 'recarga',
@@ -2693,14 +2529,6 @@
         newBalance: state.balance,
         timestamp: new Date().toISOString()
       });
-    }
-
-    function openMediaKitModal() {
-      document.getElementById('mediakit-modal').classList.remove('hidden');
-    }
-
-    function closeMediaKitModal() {
-      document.getElementById('mediakit-modal').classList.add('hidden');
     }
   </script>
 </body>
